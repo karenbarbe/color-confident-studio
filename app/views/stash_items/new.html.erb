@@ -1,0 +1,11 @@
+<% content_for :title, "New stash item" %>
+
+<h1>New stash item</h1>
+
+<%= render "form", stash_item: @stash_item %>
+
+<br>
+
+<div>
+  <%= link_to "Back to stash items", stash_items_path %>
+</div>

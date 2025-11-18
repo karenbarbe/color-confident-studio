@@ -1,0 +1,13 @@
+<% if notice.present? %>
+  <div role="alert">
+    <%= notice %>
+    <button type="button"  aria-label="Close"></button>
+  </div>
+<% end %>
+
+<% if alert.present? %>
+  <div role="alert">
+    <%= alert %>
+    <button type="button" aria-label="Close"></button>
+  </div>
+<% end %>

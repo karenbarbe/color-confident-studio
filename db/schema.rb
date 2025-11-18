@@ -10,9 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_13_202311) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_18_185444) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "brands", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "product_colors", force: :cascade do |t|
+    t.string "name"
+    t.string "vendor_code"
+    t.bigint "brand_id", null: false
+    t.string "hex_color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "oklch_l", precision: 4, scale: 3
+    t.decimal "oklch_c", precision: 4, scale: 3
+    t.decimal "oklch_h", precision: 6, scale: 3
+    t.index ["brand_id"], name: "index_product_colors_on_brand_id"
+    t.index ["oklch_c"], name: "index_product_colors_on_oklch_c"
+    t.index ["oklch_h"], name: "index_product_colors_on_oklch_h"
+    t.index ["oklch_l"], name: "index_product_colors_on_oklch_l"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
 
   create_table "solid_cable_messages", force: :cascade do |t|
     t.binary "channel", null: false
@@ -156,10 +187,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_13_202311) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "stash_items", force: :cascade do |t|
+    t.bigint "owner_id", null: false
+    t.bigint "product_color_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_color_id"], name: "index_stash_items_on_product_color_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
+  end
+
+  add_foreign_key "product_colors", "brands"
+  add_foreign_key "sessions", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "stash_items", "product_colors"
+  add_foreign_key "stash_items", "users", column: "owner_id"
 end

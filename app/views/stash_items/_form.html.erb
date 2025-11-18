@@ -1,0 +1,27 @@
+<%= form_with(model: stash_item) do |form| %>
+  <% if stash_item.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(stash_item.errors.count, "error") %> prohibited this stash_item from being saved:</h2>
+
+      <ul>
+        <% stash_item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :owner_id, style: "display: block" %>
+    <%= form.text_field :owner_id %>
+  </div>
+
+  <div>
+    <%= form.label :product_color_id, style: "display: block" %>
+    <%= form.text_field :product_color_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
