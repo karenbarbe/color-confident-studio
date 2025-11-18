@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_18_031100) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_18_185444) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,7 +27,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_031100) do
     t.string "hex_color"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "oklch_l", precision: 4, scale: 3
+    t.decimal "oklch_c", precision: 4, scale: 3
+    t.decimal "oklch_h", precision: 6, scale: 3
     t.index ["brand_id"], name: "index_product_colors_on_brand_id"
+    t.index ["oklch_c"], name: "index_product_colors_on_oklch_c"
+    t.index ["oklch_h"], name: "index_product_colors_on_oklch_h"
+    t.index ["oklch_l"], name: "index_product_colors_on_oklch_l"
   end
 
   create_table "sessions", force: :cascade do |t|
