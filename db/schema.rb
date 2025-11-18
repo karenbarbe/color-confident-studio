@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_18_021656) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_18_023443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -18,6 +18,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_021656) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "product_colors", force: :cascade do |t|
+    t.string "name"
+    t.string "vendor_code"
+    t.bigint "brand_id", null: false
+    t.string "hex_color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["brand_id"], name: "index_product_colors_on_brand_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -162,6 +172,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_18_021656) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  add_foreign_key "product_colors", "brands"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
