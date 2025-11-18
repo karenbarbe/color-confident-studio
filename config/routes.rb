@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  root "pages#home"
+
+  resources :users
   resources :stash_items
   resource :session
   resources :passwords, param: :token
