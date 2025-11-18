@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :stash_items
   resource :session
   resources :passwords, param: :token
   resources :product_colors

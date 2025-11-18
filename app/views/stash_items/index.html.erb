@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Stash items" %>
+
+<h1>Stash items</h1>
+
+<div id="stash_items">
+  <% @stash_items.each do |stash_item| %>
+    <%= render stash_item %>
+    <p>
+      <%= link_to "Show this stash item", stash_item %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New stash item", new_stash_item_path %>
