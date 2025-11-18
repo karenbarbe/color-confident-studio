@@ -26,4 +26,5 @@
 #
 class ProductColor < ApplicationRecord
   belongs_to :brand, counter_cache: true
+  has_many :stash_items, dependent: :destroy
 end

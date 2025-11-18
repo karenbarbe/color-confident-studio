@@ -8,4 +8,5 @@
 #  updated_at :datetime         not null
 #
 class Brand < ApplicationRecord
+  has_many :product_colors, dependent: :destroy
 end
