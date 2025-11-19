@@ -2,16 +2,17 @@
 #
 # Table name: product_colors
 #
-#  id          :bigint           not null, primary key
-#  hex_color   :string
-#  name        :string
-#  oklch_c     :decimal(4, 3)
-#  oklch_h     :decimal(6, 3)
-#  oklch_l     :decimal(4, 3)
-#  vendor_code :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  brand_id    :bigint           not null
+#  id                :bigint           not null, primary key
+#  hex_color         :string
+#  name              :string
+#  oklch_c           :decimal(4, 3)
+#  oklch_h           :decimal(6, 3)
+#  oklch_l           :decimal(4, 3)
+#  stash_items_count :integer          default(0), not null
+#  vendor_code       :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  brand_id          :bigint           not null
 #
 # Indexes
 #
