@@ -10,5 +10,6 @@ class PagesController < ApplicationController
   end
 
   def dashboard
+    @product_colors = ProductColor.all
   end
 end

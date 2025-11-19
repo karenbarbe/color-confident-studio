@@ -1,1 +1,8 @@
 <h1>Welcome to the Dashboard</h1>
+<h2>Hello, <%= Current.user.first_name %></h2>
+
+<ul>
+  <% @product_colors.each do |color| %>
+    <li><%= color.name %></li>
+  <% end %>
+</ul>
