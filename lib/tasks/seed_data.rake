@@ -28,7 +28,7 @@ namespace :db do
         end
       end
 
-puts "  ✓ Loaded #{ProductColor.count} product colors"
+      puts "  ✓ Loaded #{ProductColor.count} product colors"
 
       # 3. Create users
       puts "Creating sample users..."
