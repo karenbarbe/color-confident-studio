@@ -18,7 +18,7 @@
         <li><a>Item 3</a></li>
       </ul>
     </div>
-    <a class="btn btn-ghost text-xl">Color Confident Studio</a>
+    <%= link_to "Color Confident Studio", root_path, class: "btn btn-ghost text-xl"%>
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
@@ -39,8 +39,14 @@
     <% if authenticated? %>
       <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-neutral" %>
     <% else %>
-      <%= link_to "Log in", login_path, class: "btn btn-outline"%>
-      <%= link_to "Sign up", signup_path, class: "btn btn-neutral" %>
-    <% end %>
-  </div>
+      <% unless current_page?(login_path) %>
+        <%= link_to "Log in", login_path, class: "btn btn-outline"%>
+      <% end %>
+      <% unless current_page?(signup_path) %>
+        <%= link_to "Sign up", signup_path, class: "btn btn-neutral" %>
+
+      <% end %>
+      
+  <% end %>
+</div>
 </div>
