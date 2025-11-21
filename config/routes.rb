@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root "pages#home"
 
   get "/dashboard" => "pages#dashboard", as: :dashboard
+  get "/color-libraries" => "product_colors#color_libraries", as: :color_libraries
 
   # Custom sign in and sign out routes
   get "/login" => "sessions#new", as: :login

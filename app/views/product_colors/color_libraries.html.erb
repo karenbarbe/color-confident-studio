@@ -1,0 +1,19 @@
+<% content_for :title, "Color libraries" %>
+
+<div class="container mx-auto mt-8 w-full space-y-4 p-4">
+  <h1>Color Libraries</h1>
+  <ul>
+    <% @available_brands.each do |brand| %>
+      <li class="badge badge-soft badge-primary"><%= brand.name %></li>
+    <% end %>
+
+  </ul>
+</div>
+
+<div class="container mx-auto mt-8 w-full space-y-4 p-4">
+  <ul class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2" id="product_colors">
+    <% @product_colors.each do |product_color| %>
+      <%= render "color_chip", color: product_color %>
+    <% end %>
+  </ul>
+</div>

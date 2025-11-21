@@ -57,6 +57,11 @@ class ProductColorsController < ApplicationController
     end
   end
 
+  def color_libraries
+    @available_brands = Brand.all.order(:id)
+    @product_colors = ProductColor.all.order(:id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product_color
