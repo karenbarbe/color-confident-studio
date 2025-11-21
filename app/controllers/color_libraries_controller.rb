@@ -1,12 +1,20 @@
 class ColorLibrariesController < ApplicationController
   def index
-    @available_brands = Brand.all.order(:id)
-    @product_colors = ProductColor.all.order(:id)
+    @categories = Brand.categories.keys
+    @brands_by_category = Brand.all.group_by(&:category)
+  end
+
+  def category
+    @category = params[:category]
+    @brands = Brand.where(category: @category).order(:name)
+    @all_categories = Brand.categories.keys
   end
 
   def show
-    @brand = Brand.where("LOWER(name) = ?", params[:id].downcase).first!
-    @available_brands = Brand.all.order(:id)
-    @brand_colors = @brand.product_colors.order(:id)
+    @category = params[:category]
+    @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
+    @product_colors = @brand.product_colors.order(:id)
+    @all_categories = Brand.categories.keys
+    @brands_in_category = Brand.where(category: @category).order(:name)
   end
 end

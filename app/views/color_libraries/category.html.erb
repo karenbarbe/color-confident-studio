@@ -1,0 +1,18 @@
+<% content_for :title, "#{@category.titleize} Color Libraries" %>
+
+<div class="container mx-auto mt-8 w-full space-y-4 p-4">
+  <nav class="text-sm breadcrumbs">
+    <%= link_to "Color Libraries", color_libraries_path %> / 
+    <span class="font-bold"><%= @category.titleize %></span>
+  </nav>
+
+  <h1><%= @category.titleize %> Brands</h1>
+
+  <div class="flex gap-2 flex-wrap">
+    <% @brands.each do |brand| %>
+      <%= link_to brand.name, 
+                  color_library_path(@category, brand.slug),
+                  class: "badge badge-soft badge-primary" %>
+    <% end %>
+  </div>
+</div>

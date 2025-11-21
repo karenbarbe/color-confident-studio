@@ -1,16 +1,22 @@
 <% content_for :title, "#{@brand.name} Color Library" %>
 
 <div class="container mx-auto mt-8 w-full space-y-4 p-4">
-  <h1><%= @brand.name %> Color Library</h1>
+  <nav class="text-sm breadcrumbs mb-4">
+    <%= link_to "Color Libraries", color_libraries_path %> / 
+    <%= link_to @category.titleize, color_library_category_path(@category) %> / 
+    <span class="font-bold"><%= @brand.name %></span>
+  </nav>
 
-  <nav class="flex gap-2 flex-wrap mb-4">
-    <%= link_to "All libraries", color_libraries_path, class: "badge badge-soft badge-secondary" %>
-    <% @available_brands.each do |brand| %>
+  <h1><%= @brand.name %> Colors</h1>
+
+  <nav class="flex gap-2 flex-wrap mb-6">
+    <% @brands_in_category.each do |brand| %>
       <%= link_to brand.name, 
-                  color_library_path(brand.name.downcase), 
+                  color_library_path(@category, brand.slug),
                   class: "badge badge-soft #{brand == @brand ? 'badge-primary' : 'badge-secondary'}" %>
     <% end %>
   </nav>
-</div>
 
-<%= render "color_grid", product_colors: @brand_colors %>
+  <%= render "color_grid", product_colors: @product_colors, category: @category, brand: @brand %>
+
+</div>
