@@ -1,16 +1,11 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Color libraries" %>
 
-<% content_for :title, "Product colors" %>
+<h1>Color Libraries</h1>
 
-<h1>Product colors</h1>
-
-<div id="product_colors">
+<ul class="grid" id="product_colors">
   <% @product_colors.each do |product_color| %>
-    <%= render product_color %>
-    <p>
-      <%= link_to "Show this product color", product_color %>
-    </p>
+    <li>
+      <%= render "color_chip", color: product_color %>
+    </li>
   <% end %>
-</div>
-
-<%= link_to "New product color", new_product_color_path %>
+</ul>
