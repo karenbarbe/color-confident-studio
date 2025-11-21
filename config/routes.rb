@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
+  get "color_libraries/index"
+  get "color_libraries/show"
   root "pages#home"
 
   get "/dashboard" => "pages#dashboard", as: :dashboard
-  get "/color-libraries" => "product_colors#color_libraries", as: :color_libraries
+
+  # Color Libraries routes
+  get "/color-libraries" => "color_libraries#index", as: :color_libraries
+  get "/color-libraries/:id" => "color_libraries#show", as: :color_library
 
   # Custom sign in and sign out routes
   get "/login" => "sessions#new", as: :login
