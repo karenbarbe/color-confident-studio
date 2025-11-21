@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resource :session, only: [ :new, :create, :destroy ]
   resources :passwords, param: :token
 
-  resources :product_colors, only: [ :index, :show]
+  resources :product_colors, only: [ :index, :show ]
   resources :stash_items
 
 end
