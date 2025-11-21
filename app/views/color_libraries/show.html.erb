@@ -1,0 +1,16 @@
+<% content_for :title, "#{@brand.name} Color Library" %>
+
+<div class="container mx-auto mt-8 w-full space-y-4 p-4">
+  <h1><%= @brand.name %> Color Library</h1>
+
+  <nav class="flex gap-2 flex-wrap mb-4">
+    <%= link_to "All libraries", color_libraries_path, class: "badge badge-soft badge-secondary" %>
+    <% @available_brands.each do |brand| %>
+      <%= link_to brand.name, 
+                  color_library_path(brand.name.downcase), 
+                  class: "badge badge-soft #{brand == @brand ? 'badge-primary' : 'badge-secondary'}" %>
+    <% end %>
+  </nav>
+</div>
+
+<%= render "color_grid", product_colors: @brand_colors %>
