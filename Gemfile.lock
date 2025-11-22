@@ -208,9 +208,6 @@ GEM
       zip
     haikunator (1.1.1)
     hashdiff (1.1.2)
-    heroicon-rails (0.2.9)
-      activesupport (>= 7.0.8)
-      nokogiri (>= 1.14.3)
     htmlbeautifier (1.4.3)
     http (5.2.0)
       addressable (~> 2.8)
@@ -624,7 +621,6 @@ DEPENDENCIES
   faker
   grade_runner (~> 0.0.13)
   haikunator
-  heroicon-rails
   htmlbeautifier
   http
   importmap-rails
