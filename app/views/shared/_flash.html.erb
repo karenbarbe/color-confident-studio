@@ -1,13 +1,15 @@
 <% if notice.present? %>
-  <div role="alert">
-    <%= notice %>
-    <button type="button"  aria-label="Close"></button>
+  <div class="container mx-auto mt-4 w-full space-y-4 p-4">
+    <div role="alert" class="alert alert-success alert-outline">
+      <%= notice %>
+    </div>
   </div>
 <% end %>
 
 <% if alert.present? %>
-  <div role="alert">
-    <%= alert %>
-    <button type="button" aria-label="Close"></button>
+  <div class="container mx-auto mt-4 w-full space-y-4 p-4">
+    <div role="alert" class="alert alert-warning alert-outline">
+      <span><%= alert %></span>
+    </div>
   </div>
 <% end %>
