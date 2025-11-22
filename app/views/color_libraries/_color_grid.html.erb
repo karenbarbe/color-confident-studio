@@ -1,7 +1,7 @@
 <ul class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
   <% product_colors.each do |product_color| %>
     <%= link_to color_library_color_path(category, brand.slug, product_color.id) do %>
-      <%= render "color_chip", color: product_color %>
+      <%= render "color_libraries/color_chip", color: product_color %>
     <% end %>
   <% end %>
 </ul>
