@@ -1,13 +1,10 @@
-<h1>Welcome to the Dashboard</h1>
-<h2>Hello, <%= Current.user.first_name %></h2>
-
-<div class="container mx-auto mt-8 w-full space-y-4 text-center">
+<div class="p-4 space-y-4">
+  <h1>Welcome to the Dashboard</h1>
+  <p>Hi, <%= Current.user.first_name.titleize %> <%= Current.user.last_name.first.upcase %></p>
   <h2 class="text-3xl font-bold">Create a new palette</h2>
   <p>Coming soon</p>
+  
+  <div class="text-center">
+    <%= link_to "Browse libraries", color_libraries_path, class: "btn" %>
+  </div>
 </div>
-
-<div class="container mx-auto mt-8 w-full space-y-4 text-center">
-  <%= link_to "Browse libraries", color_libraries_path, class: "btn" %>
-</div>
-
-<%= render "shared/dock" %>
