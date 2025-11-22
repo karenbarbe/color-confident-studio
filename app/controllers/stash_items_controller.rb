@@ -1,5 +1,6 @@
 class StashItemsController < ApplicationController
   before_action :set_stash_item, only: %i[ show edit update destroy ]
+  layout "dock"
 
   # GET /stash_items or /stash_items.json
   def index
