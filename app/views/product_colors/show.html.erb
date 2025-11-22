@@ -1,1 +1,6 @@
-<%= render @product_color %>
+<div class="container mx-auto mt-8 space-y-6">
+  <div class="mx-auto w-sm space-y-4">
+    <%= render @product_color %>
+    <%= button_to "Add to my stash", stash_items_path, params: { stash_item: { product_color_id: @product_color.id } }, class: "btn btn-outline" %>
+  </div>
+</div>

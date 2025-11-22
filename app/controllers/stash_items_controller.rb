@@ -3,7 +3,7 @@ class StashItemsController < ApplicationController
 
   # GET /stash_items or /stash_items.json
   def index
-    @stash_items = StashItem.all
+    @stash_items = StashItem.where(owner: Current.user).includes(product_color: :brand)
   end
 
   # GET /stash_items/1 or /stash_items/1.json
@@ -21,11 +21,11 @@ class StashItemsController < ApplicationController
 
   # POST /stash_items or /stash_items.json
   def create
-    @stash_item = StashItem.new(stash_item_params)
+    @stash_item = Current.user.stash_items.build(stash_item_params)
 
     respond_to do |format|
       if @stash_item.save
-        format.html { redirect_to @stash_item, notice: "Stash item was successfully created." }
+        format.html { redirect_to stash_items_path, notice: "Stash item was successfully created." }
         format.json { render :show, status: :created, location: @stash_item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class StashItemsController < ApplicationController
   def update
     respond_to do |format|
       if @stash_item.update(stash_item_params)
-        format.html { redirect_to @stash_item, notice: "Stash item was successfully updated." }
+        format.html { redirect_to stash_items_path, notice: "Stash item was successfully updated." }
         format.json { render :show, status: :ok, location: @stash_item }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class StashItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def stash_item_params
-      params.expect(stash_item: [ :owner_id, :product_color_id ])
+      params.require(:stash_item).permit(:product_color_id)
     end
 end

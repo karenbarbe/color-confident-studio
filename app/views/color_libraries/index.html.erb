@@ -1,0 +1,21 @@
+<% content_for :title, "Color libraries" %>
+
+<div class="container mx-auto mt-8 w-full space-y-4 p-4">
+  <h1>Color Libraries</h1>
+  <% @categories.each do |category| %>
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold capitalize">
+        <%= link_to category, color_library_category_path(category) %>
+      </h2>
+
+      <div class="flex gap-2 flex-wrap">
+        <% @brands_by_category[category]&.each do |brand| %>
+          <%= link_to brand.name, 
+                      color_library_path(category, brand.slug),
+                      class: "badge badge-soft badge-primary" %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+</div>

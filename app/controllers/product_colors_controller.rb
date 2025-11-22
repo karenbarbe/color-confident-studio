@@ -1,5 +1,5 @@
 class ProductColorsController < ApplicationController
-  before_action :set_product_color, only: %i[ show edit update destroy ]
+  before_action :set_product_color, only: %i[ show ]
 
   # GET /product_colors or /product_colors.json
   def index
@@ -8,6 +8,10 @@ class ProductColorsController < ApplicationController
 
   # GET /product_colors/1 or /product_colors/1.json
   def show
+    if params[:category] && params[:brand_slug]
+      @category = params[:category]
+      @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
+    end
   end
 
   # GET /product_colors/new
@@ -57,15 +61,11 @@ class ProductColorsController < ApplicationController
     end
   end
 
-  def color_libraries
-    @available_brands = Brand.all.order(:id)
-    @product_colors = ProductColor.all.order(:id)
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product_color
-      @product_color = ProductColor.find(params.expect(:id))
+      color_param = params[:color_id] || params[:id]
+      @product_color = ProductColor.find(color_param)
     end
 
     # Only allow a list of trusted parameters through.
