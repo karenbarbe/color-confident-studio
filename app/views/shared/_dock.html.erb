@@ -5,14 +5,19 @@
     <span class="dock-label">Home</span>
   <% end %>
 
-  <%= link_to stash_items_path, class: class_names("dock-active": controller_name == "stash_items") do %>
-    <%= icon(:stash) %>
-    <span class="dock-label">Stash</span>
+  <%= link_to color_libraries_path, class: class_names("dock-active": controller_name == "color_libraries") do %>
+    <%= icon(:swatch) %>
+    <span class="dock-label">Browse</span>
   <% end %>
 
   <%= link_to root_path, class: class_names("dock-active": current_page?(root_path)) do %>
     <%= icon(:create) %>
     <span class="dock-label">Create</span>
+  <% end %>
+
+  <%= link_to stash_items_path, class: class_names("dock-active": controller_name == "stash_items") do %>
+    <%= icon(:stash) %>
+    <span class="dock-label">Stash</span>
   <% end %>
 
   <%= link_to root_path, class: class_names("dock-active": current_page?(root_path)) do %>
