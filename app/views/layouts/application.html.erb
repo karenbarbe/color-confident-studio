@@ -23,9 +23,13 @@
   </head>
 
   <body class="min-h-screen antialiased">
-    <%= render "shared/navbar" %>
-    <%= render "shared/flash" %>
 
-    <%= yield %>
+    <%= render "shared/navbar" %>
+    <main class="container mx-auto mt-8 w-full space-y-4">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </main>
+
   </body>
+
 </html>
