@@ -12,6 +12,8 @@ class ProductColorsController < ApplicationController
       @category = params[:category]
       @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
     end
+
+    render layout: "dock"
   end
 
   # GET /product_colors/new
