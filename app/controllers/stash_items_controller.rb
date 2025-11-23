@@ -53,7 +53,7 @@ class StashItemsController < ApplicationController
     @stash_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to stash_items_path, status: :see_other, notice: "Stash item was successfully destroyed." }
+      format.html { redirect_to stash_items_path, status: :see_other, notice: "Item was successfully removed from your stash." }
       format.json { head :no_content }
     end
   end
