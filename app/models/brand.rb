@@ -18,18 +18,7 @@
 class Brand < ApplicationRecord
   has_many :product_colors, dependent: :destroy
 
-  enum :category, { general: "general", fabric: "fabric", thread: "thread" }
+  enum :category, { thread: "thread", fabric: "fabric" }
 
-  before_validation :generate_slug
   validates :slug, presence: true, uniqueness: true
-
-  def to_param
-    slug
-  end
-
-  private
-
-  def generate_slug
-    self.slug ||= name.parameterize if name.present?
-  end
 end
