@@ -1,6 +1,33 @@
 <div class="container mx-auto mt-8 space-y-6">
   <div class="mx-auto w-sm space-y-4">
     <%= render @product_color %>
-    <%= button_to "Add to my stash", stash_items_path, params: { stash_item: { product_color_id: @product_color.id } }, class: "btn btn-outline" %>
+
+    <% stash_item = Current.user.stash_items.find_by(product_color_id: @product_color.id) %>
+    <% if stash_item %>
+
+      <%= button_to "Remove from stash", stash_item_path(stash_item), method: :delete, params: { stash_item: { product_color_id: @product_color.id } }, class: "btn btn-outline" %>
+
+      <%= button_to toggle_favorite_stash_item_path(stash_item), method: :patch, class: "btn btn-ghost" do %>
+        <%= icon(stash_item.favorite? ? :heart_solid : :heart_outline) %>
+      <% end %>
+
+      <% if stash_item.ownership_status %>
+        <div class="badge badge-soft badge-primary"><%= stash_item.ownership_status %></div>
+      <% end %>
+
+      <div>
+        <%= form_with model: stash_item, method: :patch, class: "join" do |f| %>
+          <%= f.select :ownership_status,
+                 [['Owned', 'owned'], ['Wish List', 'wish_list']],
+                 { prompt: "Select ownership status..." },
+                 { class: "select join-item", required: true } %>
+          <%= f.submit "Update", class: "btn join-item" %>
+        <% end %>
+      </div>
+
+    <% else %>
+      <%= button_to "Add to my stash", stash_items_path, params: { stash_item: { product_color_id: @product_color.id } }, class: "btn btn-outline" %>
+    <% end %>
+
   </div>
 </div>

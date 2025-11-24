@@ -1,6 +1,6 @@
 <% content_for :title, "#{@brand.name} Color Library" %>
 
-<div class="container mx-auto mt-8 w-full space-y-4 p-4">
+<div class="container mx-auto w-full space-y-4 p-4">
   <nav class="text-sm breadcrumbs mb-4">
     <%= link_to "Color Libraries", color_libraries_path %> / 
     <%= link_to @category.titleize, color_library_category_path(@category) %> / 
