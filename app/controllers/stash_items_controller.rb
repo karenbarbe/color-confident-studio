@@ -1,5 +1,5 @@
 class StashItemsController < ApplicationController
-  before_action :set_stash_item, only: %i[ show edit update destroy ]
+  before_action :set_stash_item, only: %i[ toggle_favorite show edit update destroy ]
   layout "dock"
 
   # GET /stash_items or /stash_items.json
@@ -35,11 +35,34 @@ class StashItemsController < ApplicationController
     end
   end
 
+  def toggle_favorite
+    @stash_item.update(favorite: !@stash_item.favorite)
+
+    respond_to do |format|
+      format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item favorite status updated." }
+      format.json { render :show, status: :ok, location: @stash_item }
+    end
+  end
+
+  def update_ownership_status
+    if @stash_item.update(ownership_status: params[:ownership_status])
+      respond_to do |format|
+        format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item ownership status updated." }
+        format.json { render :show, status: :ok, location: @stash_item }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_back fallback_location: stash_items_path, alert: "Failed to update ownership status." }
+        format.json { render json: @stash_item.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # PATCH/PUT /stash_items/1 or /stash_items/1.json
   def update
     respond_to do |format|
       if @stash_item.update(stash_item_params)
-        format.html { redirect_to stash_items_path, notice: "Stash item was successfully updated." }
+        format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item was successfully updated." }
         format.json { render :show, status: :ok, location: @stash_item }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -61,11 +84,11 @@ class StashItemsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_stash_item
-      @stash_item = StashItem.find(params.expect(:id))
+      @stash_item = Current.user.stash_items.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def stash_item_params
-      params.require(:stash_item).permit(:product_color_id)
+      params.require(:stash_item).permit(:product_color_id, :ownership_status)
     end
 end

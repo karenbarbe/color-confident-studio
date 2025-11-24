@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   resources :product_colors, only: [ :index, :show ]
-  resources :stash_items
+  resources :stash_items do
+    member do
+      patch :toggle_favorite
+      patch :update_ownership_status
+    end
+  end
 
 end
