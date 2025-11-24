@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  get "color_libraries/index"
-  get "color_libraries/show"
-  root "pages#home"
+ root "pages#home"
 
   get "/dashboard" => "pages#dashboard", as: :dashboard
 
