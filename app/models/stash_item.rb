@@ -3,6 +3,8 @@
 # Table name: stash_items
 #
 #  id               :bigint           not null, primary key
+#  favorite         :boolean          default(FALSE)
+#  ownership_status :string           default("pending")
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  owner_id         :bigint           not null
@@ -10,6 +12,8 @@
 #
 # Indexes
 #
+#  index_stash_items_on_favorite          (favorite)
+#  index_stash_items_on_ownership_status  (ownership_status)
 #  index_stash_items_on_product_color_id  (product_color_id)
 #
 # Foreign Keys
