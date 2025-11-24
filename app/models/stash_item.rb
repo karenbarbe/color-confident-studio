@@ -4,7 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  favorite         :boolean          default(FALSE)
-#  ownership_status :string           default("pending")
+#  ownership_status :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  owner_id         :bigint           not null
@@ -24,4 +24,8 @@
 class StashItem < ApplicationRecord
   belongs_to :owner, class_name: "User", counter_cache: true
   belongs_to :product_color, counter_cache: true
+
+  enum :ownership_status, { owned: "owned", wish_list: "wish_list" }
+
+  validates :ownership_status, inclusion: { in: ownership_statuses.keys }, allow_nil: true
 end

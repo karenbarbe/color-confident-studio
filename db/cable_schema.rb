@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_24_040726) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_24_201016) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -199,7 +199,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_040726) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "favorite", default: false
-    t.string "ownership_status", default: "pending"
+    t.string "ownership_status"
     t.index ["favorite"], name: "index_stash_items_on_favorite"
     t.index ["ownership_status"], name: "index_stash_items_on_ownership_status"
     t.index ["product_color_id"], name: "index_stash_items_on_product_color_id"
