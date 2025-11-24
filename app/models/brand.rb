@@ -3,7 +3,7 @@
 # Table name: brands
 #
 #  id                   :bigint           not null, primary key
-#  category             :string           default("general")
+#  category             :string           default(NULL)
 #  name                 :string
 #  product_colors_count :integer          default(0), not null
 #  slug                 :string
