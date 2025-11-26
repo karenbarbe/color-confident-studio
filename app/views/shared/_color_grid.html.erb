@@ -1,5 +1,4 @@
-<ul class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10
- gap-x-4 gap-y-8">
+<ul class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-x-4 gap-y-8">
   <% product_colors.each do |product_color| %>
     <%= link_to color_library_color_path(product_color.brand.category, product_color.brand.slug, product_color.id) do %>
       <%= render "shared/color_chip", color: product_color %>
