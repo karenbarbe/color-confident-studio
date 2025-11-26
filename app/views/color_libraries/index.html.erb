@@ -3,7 +3,7 @@
 <div class="container mx-auto mt-8 w-full space-y-4 px-4">
   <h1>Color Libraries</h1>
 
-  <h2>DMC—our featured brand</h2>
+  <h2><%= @featured.name %>—our featured brand</h2>
  <%= render "color_grid", product_colors: @featured_colors, category: @featured.category, brand: @featured %>
 
 </div>

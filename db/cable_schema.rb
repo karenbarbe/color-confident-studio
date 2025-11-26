@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_24_201016) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_26_153644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,7 +21,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_201016) do
     t.integer "product_colors_count", default: 0, null: false
     t.string "slug"
     t.string "category", default: "general"
+    t.string "featured", default: "general", null: false
     t.index ["category"], name: "index_brands_on_category"
+    t.index ["featured"], name: "index_brands_on_featured"
     t.index ["slug"], name: "index_brands_on_slug", unique: true
   end
 
