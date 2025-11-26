@@ -1,8 +1,0 @@
-<ul class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10
- gap-x-4 gap-y-8">
-  <% product_colors.each do |product_color| %>
-    <%= link_to color_library_color_path(category, brand.slug, product_color.id) do %>
-      <%= render "color_libraries/color_chip", color: product_color %>
-    <% end %>
-  <% end %>
-</ul>
