@@ -4,6 +4,11 @@
   <h1>Color Libraries</h1>
 
   <h2><%= @featured.name %>—our featured brand</h2>
- <%= render "color_grid", product_colors: @featured_colors, category: @featured.category, brand: @featured %>
+  <%= render "shared/color_grid", product_colors: @featured_colors %>
+
+  <%= link_to color_library_path(@featured.category, @featured.slug), class: "btn btn-ghost" do %>
+    See all <%= @featured.name %>
+    <%= icon (:arrow_right_outline) %>
+  <% end %>
 
 </div>
