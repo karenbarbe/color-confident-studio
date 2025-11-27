@@ -4,11 +4,16 @@
   <h1>Color Libraries</h1>
 
   <h2><%= @featured.name %>—our featured brand</h2>
+  <h3 class="text-sm font-semibold"><%= @featured.name.upcase %> (<%= @featured.product_colors_count %>)</h3>
+
   <%= render "shared/color_grid", product_colors: @featured_colors %>
 
-  <%= link_to color_library_path(@featured.category, @featured.slug), class: "btn btn-ghost" do %>
-    See all <%= @featured.name %>
-    <%= icon (:arrow_right_outline) %>
-  <% end %>
+  <div class="flex justify-end">
+    <%= link_to color_library_path(@featured.category, @featured.slug), class: "btn btn-ghost" do %>
+      See all <%= @featured.name %>
+      <%= icon (:arrow_right_outline) %>
+    <% end %>
+  </div>
+
 
 </div>
