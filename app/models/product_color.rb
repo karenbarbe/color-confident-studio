@@ -3,6 +3,7 @@
 # Table name: product_colors
 #
 #  id                :bigint           not null, primary key
+#  color_family      :string
 #  hex_color         :string
 #  name              :string
 #  oklch_c           :decimal(4, 3)
@@ -16,10 +17,11 @@
 #
 # Indexes
 #
-#  index_product_colors_on_brand_id  (brand_id)
-#  index_product_colors_on_oklch_c   (oklch_c)
-#  index_product_colors_on_oklch_h   (oklch_h)
-#  index_product_colors_on_oklch_l   (oklch_l)
+#  index_product_colors_on_brand_id      (brand_id)
+#  index_product_colors_on_color_family  (color_family)
+#  index_product_colors_on_oklch_c       (oklch_c)
+#  index_product_colors_on_oklch_h       (oklch_h)
+#  index_product_colors_on_oklch_l       (oklch_l)
 #
 # Foreign Keys
 #
@@ -28,4 +30,14 @@
 class ProductColor < ApplicationRecord
   belongs_to :brand, counter_cache: true
   has_many :stash_items, dependent: :destroy
+
+  COLOR_FAMILIES = [
+    "Red", "Red-orange", "Orange", "Yellow-orange", "Yellow", "Yellow-green", "Green", "Blue-green", "Blue", "Blue-violet", "Violet", "Red-violet", "Warm neutral", "Cool neutral", "Gray"
+  ].freeze
+
+  validates :color_family, inclusion: { in: COLOR_FAMILIES }, allow_blank: true
+
+  scope :by_family, ->(family) { where(color_family: family) }
+  scope :neutrals, -> { where(color_family: [ "Warm neutral", "Cool neutral", "Gray" ]) }
+  scope :chromatic, -> { where.not(color_family: [ "Warm neutral", "Cool neutral", "Gray" ]) }
 end
