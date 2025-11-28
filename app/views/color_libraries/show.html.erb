@@ -7,16 +7,13 @@
     <span class="font-bold"><%= @brand.name %></span>
   </nav>
 
-  <h1><%= @brand.name %> Colors</h1>
+  <h1 class="font-bold text-3xl"><%= @brand.name %> colors</h1>
 
-  <nav class="flex gap-2 flex-wrap mb-6">
-    <% @brands_in_category.each do |brand| %>
-      <%= link_to brand.name, 
-                  color_library_path(@category, brand.slug),
-                  class: "badge badge-soft #{brand == @brand ? 'badge-primary' : 'badge-secondary'}" %>
-    <% end %>
-  </nav>
-
-  <%= render "shared/color_grid", product_colors: @product_colors %>
+  <% @colors_by_family.each do |family, colors| %>
+    <section class="space-y-2">
+      <h2 class="font-bold text-2xl"><%= family %></h2>
+      <%= render "shared/color_grid", product_colors: colors %>
+    </section>
+  <% end %>
 
 </div>

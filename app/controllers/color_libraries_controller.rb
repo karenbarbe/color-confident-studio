@@ -18,8 +18,11 @@ class ColorLibrariesController < ApplicationController
     @category = params[:category]
     @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
     @product_colors = @brand.product_colors.order(:id)
-    @all_categories = Brand.categories.keys
-    @brands_in_category = Brand.where(category: @category).order(:name)
     @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id).to_set
+
+    @colors_by_family = ProductColor::COLOR_FAMILIES.filter_map do |family|
+      colors = @product_colors.by_family(family).to_a
+      [ family, colors ] if colors.any?
+    end
   end
 end
