@@ -17,7 +17,7 @@ class ColorLibrariesController < ApplicationController
   def show
     @category = params[:category]
     @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
-    @product_colors = @brand.product_colors.order(:id)
+    @product_colors = @brand.product_colors.order(:id).to_a
     @stashed_color_ids = Current.user.stash_items
                             .joins(:brand)
                             .where(brands: { id: @brand.id })
@@ -26,9 +26,11 @@ class ColorLibrariesController < ApplicationController
 
     @stash_by_brand_count = @stashed_color_ids.count
 
+    colors_grouped = @product_colors.group_by(&:color_family)
+
     @colors_by_family = ProductColor::COLOR_FAMILIES.filter_map do |family|
-      colors = @product_colors.by_family(family).to_a
-      [ family, colors ] if colors.any?
+      colors = colors_grouped[family]
+      [ family, colors ] if colors.present?
     end
   end
 end
