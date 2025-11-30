@@ -1,26 +1,26 @@
 <div class="dock dock-lg">
 
-  <%= link_to dashboard_path, class: class_names("dock-active": current_page?(dashboard_path)) do %>
+  <%= link_to dashboard_path, class: class_names("dock-active": current_page?(dashboard_path), "text-gray-500": !current_page?(dashboard_path)) do %>
     <%= icon(:home_outline) %>
     <span class="dock-label">Home</span>
   <% end %>
 
-  <%= link_to color_libraries_path, class: class_names("dock-active": controller_name == "color_libraries") do %>
+  <%= link_to color_libraries_path, class: class_names("dock-active": controller_name == "color_libraries", "text-gray-500": controller_name != "color_libraries") do %>
     <%= icon(:swatch_outline) %>
     <span class="dock-label">Browse</span>
   <% end %>
 
-  <%= link_to root_path, class: class_names("dock-active": current_page?(root_path)) do %>
+  <%= link_to root_path, class: class_names("dock-active": current_page?(root_path), "text-gray-500": !current_page?(root_path)) do %>
     <%= icon(:create_outline) %>
     <span class="dock-label">Create</span>
   <% end %>
 
-  <%= link_to stash_items_path, class: class_names("dock-active": controller_name == "stash_items") do %>
+  <%= link_to stash_items_path, class: class_names("dock-active": controller_name == "stash_items", "text-gray-500": controller_name != "stash_items") do %>
     <%= icon(:stash_outline) %>
     <span class="dock-label">Stash</span>
   <% end %>
 
-  <%= link_to root_path, class: class_names("dock-active": current_page?(root_path)) do %>
+  <%= link_to root_path, class: class_names("dock-active": current_page?(root_path), "text-gray-500": !current_page?(root_path)) do %>
     <%= icon(:palette_outline) %>
     <span class="dock-label">Palettes</span>
   <% end %>

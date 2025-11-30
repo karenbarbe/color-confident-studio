@@ -25,6 +25,8 @@ class StashItem < ApplicationRecord
   belongs_to :owner, class_name: "User", counter_cache: true
   belongs_to :product_color, counter_cache: true
 
+  has_one :brand, through: :product_color
+
   enum :ownership_status, { owned: "owned", wish_list: "wish_list" }
 
   validates :ownership_status, inclusion: { in: ownership_statuses.keys }, allow_nil: true

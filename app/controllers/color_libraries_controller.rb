@@ -3,6 +3,9 @@ class ColorLibrariesController < ApplicationController
   def index
     @categories = Brand.categories.keys
     @brands_by_category = Brand.all.group_by(&:category)
+    @featured = Brand.main.first
+    @featured_colors = @featured.product_colors.order(:id).first(20)
+    @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id).to_set
   end
 
   def category
@@ -14,8 +17,20 @@ class ColorLibrariesController < ApplicationController
   def show
     @category = params[:category]
     @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
-    @product_colors = @brand.product_colors.order(:id)
-    @all_categories = Brand.categories.keys
-    @brands_in_category = Brand.where(category: @category).order(:name)
+    @product_colors = @brand.product_colors.order(:id).to_a
+    @stashed_color_ids = Current.user.stash_items
+                            .joins(:brand)
+                            .where(brands: { id: @brand.id })
+                            .pluck(:product_color_id)
+                            .to_set
+
+    @stash_by_brand_count = @stashed_color_ids.count
+
+    colors_grouped = @product_colors.group_by(&:color_family)
+
+    @colors_by_family = ProductColor::COLOR_FAMILIES.filter_map do |family|
+      colors = colors_grouped[family]
+      [ family, colors ] if colors.present?
+    end
   end
 end

@@ -1,0 +1,483 @@
+name,vendor_code,hex_color,oklch_l,oklch_c,oklch_h,color_family
+Rose Quartz,3713,FFD1E0,0.904,0.055,356.724,Red
+Rose Dawn,761,F9B9CA,0.849,0.077,1.326,Red
+Dusty Pink,760,E88DA0,0.743,0.112,6.661,Red
+Blush,3712,DD7288,0.680,0.135,8.286,Red
+Amaranth,3328,D15767,0.617,0.154,14.859,Red
+Egyptian Red,347,B11B39,0.494,0.182,17.483,Red
+Ballet Slippers,353,FFCDC7,0.890,0.058,26.226,Red
+Salmon,352,FDA8A1,0.813,0.102,24.708,Red-orange
+Coral,351,E55C52,0.649,0.173,27.083,Red-orange
+Vermillion,350,D03E35,0.577,0.184,27.918,Red-orange
+Red Pepper,349,BA1F17,0.509,0.190,29.015,Red-orange
+Japanese Red,817,B00C0C,0.480,0.191,28.571,Red-orange
+Chinese Lacquer,304,9C073B,0.445,0.174,11.185,Red
+Strawberry Sorbet,3833,E684AF,0.731,0.130,353.018,Red
+Strawberry,3832,D15784,0.625,0.160,359.770,Red
+Wild Strawberry,3831,B02754,0.506,0.174,6.862,Red
+Wine,777,70003C,0.355,0.145,357.501,Red
+Tulip Red,3801,F43653,0.636,0.223,18.668,Red
+Scarlet,666,E00000,0.569,0.234,29.234,Red
+Carmine Red,321,C2003A,0.516,0.207,17.064,Red
+Red Kiss,498,971C41,0.447,0.158,9.520,Red
+Cherry Red,816,8F002B,0.413,0.165,15.826,Red
+Black Cherry,815,6C2338,0.374,0.105,6.095,Red
+Vin Rouge,814,541835,0.316,0.095,354.035,Red
+Rose,894,FF8FB2,0.779,0.140,0.853,Red
+Dahlia,893,FF668C,0.713,0.188,7.910,Red
+Dahlia,892,F9486B,0.664,0.212,13.918,Red
+Geranium,891,EF3E67,0.638,0.212,12.566,Red
+Powder Pink,818,FEDCEB,0.927,0.042,349.514,Red
+Bubblegum Pink,957,FF9EBE,0.806,0.121,358.908,Red
+Hot Pink,956,F6608F,0.693,0.187,3.937,Red
+Azalea,3708,FF9EBA,0.805,0.119,1.461,Red
+Flamingo,3706,F57A93,0.727,0.152,8.801,Red
+Guava,3705,E84F63,0.642,0.188,16.673,Red
+Candy Pink,963,FFD6E3,0.914,0.049,357.075,Red
+Peony,3716,FFA8C5,0.825,0.108,358.165,Red
+Antique Rose,962,E37DA2,0.712,0.132,357.875,Red
+Rose Garden,961,CD4778,0.596,0.174,1.410,Red
+Crushed Raspberry,309,B4235A,0.512,0.182,4.262,Red
+Layette,819,FCE3E3,0.936,0.028,17.654,Red
+Wild Rose,3326,FFA8BA,0.822,0.104,6.110,Red
+Watermelon,899,E87894,0.707,0.141,5.458,Red
+Dark Pink,335,D24B6F,0.606,0.172,7.558,Red
+Rhubarb,326,BA0840,0.504,0.198,14.219,Red
+Marshmallow,151,FFBDCA,0.862,0.078,5.755,Red
+Baker Miller Pink,3354,F8B0C6,0.831,0.088,359.222,Red
+Pink Hollyhock,3733,F08AA3,0.749,0.127,4.845,Red
+Pink Pepper,3731,DB5C7E,0.644,0.162,6.132,Red
+Dragonfruit,3350,BB1B5B,0.520,0.194,4.447,Red
+Raspberry,150,97023E,0.434,0.173,8.249,Red
+Sakura,23,FFE5F1,0.946,0.032,348.088,Red-violet
+Pale Orchid,3689,F9BDD3,0.859,0.074,354.931,Red-violet
+Pink Lupine,3688,DA8BAC,0.727,0.104,353.370,Red-violet
+Berry Smoothie,3687,CD568D,0.621,0.161,353.980,Red-violet
+Bordeaux,3803,8D024A,0.418,0.168,359.261,Red-violet
+Bramble,3685,770D3F,0.376,0.142,359.449,Red-violet
+Rosebud,605,F8B9CE,0.849,0.077,357.087,Red-violet
+Pink Hyacinth,604,F99FBD,0.801,0.112,358.430,Red-violet
+Macaroon Pink,603,F27DA4,0.732,0.149,0.255,Red
+Pink Verbena,602,E55283,0.648,0.186,3.318,Red
+Impatiens,601,D1235B,0.564,0.207,9.318,Red
+Radish,600,D1006C,0.557,0.225,0.858,Red
+Carnation,3806,FF8FB8,0.781,0.142,357.562,Red-violet
+Fuschia,3805,E94E99,0.657,0.202,354.320,Red-violet
+Bengal Rose,3804,E22881,0.607,0.226,358.321,Red-violet
+Lotus Blossom,3609,FCBBE4,0.863,0.091,340.971,Red-violet
+Foxglove,3608,F495D1,0.786,0.135,342.225,Red-violet
+Hibiscus,3607,DF43A9,0.637,0.216,344.847,Red-violet
+Rose Magenta,718,B3097D,0.511,0.211,347.098,Red-violet
+Dark Magenta,917,A80076,0.486,0.205,346.538,Red-violet
+Bougainvillea,915,800059,0.398,0.168,346.531,Red-violet
+Allium,33,BA6FC3,0.654,0.145,323.112,Red-violet
+Tyrian,34,812C7E,0.450,0.154,329.213,Red-violet
+Plum,35,7D2171,0.425,0.156,333.765,Red-violet
+Amethyst Haze,778,D3A7B7,0.773,0.056,354.732,Red-violet
+Lycee,3727,CB9AB2,0.739,0.066,347.912,Red-violet
+Heather,316,BB7C9E,0.661,0.090,346.267,Red-violet
+Iced Plum,3726,A05A7D,0.559,0.102,349.551,Red-violet
+Archil,315,894368,0.483,0.106,348.840,Red-violet
+Aubergine,3802,7C2759,0.418,0.130,347.885,Red-violet
+Magenta Red,902,731C3C,0.379,0.123,2.869,Red
+Thyme Flower,3836,C48DB3,0.709,0.084,338.367,Red-violet
+Purple Violet,3835,A0658E,0.584,0.094,338.910,Red-violet
+Red Grape,3834,673257,0.400,0.091,339.923,Red-violet
+Prune,154,421032,0.272,0.088,342.923,Red-violet
+Heather White,24,F6E0EB,0.928,0.028,345.915,Red-violet
+Cornflower White,25,EEDDEE,0.916,0.029,325.812,Red-violet
+Lavender White,26,E3D4ED,0.890,0.037,312.047,Red-violet
+Light Parma Violet,211,E5C3E6,0.857,0.060,325.203,Red-violet
+Parma Violet,210,E1ADDA,0.809,0.085,330.951,Red-violet
+Lilac,209,C492C8,0.725,0.094,324.017,Red-violet
+Pansy,208,9C5BA4,0.572,0.130,323.029,Red-violet
+Purple,3837,7C4899,0.498,0.135,312.108,Violet
+Dark Purple,327,65356E,0.414,0.107,321.117,Red-violet
+Pink Lilac,153,EBC6E1,0.866,0.055,335.745,Red-violet
+Pastel Purple,554,D2A2D2,0.772,0.085,326.366,Red-violet
+Violet Amethyst,553,B077B6,0.650,0.111,323.419,Red-violet
+Violet,552,824D8F,0.508,0.117,319.514,Violet
+Passionflower,550,47155B,0.313,0.123,314.392,Violet
+Rose Mist,3743,D7CBE2,0.859,0.034,308.920,Violet
+Storm Clouds,3042,AA8DAA,0.679,0.054,326.147,Red-violet
+Purple Slate,3041,7B566F,0.501,0.061,339.131,Red-violet
+Gun Metal,3740,68455D,0.438,0.060,338.924,Red-violet
+Ash White,27,E2D8E9,0.895,0.025,311.689,Violet
+Lavender Gray,28,7C688D,0.550,0.061,308.994,Violet
+Emperor Purple,29,563F69,0.411,0.074,308.604,Violet
+Ice Blue,3747,D1D5FA,0.882,0.051,280.424,Blue-violet
+Hydrangea Blue,341,A7B3F1,0.780,0.090,275.662,Blue-violet
+Cornflower Blue,156,99A1EA,0.731,0.106,278.622,Blue-violet
+Wisteria Blue,340,9392DD,0.691,0.109,283.767,Blue-violet
+Mauve,155,7363BB,0.556,0.133,289.708,Violet
+Iris,3746,6049A2,0.475,0.138,292.224,Violet
+Violet Blue,333,5C3EA3,0.453,0.156,292.808,Violet
+Kitten Gray,30,8B8CD0,0.666,0.100,282.681,Blue-violet
+Dusty Violet,31,635BA9,0.516,0.120,286.046,Blue-violet
+Antique Mauve,32,4C4A8C,0.444,0.106,282.551,Blue-violet
+Heliotrope,157,AECBFF,0.839,0.080,261.972,Blue-violet
+Baby Blue,794,86A5E4,0.723,0.099,263.935,Blue-violet
+Deep Ocean,793,5E7EC9,0.603,0.120,265.467,Blue-violet
+Tanzanite,3807,465DAF,0.502,0.133,269.385,Blue-violet
+China Blue,792,3E4698,0.434,0.133,275.223,Blue-violet
+Ultramarine Blue,158,30398D,0.389,0.138,273.494,Blue-violet
+Lapis,791,212B82,0.343,0.145,271.244,Blue-violet
+Linen Flower Blue,3840,B5D2FD,0.857,0.068,258.105,Blue-violet
+Mediterranean Blue,3839,6B89DB,0.644,0.128,267.547,Blue-violet
+Thistle Blue,3838,3A5CB7,0.499,0.149,265.805,Blue-violet
+Sky Blue,800,B4D9FD,0.871,0.064,247.845,Blue
+Soft Blue,809,87ACEE,0.743,0.104,261.613,Blue-violet
+Horizon Blue,799,76A2E0,0.705,0.103,257.026,Blue-violet
+Cobalt Blue,798,4D79C7,0.581,0.130,261.063,Blue-violet
+French Blue,797,2A4DAC,0.452,0.158,265.251,Blue-violet
+Sévres Blue,796,00308C,0.352,0.160,261.749,Blue-violet
+Royal Blue,820,001675,0.279,0.160,263.944,Blue-violet
+Blue Water,162,C9E7F2,0.910,0.035,221.904,Blue
+Forget-Me-Knot,827,ABD0ED,0.841,0.057,241.960,Blue
+Gallic Blue,813,6B9BD6,0.679,0.102,254.163,Blue
+Tuareg Blue,826,2C6CB5,0.528,0.132,254.007,Blue
+Gentian Blue,825,084C8C,0.416,0.123,253.041,Blue
+Marine Blue,824,043B76,0.357,0.114,255.190,Blue-violet
+Electric Blue,996,62B5FE,0.751,0.133,247.202,Blue
+Pool Blue,3843,1385F6,0.621,0.193,254.317,Blue
+Plunge Pool,995,006BD6,0.540,0.184,255.920,Blue-violet
+Navajo Blue,3846,54CFF8,0.802,0.122,223.645,Blue
+Turquoise,3845,0DB1E3,0.710,0.136,227.381,Blue
+Lagoon,3844,01A0D0,0.659,0.129,228.429,Blue
+Stormy Sky,159,C5CDF1,0.854,0.051,275.406,Blue-violet
+Stormy Blue,160,8F9CD1,0.702,0.079,273.553,Blue-violet
+Blue Ash,161,5C6CAD,0.547,0.103,272.122,Blue-violet
+Cloud Blue,3756,DDEFFD,0.943,0.027,241.157,Blue
+Blue Summer Rain,775,C1DDF6,0.885,0.046,245.288,Blue
+Igloo Blue,3841,ADD0F0,0.843,0.058,246.153,Blue
+Arctic Blue,3325,89B9E1,0.766,0.077,244.170,Blue
+Pastel Blue,3755,65A1D2,0.688,0.096,244.471,Blue
+Light Indigo,334,307FC0,0.579,0.126,247.201,Blue
+Delft Blue,322,3E75C1,0.562,0.132,256.984,Blue-violet
+Midnight Blue,312,1C4182,0.387,0.118,260.740,Blue-violet
+Inky Blue,803,1A3474,0.345,0.115,264.465,Blue-violet
+Indigo Blue,336,182F69,0.324,0.106,264.790,Blue-violet
+Blueberry,823,0E204E,0.260,0.088,264.774,Blue-violet
+Elderberry Blue,939,000E33,0.181,0.077,260.828,Blue-violet
+Moonlight Blue,3753,BCD5F1,0.864,0.047,251.332,Blue-violet
+Light Porcelain Blue,3752,9BB9D9,0.774,0.056,250.224,Blue
+Blue Gull,932,6587AE,0.613,0.071,252.356,Blue
+Blue Gray,931,497097,0.533,0.076,249.419,Blue
+Slate Gray,930,284F77,0.419,0.081,250.842,Blue
+Dark Petrol Blue,3750,1E426C,0.375,0.083,253.883,Blue
+Sea Air,828,C2E9FF,0.913,0.051,232.785,Blue
+Aquamarine Blue,3761,9CD6F7,0.848,0.075,233.764,Blue
+Bluish Spray,519,83BEF1,0.780,0.095,245.518,Blue
+Nattier Blue,518,499DD4,0.668,0.115,240.324,Blue
+Fjord Blue,3760,3F8ECF,0.627,0.125,246.476,Blue
+Nautical Blue,517,066DBC,0.527,0.148,250.294,Blue
+Prussian Blue,3842,045FA4,0.478,0.133,249.939,Blue
+Dark Polar Blue,311,114D8D,0.420,0.121,254.112,Blue
+Blue Sea Mist,747,C9F1F8,0.932,0.042,209.353,Blue
+Blue Green,3766,84CEE1,0.810,0.078,215.830,Blue
+Turquoise Tide,807,359EBB,0.652,0.102,220.151,Blue
+Blue Teal,3765,066A98,0.498,0.108,237.598,Blue
+Blue Waterfall,3811,BDE7EF,0.901,0.045,210.470,Blue
+Pale Lagoon,598,95D3DF,0.829,0.065,210.929,Blue
+Pack Ice Blue,597,58A8C6,0.693,0.090,224.904,Blue
+Persian Blue,3810,1F8CAD,0.597,0.104,223.923,Blue
+Sea Cave,3809,097995,0.535,0.097,221.891,Blue
+Mallard,3808,056780,0.477,0.087,222.480,Blue
+Oyster Shell,928,D4E9ED,0.920,0.023,210.397,Blue
+Oyster,927,AFCFD4,0.833,0.035,208.008,Blue
+Gray Green,926,79A0AF,0.682,0.048,223.539,Blue
+Storm,3768,477790,0.545,0.065,232.429,Blue
+Tahitian Pearl,924,2F6783,0.488,0.074,232.839,Blue
+Turquoise Green,3849,53B2B2,0.707,0.089,195.318,Blue-green
+Mermaid’s Tail,3848,129191,0.596,0.099,194.832,Blue-green
+Chinese Green,3847,007575,0.509,0.087,194.769,Blue-green
+Sea Green,964,A7E6E2,0.881,0.064,191.130,Blue-green
+Pale Viridian,959,59C9C2,0.769,0.102,189.661,Blue-green
+Green Valley,958,2CAAA2,0.670,0.106,188.548,Blue-green
+Viridian,3812,008F85,0.585,0.103,186.187,Blue-green
+Emerald Shard,3851,36BAA8,0.715,0.114,181.816,Blue-green
+Acid Green,943,00A38D,0.640,0.117,178.573,Blue-green
+Emerald,3850,00947B,0.595,0.112,175.087,Blue-green
+Peppermint,993,6CC6BD,0.768,0.088,187.128,Blue-green
+Mint,992,42A99F,0.672,0.096,186.297,Blue-green
+Spruce,3814,179088,0.591,0.098,187.726,Blue-green
+Frog,991,00857C,0.555,0.097,186.511,Blue-green
+Soft Green,966,91C0AC,0.769,0.057,166.861,Green
+Light Malachite,564,8CC5AD,0.777,0.069,166.623,Green
+Celedon,563,74B499,0.719,0.077,165.838,Green
+Malachite,562,408769,0.569,0.086,163.761,Green
+Pinewood,505,2C775A,0.514,0.088,164.451,Green
+Poplar,3817,92C3B7,0.779,0.054,178.039,Blue-green
+Serpent,3816,73AB9D,0.698,0.062,176.969,Blue-green
+Eucalyptus,163,538D7D,0.599,0.066,174.362,Blue-green
+Almond Green,3815,457E6E,0.549,0.066,173.618,Blue-green
+Cypress Green,561,32715F,0.502,0.072,172.068,Blue-green
+Lichen Green,3813,ABCFC8,0.826,0.039,182.206,Blue-green
+Thyme Green,503,8CB5AE,0.741,0.045,183.475,Green
+Almond Leaf,502,5B867D,0.586,0.049,179.960,Green
+Pond Green,501,3E6059,0.461,0.041,180.019,Green
+Ivy,500,24423C,0.353,0.038,179.767,Green
+Pale Green,955,ADEBD1,0.891,0.072,166.968,Green
+Spearmint,13,A2E6C4,0.870,0.083,162.307,Green
+Rice Field,954,8FE0BE,0.845,0.093,165.823,Green
+Jade,913,67C19B,0.744,0.104,164.394,Green
+Watermint,912,3FA278,0.642,0.113,162.299,Green
+Golf Green,911,108957,0.557,0.125,158.408,Green
+English Green,910,217847,0.509,0.113,154.105,Green
+Croquet Lawn,909,007544,0.495,0.119,156.264,Green
+Broccoli,3818,0A5C3D,0.421,0.090,161.056,Green
+Bamboo Shoot Green,369,BFE8CA,0.894,0.059,153.356,Green
+Eau de Nile,368,98C3A8,0.779,0.060,157.158,Green
+Fern,320,689C81,0.648,0.069,161.026,Green
+Laurel,367,47765E,0.525,0.064,160.824,Green
+Shaded Green,319,2A513D,0.400,0.056,159.997,Green
+Black Forest,890,1F4730,0.362,0.061,156.321,Green
+Pistachio,164,B0E3B8,0.869,0.079,149.191,Green
+Fennel,989,82BA84,0.736,0.097,145.365,Green
+Verbena Stem,988,5A905A,0.601,0.099,144.224,Green
+Basil,987,437553,0.517,0.077,153.236,Green
+Boxwood,986,305F3F,0.443,0.074,152.646,Green
+Celery,772,C4E2BB,0.881,0.061,138.492,Green
+Scallion,3348,ADD08B,0.815,0.100,130.217,Green
+Asparagus,3347,74995C,0.640,0.096,133.883,Green
+Artichoke,3346,587C49,0.546,0.086,136.922,Green
+Spinach,3345,375F35,0.444,0.081,143.056,Green
+Bottle Green,895,2F5634,0.414,0.072,147.093,Green
+Bok Choy,14,DCF1A7,0.925,0.098,121.210,Yellow-green
+Spring Onion,15,DCF094,0.920,0.118,118.793,Yellow-green
+Sprout,16,CBE873,0.886,0.147,120.994,Yellow-green
+Lime,704,A8CB4D,0.792,0.157,123.184,Yellow-green
+Spring Green,703,89C346,0.752,0.167,130.712,Yellow-green
+Spring Lawn,702,65B446,0.695,0.165,137.931,Yellow-green
+Grass,701,43A130,0.629,0.174,140.571,Green
+Meadow Green,700,288F2A,0.571,0.166,143.249,Green
+Candied Fruit,699,147636,0.497,0.131,149.390,Green
+Granny Smith,907,BAD728,0.829,0.186,119.369,Yellow-green
+Mistletoe,906,8FC01B,0.746,0.184,126.287,Yellow-green
+Budgie Green,905,618D16,0.590,0.148,128.992,Yellow-green
+Kale,904,527D17,0.538,0.135,130.576,Yellow-green
+Green Bud,472,D2DB76,0.863,0.126,113.213,Yellow-green
+Tarragon,471,AEC153,0.774,0.137,117.928,Yellow-green
+Olive Green,470,84A735,0.680,0.145,124.908,Yellow-green
+Golden Moss Green,469,708F2D,0.606,0.129,125.252,Yellow-green
+Moss,937,547B32,0.537,0.111,132.540,Yellow-green
+Oak Moss,936,4D6B2E,0.490,0.095,130.908,Yellow-green
+Undergrowth,935,3F5426,0.417,0.075,129.400,Yellow-green
+Seaweed,934,3E4C2F,0.396,0.050,129.388,Yellow-green
+Sage,3364,A5B06D,0.733,0.090,116.293,Yellow-green
+Bullfrog,3363,6C824A,0.575,0.084,126.407,Yellow-green
+Conifer,3362,5A713D,0.517,0.081,128.447,Yellow-green
+Lemon Sherbet,10,FAFFB3,0.979,0.096,111.208,Yellow-green
+Lemon Drop,11,F1F48A,0.943,0.129,110.063,Yellow-green
+Citrus Yellow,12,E4F66F,0.934,0.160,115.921,Yellow-green
+Linden Green,165,DEDE7D,0.880,0.120,108.633,Yellow-green
+Aurous Green,3819,CDCD56,0.825,0.141,109.125,Yellow-green
+Wormwood Green,166,B3B305,0.742,0.161,109.754,Yellow-green
+Grasshopper,581,989D06,0.670,0.147,112.034,Yellow-green
+Cactus,580,808005,0.581,0.125,109.738,Yellow-green
+Green Ash,523,BED0B3,0.836,0.044,133.502,Yellow-green
+Avocado,3053,B0C69F,0.800,0.059,131.666,Yellow-green
+Silver Green,3052,93A67D,0.699,0.062,128.125,Yellow-green
+Forest Green,3051,66794E,0.549,0.067,127.832,Yellow-green
+Pebble Green,524,BBCFB4,0.832,0.043,137.556,Green
+Lattice Green,522,95B191,0.730,0.055,141.618,Green
+Wild Wood,520,587354,0.525,0.057,141.406,Green
+Broken Olive,734,D5CD5D,0.833,0.134,105.169,Yellow-green
+Golden Green,733,BCB22F,0.749,0.144,104.886,Yellow-green
+Light Bronzed Green,732,928B26,0.624,0.118,105.337,Yellow-green
+Khaki,730,79710C,0.539,0.110,104.419,Yellow-green
+Green Oyster,3013,B2AE70,0.740,0.082,105.064,Yellow-green
+Dried Moss,3012,9F9556,0.664,0.084,100.416,Yellow-green
+Deep Olive,3011,7D7531,0.555,0.090,102.637,Yellow-green
+Cardamom Green,372,C4B782,0.778,0.072,96.001,Yellow
+Steppe,371,B59E69,0.707,0.076,87.009,Yellow-orange
+Herbes de Provence,370,AE995B,0.688,0.085,91.312,Yellow
+Maize,17,e0c76e,0.832,0.113,94.073,Yellow
+Corn,18,dbbb44,0.799,0.139,93.769,Yellow
+Dusty Sunflower,834,be9e4d,0.712,0.107,87.907,Yellow-orange
+Brass,833,a68331,0.628,0.107,85.262,Yellow-orange
+Modoré,832,936e1a,0.561,0.106,82.776,Yellow-orange
+Bronze,831,77560a,0.476,0.094,81.484,Yellow-orange
+Cork Oak,830,5b3c00,0.382,0.080,76.179,Yellow-orange
+Star Anise,829,563302,0.356,0.077,67.780,Orange
+Vanilla,746,eae5c6,0.918,0.041,99.608,Yellow
+Sand,677,e0c994,0.843,0.074,87.207,Yellow-orange
+Light Oak,422,b99765,0.696,0.078,76.534,Yellow-orange
+Oak,3828,a07947,0.603,0.083,72.042,Yellow-orange
+Hazelnut,420,7f5222,0.479,0.087,64.559,Orange
+Coffee,869,663e08,0.402,0.084,67.149,Orange
+Twine,613,cdc0a6,0.812,0.038,84.570,Warm neutral
+Jute,612,a18b66,0.647,0.058,80.356,Yellow-orange
+Umber,611,695235,0.455,0.053,72.312,Yellow-orange
+Beaver,610,5e492c,0.420,0.052,74.549,Yellow-orange
+Sawdust,3047,d4c799,0.829,0.063,94.173,Yellow
+Biscuit,3046,c4aa6f,0.747,0.083,86.646,Yellow-orange
+Toffee,3045,a07b4b,0.608,0.079,72.614,Yellow-orange
+Praline,167,80582c,0.494,0.080,66.671,Orange
+Savannah,676,d6b27a,0.783,0.084,78.095,Yellow-orange
+Honey,729,be9256,0.689,0.094,73.744,Yellow-orange
+Fennec,680,9c6e28,0.573,0.103,74.023,Yellow-orange
+Ochre Earth,3829,915e0b,0.525,0.109,71.366,Yellow-orange
+Corn Husk,3822,e4c163,0.823,0.120,89.194,Yellow-orange
+Mango,3821,d6a93c,0.757,0.133,85.615,Yellow-orange
+Sunshine,3820,c9961c,0.703,0.138,82.792,Yellow-orange
+Glitz,3852,b97e00,0.637,0.134,76.000,Yellow-orange
+Mustard,728,dca433,0.753,0.139,80.544,Yellow-orange
+Old Gold,783,be7900,0.634,0.137,70.162,Yellow-orange
+Wicker,782,925700,0.513,0.114,65.964,Orange
+Chestnut,780,7b3e00,0.433,0.106,56.117,Orange
+Moonshine,3823,f6e7be,0.930,0.056,90.325,Yellow
+Desert Winds,3855,f3c47d,0.847,0.104,76.940,Yellow-orange
+Soft Peach,19,f5bc6f,0.831,0.115,73.404,Yellow-orange
+Chai Spice,3854,d99150,0.716,0.119,61.089,Orange
+Copper,3853,c46617,0.609,0.145,53.518,Orange
+Coral Blush,3827,d69b5d,0.733,0.106,66.241,Orange
+Caramel,977,cf8c49,0.695,0.117,63.737,Orange
+Nutmeg,976,ae6419,0.576,0.126,59.569,Orange
+Fox,3826,8d4506,0.473,0.117,52.807,Orange
+Weasel,975,5a1f00,0.326,0.095,43.621,Red-orange
+Buttered Popcorn,445,f5f1b3,0.947,0.079,104.714,Yellow
+Lemon,307,f7d830,0.882,0.171,97.800,Yellow
+Daffodil,973,f5c700,0.845,0.173,91.873,Yellow
+Bright Yellow,444,efbc00,0.818,0.167,88.859,Yellow-orange
+Buttermilk,3078,f5e499,0.916,0.096,96.939,Yellow
+Primrose,727,f7e181,0.908,0.119,96.779,Yellow
+Mimosa,726,f8cf53,0.868,0.146,90.541,Yellow
+Buttercup,725,ecb037,0.793,0.147,80.491,Yellow-orange
+Curry,972,f09d00,0.761,0.163,71.758,Yellow-orange
+Blonde,745,f9dfa2,0.911,0.083,87.527,Yellow-orange
+Grapefruit,744,f6cf74,0.869,0.119,86.692,Yellow-orange
+Banana,743,f5bf46,0.833,0.146,83.888,Yellow-orange
+Clementine,742,f19f0e,0.766,0.162,71.965,Yellow-orange
+Mandarin,741,f18800,0.726,0.170,60.272,Orange
+Orange Papaya,740,e56100,0.650,0.183,45.726,Orange
+Neon Orange,970,ef6915,0.676,0.185,45.558,Orange
+Sunset,947,d24200,0.581,0.190,38.110,Red-orange
+Fire,946,c13807,0.542,0.181,36.275,Red-orange
+Blood Orange,900,9c150b,0.444,0.169,29.732,Red-orange
+Tutu,967,f9c2b2,0.859,0.067,36.824,Red-orange
+Strawberry Chew,3824,ec9e8b,0.772,0.098,34.307,Red-orange
+Kitten’s Nose,3341,e4816b,0.706,0.127,33.519,Red-orange
+Hot Peach,3340,db603e,0.637,0.162,36.307,Red-orange
+Poppy,608,c93200,0.550,0.193,34.879,Red-orange
+Bright Red,606,a70100,0.458,0.187,29.313,Red-orange
+Cashmere Beige,951,e8cdb5,0.865,0.044,63.838,Warm neutral
+Buff,3856,dfaf84,0.788,0.080,63.106,Orange
+Shrimp,722,e2834d,0.703,0.136,48.866,Orange
+Papaya,721,ce5822,0.604,0.163,42.098,Red-orange
+Rust,720,af3700,0.509,0.164,38.613,Red-orange
+Muted Apricot,3825,eb9e70,0.765,0.111,51.287,Orange
+Terracotta,922,bb6239,0.593,0.127,44.200,Red-orange
+Tuscan Ochre,921,9d401c,0.492,0.133,40.010,Red-orange
+Sienna Ochre,920,7f2203,0.399,0.133,36.353,Red-orange
+Terracotta Brown,919,660600,0.324,0.128,30.618,Red-orange
+Rosewood,918,5b1000,0.309,0.110,34.340,Red-orange
+Eggshell,3770,f5e3d1,0.926,0.031,67.428,Orange
+Champagne,945,dbba9e,0.810,0.054,62.268,Orange
+Pottery,402,d38e62,0.707,0.103,52.863,Orange
+Nut Brittle,3776,ad6741,0.584,0.104,48.300,Orange
+Squirrel,301,884319,0.463,0.108,48.379,Orange
+Conker,400,591a00,0.316,0.099,40.190,Red-orange
+Mahogany,300,3f0e01,0.248,0.080,37.458,Red-orange
+Cherry Blossom,225,e7c6c2,0.854,0.038,26.083,Red-orange
+Earthworm,224,ca9b97,0.732,0.057,24.132,Red-orange
+Old Pink,152,bc8688,0.674,0.067,16.527,Red
+Granite Pink,223,93505a,0.514,0.090,11.212,Red
+Dark Rosewood,3722,803c46,0.447,0.094,12.459,Red
+Pink Earth,3721,681f2b,0.358,0.104,14.498,Red
+Mars Red,221,520416,0.282,0.108,16.237,Red
+Himalayan Salt,948,e6cab6,0.857,0.042,57.679,Warm neutral
+Beige Rose,754,daaa93,0.776,0.065,46.852,Orange
+Pink Sand,3771,cc9778,0.720,0.077,51.438,Orange
+Pink Dawn,758,c89079,0.702,0.076,43.260,Red-orange
+Rose Gold,3778,ac6858,0.588,0.091,34.037,Red-orange
+Pink Terracotta,356,914b41,0.496,0.096,29.411,Red-orange
+Deep Blush,3830,7e2a23,0.410,0.118,28.117,Red-orange
+Red Brown,355,610908,0.316,0.120,28.010,Red-orange
+Red Leather,3777,480005,0.253,0.103,25.176,Red-orange
+Burnished Pink,3779,d6a393,0.759,0.065,38.131,Red-orange
+Clay,3859,956252,0.547,0.071,38.163,Red-orange
+Rose Brown,3858,552121,0.324,0.078,22.389,Red-orange
+Oxblood,3857,370609,0.222,0.077,22.666,Red-orange
+Peach,20,f4b4a3,0.825,0.079,35.409,Red-orange
+Prosciutto,21,ab574c,0.556,0.112,28.880,Red-orange
+Ruby,22,7a0f19,0.374,0.139,23.476,Red-orange
+Linen,3774,dfc0ab,0.829,0.046,56.113,Warm neutral
+Beige,950,d6b59f,0.796,0.049,55.582,Warm neutral
+Fallow,3064,a5735c,0.601,0.072,45.598,Orange
+Fawn,407,a67767,0.612,0.064,39.596,Red-orange
+Glazed Chestnut,3772,825041,0.484,0.072,37.462,Red-orange
+Cocoa,632,613023,0.371,0.075,35.832,Red-orange
+Dove Gray,453,c6bab4,0.797,0.016,48.512,Warm neutral
+Pigeon Gray,452,a79594,0.685,0.022,21.507,Warm neutral
+Little Gray,451,7c6667,0.532,0.028,14.993,Warm neutral
+Light Taupe,3861,927676,0.593,0.035,18.190,Warm neutral
+Dark Taupe,3860,604444,0.417,0.039,18.842,Warm neutral
+Sepia,779,4b3030,0.342,0.040,19.317,Warm neutral
+Pine Marten,09,372428,0.285,0.030,5.242,Warm neutral
+Cream,712,e7dac3,0.893,0.034,81.978,Warm neutral
+Dune,739,e3cdab,0.858,0.052,78.675,Yellow-orange
+Sahara,738,caaa81,0.756,0.067,73.425,Yellow-orange
+Camel,437,c59867,0.711,0.085,68.154,Orange
+Teddy,436,a6794c,0.611,0.083,65.198,Orange
+Tobacco,435,936036,0.535,0.088,58.786,Orange
+Cigar Brown,434,723700,0.407,0.102,54.268,Orange
+Chocolate,433,4f2403,0.315,0.077,52.330,Orange
+Mink,801,401c07,0.274,0.064,47.900,Orange
+Ferret,898,320e02,0.222,0.063,40.841,Red-orange
+Clove,938,2f1512,0.233,0.043,27.719,Warm neutral
+Peppercorn,3371,180d0e,0.175,0.019,13.223,Warm neutral
+Shell,543,d3beae,0.815,0.033,59.623,Warm neutral
+Vicuna Wool,3864,b39781,0.696,0.046,60.096,Warm neutral
+Otter,3863,85644d,0.531,0.055,56.098,Orange
+Lama,3862,694730,0.430,0.059,54.593,Orange
+Brazil Nut,3031,281610,0.223,0.032,39.190,Warm neutral
+Edelweiss,3865,f5f4ec,0.966,0.011,100.822,Warm neutral
+Ecru,Ecru,e7dbc4,0.895,0.033,83.707,Warm neutral
+Cotton,822,d6ccb7,0.848,0.031,85.566,Warm neutral
+Hemp,644,bdb39f,0.770,0.030,84.586,Warm neutral
+Umbra Gray,642,887a64,0.586,0.036,79.059,Warm neutral
+Gray Cobblestone,640,6d6148,0.497,0.040,85.236,Warm neutral
+Gray Wolf,3787,474135,0.378,0.021,84.540,Warm neutral
+Ink,3021,261f1a,0.246,0.014,57.539,Warm neutral
+Black Pepper,844,383130,0.320,0.010,27.401,Warm neutral
+Ashes,3033,cfbeaa,0.810,0.034,71.823,Warm neutral
+Ginger,3782,ab9981,0.692,0.040,74.962,Warm neutral
+Stone,3032,89775e,0.579,0.043,75.811,Warm neutral
+Tree Bark,3790,6e5846,0.478,0.040,60.918,Warm neutral
+Wrought Iron,3781,402c1d,0.313,0.039,57.624,Warm neutral
+Frosted Glass,05,c2b3aa,0.777,0.021,53.174,Warm neutral
+Koala,06,b8a89f,0.743,0.023,51.421,Warm neutral
+Rhino,07,89756b,0.578,0.029,48.192,Warm neutral
+Racoon,08,503d37,0.379,0.029,38.247,Warm neutral
+Garlic White,3866,e0d3c9,0.875,0.020,60.138,Warm neutral
+Beige Rope,842,b29a87,0.702,0.039,60.468,Warm neutral
+Suede,841,9e806e,0.623,0.046,52.584,Warm neutral
+Country Mouse,840,7e604e,0.515,0.048,52.304,Warm neutral
+Root Brown,839,412b20,0.312,0.038,47.455,Warm neutral
+Dark Wood,838,291311,0.218,0.037,26.013,Warm neutral
+Thunderous Skies,3072,cbcbc1,0.839,0.014,106.690,Cool neutral
+Rock Gray,647,949382,0.659,0.025,104.298,Cool neutral
+Elephant,3023,9c9482,0.668,0.027,86.892,Cool neutral
+Rhino,3022,797860,0.567,0.035,105.501,Cool neutral
+Silver Linings,3024,bfbeb2,0.799,0.017,102.897,Cool neutral
+White Pepper,648,a59e93,0.702,0.018,79.320,Cool neutral
+Smoke Gray,646,756d60,0.538,0.022,80.026,Cool neutral
+Reindeer Gray,645,504945,0.411,0.012,51.866,Cool neutral
+White Light,B5200,fefffd,0.999,0.003,128.492,Gray
+Blanc,Blanc,f8f7f5,0.976,0.003,84.559,Gray
+Pearl Gray,762,d7d8da,0.882,0.003,264.541,Gray
+Chrome,415,adafb8,0.755,0.013,276.036,Gray
+Granite Gray,318,848994,0.630,0.017,266.208,Gray
+Lead,414,606470,0.504,0.020,271.006,Gray
+Rain,01,cdcacb,0.842,0.004,354.711,Gray
+Mist,02,b8b7ba,0.781,0.004,301.404,Gray
+Dust,03,918f98,0.655,0.013,296.209,Gray
+Shadow,04,6c666e,0.518,0.014,317.718,Gray
+Pebble,535,423d41,0.367,0.010,332.388,Gray
+Town Mouse Gray,168,aeb4b8,0.766,0.009,236.602,Gray
+Tin,169,717779,0.565,0.008,219.616,Gray
+Steel,317,3f4550,0.389,0.020,262.625,Gray
+Iron,413,31353c,0.328,0.014,261.722,Gray
+Anthracite,3799,212326,0.255,0.006,258.360,Gray
+Black,310,010002,0.051,0.026,311.994,Gray

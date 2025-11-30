@@ -1,0 +1,17 @@
+<%# For archiving purposes only %>
+<% text_color = color.oklch_l > 0.6 ? 'text-black' : 'text-white' %>
+<% ring_color = color.oklch_l > 0.6 ? 'ring-gray-900' : 'ring-white' %>
+<% is_in_stash = controller_name == "color_libraries" && @stashed_color_ids.include?(color.id) %>
+
+<% if is_in_stash %>
+  <li class="aspect-square rounded-lg flex items-center justify-center outline-2 outline-gray-800">
+    <div class="size-9/10 rounded-lg flex items-center justify-center " style="background-color: #<%= color.hex_color %>;">
+      <p class="text-xs md:text-sm <%= text_color %>"><%= color.vendor_code %></p>
+    </div>
+  </li>
+<% else %>
+  <li class="relative aspect-square rounded-lg flex items-center justify-center" style="background-color: #<%= color.hex_color %>;">
+
+    <p class="text-xs md:text-sm <%= text_color %>"><%= color.vendor_code %></p>
+  </li>
+<% end %>

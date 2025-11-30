@@ -1,15 +1,8 @@
 <% content_for :title, "Stash items" %>
 
-<div class="p-4 space-y-4">
+<div class="container mx-auto mt-8 w-full space-y-4 px-4">
   <h1>My stash</h1>
-  <ul class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2">
-    <% @stash_items.each do |stash_item| %>
-      <% product_color = stash_item.product_color %>
-      <% brand = product_color.brand %>
-      <% category = brand.category %>
-      <%= link_to color_library_color_path(category, brand.slug, product_color.id) do %>
-        <%= render "color_libraries/color_chip", color: product_color %>
-      <% end %>
-    <% end %>
-  </ul>
+
+  <%= render "shared/color_grid", product_colors: @product_colors, view_context: "stash" %>
+
 </div>

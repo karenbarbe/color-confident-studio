@@ -4,7 +4,12 @@ class StashItemsController < ApplicationController
 
   # GET /stash_items or /stash_items.json
   def index
-    @stash_items = StashItem.where(owner: Current.user).includes(product_color: :brand)
+    @stash_items = StashItem.where(owner: Current.user)
+    .joins(product_color: :brand)
+    .includes(product_color: :brand)
+    .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
+    @product_colors = @stash_items.map(&:product_color)
+    @stashed_color_ids = @product_colors.map(&:id).to_set
   end
 
   # GET /stash_items/1 or /stash_items/1.json
