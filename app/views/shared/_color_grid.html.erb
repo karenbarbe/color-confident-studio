@@ -1,7 +1,9 @@
-<ul class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-x-4 gap-y-8">
+<% view_context ||= 'library' %>
+
+<ul class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 sm:gap-5">
   <% product_colors.each do |product_color| %>
     <%= link_to color_library_color_path(product_color.brand.category, product_color.brand.slug, product_color.id) do %>
-      <%= render "shared/color_bobbin", color: product_color %>
+      <%= render "shared/color_swatch", color: product_color, view_context: view_context %>
     <% end %>
   <% end %>
 </ul>

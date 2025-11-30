@@ -1,19 +1,21 @@
 <% content_for :title, "#{@brand.name} Color Library" %>
 
-<div class="container mx-auto w-full space-y-4 px-4">
-  <nav class="text-sm breadcrumbs mb-4">
-    <%= link_to "Color Libraries", color_libraries_path %> / 
-    <%= link_to @category.titleize, color_library_category_path(@category) %> / 
-    <span class="font-bold"><%= @brand.name %></span>
-  </nav>
+<div class="container mx-auto w-full space-y-4 px-4" data-controller="scroll-spy"
+data-scroll-spy-active-classes-value="bg-gray-900 text-white"
+data-scroll-spy-inactive-classes-value="bg-gray-100 text-gray-700"
+>
+  <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
 
-  <h1 class="font-bold text-3xl"><%= @brand.name %> colors</h1>
+  <%= render "shared/color_library_nav", colors_by_family: @colors_by_family %>
 
-  <% @colors_by_family.each do |family, colors| %>
-    <section class="space-y-2">
-      <h2 class="font-bold text-2xl"><%= family %></h2>
-      <%= render "shared/color_grid", product_colors: colors %>
-    </section>
-  <% end %>
+  <div class="space-y-2">
+    <% @colors_by_family.each do |family, colors| %>
+      <section id="<%= family.parameterize %>"
+     class="scroll-mt-10 space-y-2" data-scroll-spy-target="section">
+        <%= render "shared/color_divider", family_name: family %>
+        <%= render "shared/color_grid", product_colors: colors %>
+      </section>
+    <% end %>
+  </div>
 
 </div>
