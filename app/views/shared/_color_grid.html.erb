@@ -3,7 +3,14 @@
 <ul class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 sm:gap-5">
   <% product_colors.each do |product_color| %>
     <%= link_to color_library_color_path(product_color.brand.category, product_color.brand.slug, product_color.id) do %>
-      <%= render "shared/color_swatch", color: product_color, view_context: view_context %>
+      <%# Look up ownership_status if in stash view %>
+      <% ownership_status = nil %>
+      <% if view_context == "stash" && defined?(@stash_items) %>
+        <% stash_item = @stash_items.find { |si| si.product_color_id == product_color.id } %>
+        <% ownership_status = stash_item&.ownership_status %>
+      <% end %>
+      <%= render "shared/color_swatch", color: product_color, view_context: view_context, ownership_status: ownership_status %>
     <% end %>
   <% end %>
+
 </ul>
