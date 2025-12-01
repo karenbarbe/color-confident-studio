@@ -24,12 +24,13 @@
 
   <body class="min-h-screen antialiased">
     <%= render "shared/navbar" %>
-    <main class="container mx-auto mt-8 pb-20 w-full space-y-4">
-      <%= render "shared/flash" %>
 
+    <%= render "shared/dock" %>
+
+    <main class="container mx-auto mt-8 pb-20 md:pb-8 md:pl-20 w-full space-y-4">
+      <%= render "shared/flash" %>
       <%= yield %>
     </main>
 
-    <%= render "shared/dock" %>
   </body>
 </html>
