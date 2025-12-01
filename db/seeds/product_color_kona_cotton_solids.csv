@@ -172,7 +172,7 @@ K001-846,Sea Glass,cafbfc,0.955,0.050,197.981,Blue-green
 K001-1005,Aqua,a9f2e9,0.911,0.073,186.427,Blue-green
 K001-1514,Robin Egg,8febf8,0.887,0.090,207.258,Blue-green
 K001-1011,Bahama Blue,6ce7f4,0.863,0.111,204.723,Blue-green
-K001-491,Jamaica,25cfe7,0.785,0.130,210.152,Blue
+K001-491,Jamaica,25cfe7,0.785,0.130,210.152,Blue-green
 K001-1282,Peacock,15b7dd,0.722,0.129,220.324,Blue
 K001-139,Lagoon,079fcd,0.656,0.126,227.690,Blue
 K001-1376,Turquoise,059bc4,0.642,0.121,225.334,Blue
@@ -300,11 +300,11 @@ K001-1237,Mocha,654631,0.423,0.054,54.829,Orange
 K001-406,Cappuccino,644d30,0.437,0.053,72.141,Yellow-orange
 K001-407,Chestnut,5b3e0f,0.388,0.073,74.801,Yellow-orange
 K001-1851,Otter,534633,0.402,0.035,76.919,Warm neutral
-K001-1242,Natural,f6f3e9,0.964,0.014,93.046,Cool neutral
-K001-1268,Oyster,f4f1df,0.956,0.024,99.166,Cool neutral
+K001-1242,Natural,f6f3e9,0.964,0.014,93.046,Warm neutral
+K001-1268,Oyster,f4f1df,0.956,0.024,99.166,Warm neutral
 K001-184,Eggshell,fae8c4,0.936,0.051,84.553,Yellow-orange
 K001-1090,Cream,fbe4bd,0.928,0.057,80.877,Yellow-orange
-K001-1303,Putty,eee7cb,0.926,0.038,95.491,Cool neutral
+K001-1303,Putty,eee7cb,0.926,0.038,95.491,Warm neutral
 K001-1323,Sand,f0dfca,0.912,0.034,73.162,Warm neutral
 K001-1369,Tan,dcc9a7,0.843,0.050,82.121,Yellow-orange
 K001-1069,Champagne,ede1bc,0.910,0.050,92.196,Yellow
@@ -315,8 +315,8 @@ K001-1162,Honey,ceb56e,0.779,0.095,90.687,Yellow
 K001-1176,Ice Peach,facfb6,0.885,0.059,51.805,Orange
 K001-1205,Lt. Parfait,fbe1c5,0.924,0.047,69.251,Orange
 K001-1271,Shell,fbe6e2,0.941,0.024,30.335,Red
-K001-843,Lingerie,ebd9cb,0.896,0.027,60.280,Cool neutral
-K001-1181,Ivory,ebe5d2,0.922,0.026,92.436,Cool neutral
+K001-843,Lingerie,ebd9cb,0.896,0.027,60.280,Orange
+K001-1181,Ivory,ebe5d2,0.922,0.026,92.436,Warm neutral
 K001-413,Parchment,c8bca5,0.799,0.034,83.698,Warm neutral
 K001-1362,Stone,b9a78a,0.736,0.045,79.667,Warm neutral
 K001-486,Cobblestone,a88c70,0.659,0.052,66.699,Warm neutral
