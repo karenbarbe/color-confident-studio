@@ -1,5 +1,5 @@
 vendor_code,name,hex_color,oklch_l,oklch_c,oklch_h,color_family
-K001-189,Baby Pink,fbc2ce,0.868,0.067,4.465,Red
+K001-189,Baby Pink,fbc2ce,0.868,0.067,4.465,Red-violet
 K001-110,Peony,fbc2c8,0.867,0.066,11.409,Red
 K001-1225,Med. Pink,fbafb9,0.829,0.090,10.484,Red
 K001-141,Carnation,f999b9,0.790,0.120,358.733,Red-violet
@@ -7,7 +7,7 @@ K001-261,Bubble Gum,f99aad,0.788,0.115,7.064,Red
 K001-845,Sassy Pink,f76caf,0.719,0.183,352.592,Red-violet
 K001-1841,Dragon Fruit,f0529f,0.674,0.206,353.979,Red-violet
 K001-1049,Brt. Pink,ef4ea0,0.669,0.210,352.929,Red-violet
-K001-490,Honeysuckle,f22977,0.632,0.234,4.899,Red
+K001-490,Honeysuckle,f22977,0.632,0.234,4.899,Red-violet
 K001-451,Valentine,d8317e,0.595,0.210,358.111,Red-violet
 K001-1066,Cerise,a52a65,0.495,0.167,355.908,Red-violet
 K001-861,Ballet Slipper,fbd5cd,0.903,0.044,31.805,Red
@@ -57,7 +57,7 @@ K001-1839,Clementine,f57613,0.703,0.181,49.839,Orange
 K001-1848,Marmalade,ea681b,0.668,0.180,45.324,Orange
 K001-410,Kumquat,fa761f,0.711,0.184,47.653,Orange
 K001-84,Persimmon,f97d30,0.721,0.174,48.234,Orange
-K001-192,Mango,f9844d,0.734,0.159,44.497,Red-orange
+K001-192,Mango,f9844d,0.734,0.159,44.497,Orange
 K001-59,Cantaloupe,fa9e5e,0.780,0.136,54.118,Orange
 K001-353,Sunflower,faca51,0.860,0.145,86.943,Yellow-orange
 K001-148,Daffodil,f9c760,0.854,0.133,83.270,Yellow-orange
@@ -78,7 +78,7 @@ K001-838,Bright Idea,fbe44c,0.912,0.166,100.496,Yellow
 K001-1077,Citrus,fad513,0.878,0.178,96.092,Yellow
 K001-26,Canary,f7cf3b,0.865,0.161,92.970,Yellow
 K001-1089,Corn Yellow,f9b925,0.823,0.162,81.938,Yellow-orange
-K001-840,Duckling,fac418,0.845,0.169,87.950,Yellow-orange
+K001-840,Duckling,fac418,0.845,0.169,87.950,Yellow
 K001-1835,Banana Pepper,eac52f,0.832,0.159,93.993,Yellow
 K001-476,Grellow,dd9606,0.726,0.152,74.966,Yellow-orange
 K001-1677,Curry,c8951f,0.700,0.136,82.359,Yellow-orange
@@ -105,8 +105,8 @@ K001-414,Peapod,bebe13,0.776,0.166,109.725,Yellow-green
 K001-1192,Lime,909b27,0.659,0.135,114.959,Yellow-green
 K001-1703,Grass Green,759643,0.629,0.117,127.504,Yellow-green
 K001-317,Peridot,7b8d25,0.609,0.127,119.010,Yellow-green
-K001-165,Ivy,807d43,0.579,0.079,106.022,Green
-K001-1451,Avocado,595917,0.450,0.086,109.411,Green
+K001-165,Ivy,807d43,0.579,0.079,106.022,Yellow-green
+K001-1451,Avocado,595917,0.450,0.086,109.411,Yellow-green
 K001-1856,Summer Pear,e1eea1,0.922,0.099,116.221,Yellow-green
 K001-21,Honey Dew,dbe98f,0.903,0.115,115.993,Yellow-green
 K001-351,Green Tea,c3d17d,0.831,0.109,116.593,Yellow-green
@@ -144,10 +144,10 @@ K001-409,Juniper,2a4c2c,0.381,0.067,145.443,Green
 K001-1145,Forest,174831,0.361,0.066,159.791,Green
 K001-1166,Hunter Green,2d452f,0.364,0.048,146.591,Green
 K001-837,Aruba,92f4da,0.899,0.100,175.067,Blue-green
-K001-200,Pond,9be9be,0.872,0.098,159.423,Green
-K001-197,Aloe,7ed6b5,0.811,0.098,167.871,Green
+K001-200,Pond,9be9be,0.872,0.098,159.423,Blue-green
+K001-197,Aloe,7ed6b5,0.811,0.098,167.871,Blue-green
 K001-1474,Cypress,1bc69d,0.737,0.141,170.431,Blue-green
-K001-445,Kale,0ba97e,0.653,0.133,166.616,Green
+K001-445,Kale,0ba97e,0.653,0.133,166.616,Blue-green
 K001-1031,Bluegrass,0da485,0.641,0.122,172.688,Blue-green
 K001-1135,Emerald,09735f,0.497,0.092,174.709,Blue-green
 K001-483,Ultra Marine,08655b,0.456,0.079,182.996,Blue-green
@@ -156,7 +156,7 @@ K001-356,Everglade,055853,0.416,0.071,188.070,Blue-green
 K001-1361,Spruce,09463a,0.354,0.062,175.545,Blue-green
 K001-1137,Evergreen,2e4126,0.351,0.051,136.815,Green
 K001-1852,Sea Mist,d2fce2,0.954,0.055,158.085,Green
-K001-2018,Julep,b6ebd4,0.897,0.063,166.638,Green
+K001-2018,Julep,b6ebd4,0.897,0.063,166.638,Blue-green
 K001-1173,Ice Frappe,acf4e2,0.915,0.076,177.287,Blue-green
 K001-1833,Aloha,93f6e3,0.907,0.098,180.356,Blue-green
 K001-45,Pool,18ddd0,0.810,0.139,187.236,Blue-green
@@ -166,8 +166,8 @@ K001-1009,Azure,6ce9e9,0.864,0.111,195.329,Blue-green
 K001-442,Capri,3ee1e1,0.830,0.129,194.988,Blue-green
 K001-440,Breakers,0aa3ad,0.652,0.110,202.661,Blue-green
 K001-1183,Jade Green,05999a,0.619,0.105,195.640,Blue-green
-K001-1064,Caribbean,08728d,0.512,0.093,222.307,Blue
-K001-1373,Teal Blue,346f7f,0.509,0.066,218.047,Blue
+K001-1064,Caribbean,08728d,0.512,0.093,222.307,Blue-green
+K001-1373,Teal Blue,346f7f,0.509,0.066,218.047,Blue-green
 K001-846,Sea Glass,cafbfc,0.955,0.050,197.981,Blue-green
 K001-1005,Aqua,a9f2e9,0.911,0.073,186.427,Blue-green
 K001-1514,Robin Egg,8febf8,0.887,0.090,207.258,Blue-green
@@ -176,23 +176,23 @@ K001-491,Jamaica,25cfe7,0.785,0.130,210.152,Blue
 K001-1282,Peacock,15b7dd,0.722,0.129,220.324,Blue
 K001-139,Lagoon,079fcd,0.656,0.126,227.690,Blue
 K001-1376,Turquoise,059bc4,0.642,0.121,225.334,Blue
-K001-151,Cyan,068fa6,0.598,0.104,214.506,Blue
+K001-151,Cyan,068fa6,0.598,0.104,214.506,Blue-green
 K001-446,Oasis,086a91,0.494,0.100,233.347,Blue
 K001-479,Mediterranean,08629e,0.481,0.122,246.452,Blue
-K001-1513,Sky,e2fcf7,0.971,0.028,183.085,Blue
-K001-1010,Baby Blue,b8eef3,0.914,0.055,203.368,Blue
-K001-362,Dusty Blue,96c9ca,0.801,0.053,197.728,Blue
-K001-444,Fog,9abcc4,0.773,0.038,213.674,Blue
+K001-1513,Sky,e2fcf7,0.971,0.028,183.085,Blue-green
+K001-1010,Baby Blue,b8eef3,0.914,0.055,203.368,Blue-green
+K001-362,Dusty Blue,96c9ca,0.801,0.053,197.728,Blue-green
+K001-444,Fog,9abcc4,0.773,0.038,213.674,Blue-green
 K001-866,Waterfall,77bad3,0.753,0.077,223.723,Blue
-K001-1853,Seascape,66c2d7,0.765,0.092,214.503,Blue
+K001-1853,Seascape,66c2d7,0.765,0.092,214.503,Blue-green
 K001-497,Niagara,4bc2e7,0.762,0.117,222.270,Blue
 K001-405,Alegria,3db5e3,0.727,0.123,228.094,Blue
 K001-171,Water,16a6d9,0.680,0.131,229.869,Blue
 K001-864,Paris Blue,0590cd,0.620,0.135,237.535,Blue
 K001-494,Malibu,0575b9,0.544,0.136,245.290,Blue
 K001-90,Pacific,055da3,0.472,0.134,250.755,Blue
-K001-1028,Blue,c6eaf2,0.914,0.039,212.738,Blue
-K001-266,Breeze,beeaf8,0.911,0.049,219.204,Blue
+K001-1028,Blue,c6eaf2,0.914,0.039,212.738,Blue-green
+K001-266,Breeze,beeaf8,0.911,0.049,219.204,Blue-green
 K001-194,Lake,a8d9f4,0.860,0.063,232.586,Blue
 K001-855,Prairie Sky,82c7f4,0.800,0.095,238.193,Blue
 K001-448,Stratosphere,33a5df,0.685,0.130,236.003,Blue
@@ -234,16 +234,16 @@ K001-1048,Brt. Peri,5f4893,0.462,0.119,295.505,Violet
 K001-233,Celestial,054f6e,0.403,0.082,234.119,Blue
 K001-852,Noble Purple,454390,0.427,0.124,280.964,Blue-violet
 K001-1541,Deep Blue,354987,0.422,0.106,268.189,Blue
-K001-415,Regal,272859,0.305,0.086,279.104,Blue
+K001-415,Regal,272859,0.305,0.086,279.104,Blue-violet
 K001-140,Nightfall,122857,0.289,0.090,263.109,Blue
 K001-1232,Midnight,341c42,0.278,0.073,311.670,Violet
 K001-412,Nautical,102039,0.244,0.053,259.014,Blue
 K001-1178,Indigo,112732,0.260,0.035,232.001,Blue
-K001-1266,Orchid,ebcde1,0.879,0.043,338.116,Red-violet
-K001-134,Thistle,d4b6d8,0.813,0.057,322.255,Red-violet
+K001-1266,Orchid,ebcde1,0.879,0.043,338.116,Violet
+K001-134,Thistle,d4b6d8,0.813,0.057,322.255,Violet
 K001-1850,Orchid Ice,bca2cf,0.750,0.070,310.709,Violet
 K001-1392,Wisteria,a27ebe,0.651,0.101,309.504,Violet
-K001-488,Dahlia,a36aae,0.610,0.118,320.929,Red-violet
+K001-488,Dahlia,a36aae,0.610,0.118,320.929,Violet
 K001-495,Morning Glory,8a62a8,0.566,0.113,309.462,Violet
 K001-477,Heliotrope,6e4a93,0.482,0.119,305.131,Violet
 K001-142,Crocus,84539a,0.526,0.120,314.635,Violet
@@ -251,7 +251,7 @@ K001-2119,Nocturne,69347a,0.424,0.124,317.320,Violet
 K001-1857,Velvet,552f85,0.399,0.139,300.573,Violet
 K001-327,Tulip,65437c,0.446,0.098,310.431,Violet
 K001-1301,Purple,46275e,0.340,0.098,308.069,Violet
-K001-188,Hibiscus,4f2344,0.331,0.081,337.666,Red-violet
+K001-188,Hibiscus,4f2344,0.331,0.081,337.666,Violet
 K001-24,Petunia,f5c8e7,0.881,0.065,337.621,Red-violet
 K001-487,Corsage,eda4db,0.806,0.111,335.861,Red-violet
 K001-258,Pansy,c78cc6,0.717,0.105,327.142,Red-violet
@@ -291,7 +291,7 @@ K001-1136,Espresso,2f2822,0.283,0.015,62.748,Warm neutral
 K001-1386,Wheat,c8a379,0.739,0.071,69.904,Orange
 K001-492,Latte,bba481,0.730,0.055,78.112,Yellow-orange
 K001-1473,Biscuit,a98a5b,0.651,0.074,77.288,Yellow-orange
-K001-1371,Taupe,a38367,0.633,0.056,62.714,Orange
+K001-1371,Taupe,a38367,0.633,0.056,62.714,Warm neutral
 K001-178,Leather,94712f,0.570,0.094,80.635,Yellow-orange
 K001-857,Roasted Pecan,8d550b,0.502,0.108,65.456,Orange
 K001-138,Earth,7d5a32,0.495,0.072,68.492,Orange
@@ -319,14 +319,14 @@ K001-843,Lingerie,ebd9cb,0.896,0.027,60.280,Cool neutral
 K001-1181,Ivory,ebe5d2,0.922,0.026,92.436,Cool neutral
 K001-413,Parchment,c8bca5,0.799,0.034,83.698,Warm neutral
 K001-1362,Stone,b9a78a,0.736,0.045,79.667,Warm neutral
-K001-486,Cobblestone,a88c70,0.659,0.052,66.699,Orange
+K001-486,Cobblestone,a88c70,0.659,0.052,66.699,Warm neutral
 K001-1017,Bison,7a6848,0.526,0.052,81.528,Yellow-orange
 K001-1239,Mushroom,93856a,0.622,0.042,83.711,Warm neutral
 K001-850,Doeskin,c5baa9,0.793,0.027,78.874,Warm neutral
 K001-1855,Suede,a28676,0.642,0.042,51.380,Warm neutral
 K001-849,Desert Green,cfe1d4,0.893,0.026,154.594,Green
 K001-1328,Seafoam,bfe2c9,0.881,0.050,154.273,Green
-K001-841,Eucalyptus,dad7a9,0.870,0.061,104.514,Yellow
+K001-841,Eucalyptus,dad7a9,0.870,0.061,104.514,Yellow-green
 K001-1243,Navy,122f39,0.288,0.039,223.362,Blue
 K001-186,Straw,ccb37f,0.776,0.074,85.060,Yellow-orange
 K001-478,Limestone,c5b891,0.784,0.055,91.823,Yellow
@@ -352,7 +352,7 @@ K001-1470,Pewter,89887c,0.624,0.018,103.076,Cool neutral
 K001-1007,Ash,c5c2bb,0.814,0.010,87.515,Cool neutral
 K001-456,Shale,8b9e93,0.681,0.027,160.381,Cool neutral
 K001-500,Titanium,8f99a0,0.677,0.016,238.224,Gray
-K001-408,Iron,644d30,0.437,0.053,72.141,Yellow-orange
+K001-408,Iron,644d30,0.437,0.053,72.141,Warm neutral
 K001-854,Overcast,9fa6a8,0.720,0.009,216.952,Gray
 K001-1854,Shark,839098,0.645,0.019,234.762,Gray
 K001-1223,Med. Grey,7f7d88,0.595,0.017,294.144,Gray
