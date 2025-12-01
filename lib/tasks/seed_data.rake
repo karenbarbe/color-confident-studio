@@ -23,7 +23,8 @@ namespace :db do
       # Define the mapping between brand slugs and their CSV files
       product_color_files = {
         "dmc-mouline-special" => "product_color_dmc_mouline_special.csv",
-        "kona-cotton-solids" => "product_color_kona_cotton_solids.csv"
+        "kona-cotton-solids" => "product_color_kona_cotton_solids.csv",
+        "aurifil-cotton-floss" => "product_color_aurifil_cotton_floss.csv"
       }
 
       product_color_files.each do |brand_slug, csv_filename|
@@ -52,7 +53,7 @@ namespace :db do
       puts "Creating sample users..."
       users_data = [
         { username: "alice_artist", email: "alice@example.com", first_name: "Alice", last_name: "Anderson" },
-        { username: "bob_crafter", email: "bob@example.com", first_name: "Bob", last_name: "Brown" }
+        { username: "carmen_crafter", email: "carmen@example.com", first_name: "Carmen", last_name: "Barista" }
       ]
       users_data.each do |user_data|
         User.find_or_create_by!(username: user_data[:username]) do |user|
