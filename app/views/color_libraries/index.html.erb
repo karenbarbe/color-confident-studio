@@ -14,13 +14,21 @@
           <% @brands_by_category[category].each do |brand| %>
             <%= link_to color_library_path(category, brand.slug), 
                 class: "group block" do %>
-              <div class="min-h-28 flex flex-col justify-between p-5 rounded-xl 
+              <div class="min-h-28 h-full flex flex-col justify-between p-5 rounded-xl 
                           bg-white border border-gray-300 
                           hover:shadow-sm
                           transition-all duration-200">
-                <h3 class="font-semibold text-gray-900 group-hover:text-gray-700">
-                  <%= brand.name %>
-                </h3>
+
+                <div>
+                  <div class="flex h-4 rounded-full overflow-hidden mb-3">
+                    <% brand.spectrum_sample.each do |color| %>
+                      <div class="flex-1" style="background-color: #<%= color.hex_color %>;"></div>
+                    <% end %>
+                  </div>
+                  <h3 class="font-semibold text-gray-900 group-hover:text-gray-700">
+                    <%= brand.name %>
+                  </h3>
+                </div>
 
                 <div class="flex justify-between items-center mt-4">
                   <span class="text-sm text-gray-500 flex items-center gap-1.5">
@@ -31,11 +39,6 @@
                                group-hover:translate-x-1 transition-transform duration-200">
                     <%= icon(:arrow_right_outline) %>
                   </span>
-                </div>
-                <div class="flex h-4 rounded-full overflow-hidden mt-3">
-                  <% brand.spectrum_sample.each do |color| %>
-                    <div class="flex-1" style="background-color: #<%= color.hex_color %>;"></div>
-                  <% end %>
                 </div>
 
               </div>
