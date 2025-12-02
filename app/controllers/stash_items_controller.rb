@@ -31,7 +31,7 @@ class StashItemsController < ApplicationController
 
     respond_to do |format|
       if @stash_item.save
-        format.html { redirect_to stash_items_path, notice: "Stash item was successfully created." }
+        format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item was successfully created." }
         format.json { render :show, status: :created, location: @stash_item }
       else
         format.html { render :new, status: :unprocessable_entity }
