@@ -3,9 +3,9 @@ class ColorLibrariesController < ApplicationController
   def index
     @categories = Brand.categories.keys
     @brands_by_category = Brand.all.group_by(&:category)
-    @featured = Brand.main.first
-    @featured_colors = @featured.product_colors.order(:id).first(20)
-    @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id).to_set
+    # @featured = Brand.main.first
+    # @featured_colors = @featured.product_colors.order(:id).first(20)
+    # @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id).to_set
   end
 
   def category
