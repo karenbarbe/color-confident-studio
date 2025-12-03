@@ -5,14 +5,12 @@
 
 ## Table of contents
 
-- [Color Confident Studio](#color-confident-studio)
-  - [Table of contents](#table-of-contents)
-  - [Technical stack](#technical-stack)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Contact](#contact)
+- [Technical stack](#technical-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
 ## Technical stack
 
