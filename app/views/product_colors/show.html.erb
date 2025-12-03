@@ -1,33 +1,93 @@
-<div class="container mx-auto mt-8 px-4 space-y-6">
-  <div class="mx-auto max-w-sm space-y-4">
-    <%= render @product_color %>
-
+<div class="container mx-auto mt-8 px-4">
+  <div class="mx-auto max-w-sm">
     <% stash_item = Current.user.stash_items.find_by(product_color_id: @product_color.id) %>
-    <% if stash_item %>
-
-      <%= button_to "Remove from stash", stash_item_path(stash_item), method: :delete, params: { stash_item: { product_color_id: @product_color.id } }, class: "btn btn-outline" %>
-
-      <%= button_to toggle_favorite_stash_item_path(stash_item), method: :patch, class: "btn btn-ghost" do %>
-        <%= icon(stash_item.favorite? ? :heart_solid : :heart_outline) %>
+    
+      <%= link_to color_library_path(@product_color.brand.category, @product_color.brand.slug),
+              class: "btn btn-sm btn-ghost mb-2" do %>
+        <%= icon (:arrow_left_outline) %>
+        Back to browsing
       <% end %>
 
-      <% if stash_item.ownership_status %>
-        <div class="badge badge-soft badge-primary"><%= stash_item.ownership_status %></div>
-      <% end %>
-
-      <div>
-        <%= form_with model: stash_item, method: :patch, class: "join" do |f| %>
-          <%= f.select :ownership_status,
-                 [['Owned', 'owned'], ['Wish List', 'wish_list']],
-                 { prompt: "Select ownership status..." },
-                 { class: "select join-item", required: true } %>
-          <%= f.submit "Update", class: "btn join-item" %>
+    <div class="bg-base-100 rounded-2xl shadow-sm overflow-hidden">
+      
+      <div class="relative">
+        <div class="aspect-4/3 w-full" style="background-color: #<%= @product_color.hex_color %>"></div>
+        
+        <% if stash_item %>
+          <%= button_to toggle_favorite_stash_item_path(stash_item), 
+              method: :patch, 
+              class: "absolute top-3 right-3 btn btn-circle btn-sm bg-white/80 backdrop-blur border-0 shadow-md hover:bg-white" do %>
+            <%= icon(stash_item.favorite? ? :heart_solid : :heart_outline) %>
+          <% end %>
         <% end %>
       </div>
-
-    <% else %>
-      <%= button_to "Add to my stash", stash_items_path, params: { stash_item: { product_color_id: @product_color.id } }, class: "btn btn-outline" %>
-    <% end %>
-
+      
+      <div class="p-5 space-y-4">
+        
+        <div>
+          <div class="space-y-1">
+            <h1 class="text-2xl font-bold tracking-tight"><%= @product_color.vendor_code %></h1>
+            <% if @product_color.name.present? %>
+              <p class="text-lg text-base-content/70"><%= @product_color.name %></p>
+            <% end %>
+          </div>
+          
+          <div class="flex items-center gap-2 mt-3 text-sm text-base-content/60">
+            <span><%= @product_color.brand.name %></span>
+            <span class="text-base-content/30">•</span>
+            <span class="capitalize"><%= @product_color.brand.category %></span>
+          </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <% if stash_item %>
+          <div class="space-y-4">
+            
+            <div class="flex gap-2">
+              <% is_owned = stash_item.owned? %>
+              <%= button_to stash_item_path(stash_item), 
+                  method: :patch,
+                  params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+                  class: "btn btn-xs rounded-full flex-1 #{is_owned ? 'btn-primary' : 'btn-dash text-gray-500'}" do %>
+                <% if is_owned %>
+                  <%= icon (:check_outline) %>
+                <% end %>
+                I have this
+              <% end %>
+              
+              <% is_wish_list = stash_item.wish_list? %>
+              <%= button_to stash_item_path(stash_item), 
+                  method: :patch,
+                  params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
+                  class: "btn btn-xs rounded-full flex-1 #{is_wish_list ? 'btn-secondary' : 'btn-dash text-gray-500'}" do %>
+                <% if is_wish_list %>
+                  <%= icon (:check_outline) %>
+                <% end %>
+                I want this
+              <% end %>
+            </div>
+            
+            <div class="flex justify-end">
+              <%= button_to stash_item_path(stash_item),
+                  method: :delete,
+                  params: { stash_item: { product_color_id: @product_color.id } },
+                  class: "btn btn-ghost btn-md text-error hover:bg-error/10" do %>
+                <%= icon (:trash_outline) %>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+      
+          <%= button_to stash_items_path, 
+              params: { stash_item: { product_color_id: @product_color.id } }, 
+              class: "btn btn-primary btn-block" do %>
+            <%= icon (:plus_outline) %>
+            Add to my stash
+          <% end %>
+        <% end %>
+        
+      </div>
+    </div>
   </div>
 </div>

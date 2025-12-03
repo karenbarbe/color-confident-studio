@@ -24,4 +24,16 @@ class Brand < ApplicationRecord
   enum :featured, { main: "main", secondary: "secondary", general: "general" }
 
   validates :slug, presence: true, uniqueness: true
+
+
+  def spectrum_sample(count: 10)
+    segment_size = 360.0 / count
+
+    product_colors
+      .chromatic
+      .where.not(oklch_h: nil)
+      .select("DISTINCT ON ((oklch_h / #{segment_size})::int) *")
+      .order(Arel.sql("(oklch_h / #{segment_size})::int, RANDOM()"))
+      .limit(count)
+  end
 end

@@ -1,18 +1,51 @@
 <% content_for :title, "Color libraries" %>
 
-<div class="container mx-auto mt-8 w-full space-y-4 px-4">
-  <h1>Color Libraries</h1>
-
-  <h2><%= @featured.name %>—our featured brand</h2>
-
-  <%= render "shared/color_grid", product_colors: @featured_colors, view_context: "library" %>
-
-  <div class="flex justify-end">
-    <%= link_to color_library_path(@featured.category, @featured.slug), class: "btn btn-ghost" do %>
-      See all <%= @featured.name %>
-      <%= icon (:arrow_right_outline) %>
-    <% end %>
+<div class="container mx-auto mt-8 w-full space-y-8 px-4 max-w-5xl">
+  <div>
+    <h1 class="font-bold text-3xl text-gray-900">Color libraries</h1>
+    <p class="text-gray-500 mt-1">Browse color libraries for your projects</p>
   </div>
 
+  <div class="space-y-8">
+    <% @categories.each do |category| %>
+      <section>
+        <h2 class="mb-4 font-semibold text-sm tracking-wide text-gray-700 uppercase"><%= category %></h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <% @brands_by_category[category].each do |brand| %>
+            <%= link_to color_library_path(category, brand.slug), 
+                class: "group block" do %>
+              <div class="min-h-28 h-full flex flex-col justify-between p-5 rounded-xl 
+                          bg-white border border-gray-300 
+                          hover:shadow-sm
+                          transition-all duration-200">
 
+                <div>
+                  <div class="flex h-4 rounded-full overflow-hidden mb-3">
+                    <% brand.spectrum_sample.each do |color| %>
+                      <div class="flex-1" style="background-color: #<%= color.hex_color %>;"></div>
+                    <% end %>
+                  </div>
+                  <h3 class="font-semibold text-gray-900 group-hover:text-gray-700">
+                    <%= brand.name %>
+                  </h3>
+                </div>
+
+                <div class="flex justify-between items-center mt-4">
+                  <span class="text-sm text-gray-500 flex items-center gap-1.5">
+                    <%= icon(:grid_outline) %>
+                    <span><%= brand.product_colors_count %> colors</span>
+                  </span>
+                  <span class="text-gray-400 group-hover:text-gray-600 
+                               group-hover:translate-x-1 transition-transform duration-200">
+                    <%= icon(:arrow_right_outline) %>
+                  </span>
+                </div>
+
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+  </div>
 </div>

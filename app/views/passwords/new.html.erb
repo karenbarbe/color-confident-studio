@@ -1,8 +1,26 @@
-<h1>Forgot your password?</h1>
+<div class="container mx-auto mt-8 max-w-sm p-4 space-y-6">
+  <h1 class="text-3xl font-bold">Forgot your password?</h1>
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4">
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+    <%= form_with url: passwords_path do |form| %>
 
-<%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %><br>
-  <%= form.submit "Email reset instructions" %>
-<% end %>
+      <%# Email %>
+
+      <%= form.label :email_address, class: "label" do %>
+        <span class="label-text">Email</span>
+      <% end %>
+      <%= form.email_field :email_address,
+        required: true,
+        autofocus: true,
+        autocomplete: "email",
+        placeholder: "Enter your email address",
+        value: params[:email_address],
+        class: "input input-bordered w-full" %>
+
+      <%# Submit %>
+
+      <%= form.submit "Email reset instructions", class: "btn btn-neutral mt-4 w-full" %>
+    <% end %>
+
+  </fieldset>
+</div>
