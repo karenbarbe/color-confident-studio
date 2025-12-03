@@ -1,0 +1,23 @@
+<div class="dropdown" data-controller="smart-dropdown">
+  <div tabindex="0" role="button" class="btn btn-ghost btn-circle p-1 text-gray-600" title="More options" aria-label="More options">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+    </svg>
+  </div>
+
+  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 border border-base-300 shadow-lg">
+    <% if is_in_stash %>
+      <li class="text-red-600 hover:text-red-800">
+        <%= button_to "Remove from stash", stash_item_path(stash_item),
+            method: :delete,
+            params: { stash_item: { product_color_id: color.id } }
+        %>
+        
+      </li>
+    <% else %>
+      <li>
+        <%= button_to "Add to stash", stash_items_path,
+              params: { stash_item: { product_color_id: color.id } } %>
+      </li>
+    <% end %>
+  </ul>
+</div>
