@@ -9,7 +9,7 @@
       <span class="dock-item-label">Home</span>
     <% end %>
 
-    <%= link_to color_libraries_path, class: "dock-item group #{controller_name == 'color_libraries' ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to color_libraries_path, class: "dock-item group #{(controller_name == 'color_libraries' || (controller_name == 'product_colors' && action_name == 'show')) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:swatch_outline) %>
       <span class="dock-item-label">Browse</span>
