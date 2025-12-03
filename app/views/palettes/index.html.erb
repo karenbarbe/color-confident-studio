@@ -1,13 +1,9 @@
 <% content_for :title, "Palettes" %>
 
-<div class="w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
+<div class="container mx-auto mt-8 px-4">
 
   <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Palettes</h1>
-    <%= link_to "New palette", new_palette_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+    <h1 class="font-bold text-3xl">Palettes</h1>
   </div>
 
   <div id="palettes" class="min-w-full divide-y divide-gray-200 space-y-5">
@@ -23,7 +19,7 @@
         </div>
       <% end %>
     <% else %>
-      <p class="text-center my-10">No palettes found.</p>
+      <p class="text-center my-10">No palettes yet.</p>
     <% end %>
   </div>
 </div>

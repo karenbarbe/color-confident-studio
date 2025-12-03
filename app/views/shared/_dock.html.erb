@@ -15,7 +15,7 @@
       <span class="dock-item-label">Browse</span>
     <% end %>
 
-    <%= link_to root_path, class: "dock-item group #{current_page?(root_path) ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to new_palette_path, class: "dock-item group #{current_page?(new_palette_path) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:create_outline) %>
       <span class="dock-item-label">Create</span>
@@ -27,7 +27,7 @@
       <span class="dock-item-label">Stash</span>
     <% end %>
 
-    <%= link_to root_path, class: "dock-item group #{current_page?(root_path) ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to palettes_path, class: "dock-item group #{current_page?(palettes_path) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:palette_outline) %>
       <span class="dock-item-label">Palettes</span>

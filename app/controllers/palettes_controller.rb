@@ -1,9 +1,11 @@
 class PalettesController < ApplicationController
   before_action :set_palette, only: %i[ show edit update destroy ]
+  before_action :ensure_current_user_is_creator, only: %i[ show edit update destroy ]
+  layout "dock"
 
   # GET /palettes or /palettes.json
   def index
-    @palettes = Palette.all
+    @palettes = Palette.where(creator: Current.user).order(created_at: :desc)
   end
 
   # GET /palettes/1 or /palettes/1.json
@@ -22,6 +24,7 @@ class PalettesController < ApplicationController
   # POST /palettes or /palettes.json
   def create
     @palette = Palette.new(palette_params)
+    @palette.creator = Current.user
 
     respond_to do |format|
       if @palette.save
@@ -63,8 +66,14 @@ class PalettesController < ApplicationController
       @palette = Palette.find(params.expect(:id))
     end
 
+    def ensure_current_user_is_creator
+      if Current.user != @palette.creator
+        redirect_back fallback_location: root_url, alert: "You're not authorized for that."
+      end
+    end
+
     # Only allow a list of trusted parameters through.
     def palette_params
-      params.expect(palette: [ :name, :creator_id, :description ])
+      params.expect(palette: [ :name, :description ])
     end
 end
