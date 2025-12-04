@@ -1,4 +1,11 @@
-<% is_in_stash = controller_name == "color_libraries" && @stashed_color_ids.include?(color.id) %>
+<% is_in_stash = case view_context
+                 when "stash"
+                   true
+                 when "library"
+                   @stashed_color_ids&.include?(color.id)
+                 else
+                   false
+                 end %>
 
 <li>
 
