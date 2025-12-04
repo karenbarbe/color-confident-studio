@@ -2,8 +2,16 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
-    this.element.addEventListener('click', () => this.adjustPosition())
-    this.element.addEventListener('focusin', () => this.adjustPosition())
+    this.handleClick = () => this.adjustPosition()
+    this.handleFocusin = () => this.adjustPosition()
+    
+    this.element.addEventListener('click', this.handleClick)
+    this.element.addEventListener('focusin', this.handleFocusin)
+  }
+
+  disconnect() {
+    this.element.removeEventListener('click', this.handleClick)
+    this.element.removeEventListener('focusin', this.handleFocusin)
   }
 
   adjustPosition() {
@@ -12,18 +20,14 @@ export default class extends Controller {
     
     this.element.classList.remove('dropdown-start', 'dropdown-end', 'dropdown-center')
     
-    // Check if element is in the center third of the screen
     const leftThreshold = viewportWidth * 0.33
     const rightThreshold = viewportWidth * 0.66
     
     if (rect.left > leftThreshold && rect.right < rightThreshold) {
-      // Element is in the middle 
       this.element.classList.add('dropdown-center')
     } else if (rect.left < 240) {
-      // Element is on the left side
       this.element.classList.add('dropdown-start')
     } else {
-      // Element is on the right side
       this.element.classList.add('dropdown-end')
     }
   }
