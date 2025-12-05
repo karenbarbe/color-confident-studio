@@ -1,0 +1,2 @@
+class ColorSlotsController < ApplicationController
+end
