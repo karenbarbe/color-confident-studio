@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_05_230312) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_05_231743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_05_230312) do
     t.index ["category"], name: "index_brands_on_category"
     t.index ["featured"], name: "index_brands_on_featured"
     t.index ["slug"], name: "index_brands_on_slug", unique: true
+  end
+
+  create_table "color_slots", force: :cascade do |t|
+    t.bigint "palette_id", null: false
+    t.bigint "product_color_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["palette_id"], name: "index_color_slots_on_palette_id"
+    t.index ["product_color_id"], name: "index_color_slots_on_product_color_id"
   end
 
   create_table "palettes", force: :cascade do |t|
@@ -228,6 +237,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_05_230312) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "color_slots", "palettes"
+  add_foreign_key "color_slots", "product_colors"
   add_foreign_key "palettes", "users", column: "creator_id"
   add_foreign_key "product_colors", "brands"
   add_foreign_key "sessions", "users"
