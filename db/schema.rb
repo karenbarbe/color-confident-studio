@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_05_231743) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_06_190135) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_05_231743) do
     t.bigint "product_color_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slot_type", default: "main", null: false
+    t.integer "position", default: 0, null: false
+    t.index ["palette_id", "product_color_id"], name: "index_color_slots_on_palette_id_and_product_color_id", unique: true
+    t.index ["palette_id", "slot_type", "position"], name: "index_color_slots_on_palette_id_and_slot_type_and_position"
     t.index ["palette_id"], name: "index_color_slots_on_palette_id"
     t.index ["product_color_id"], name: "index_color_slots_on_product_color_id"
   end
@@ -42,6 +46,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_05_231743) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status", default: "draft", null: false
+    t.index ["status"], name: "index_palettes_on_status"
   end
 
   create_table "product_colors", force: :cascade do |t|
