@@ -75,8 +75,7 @@ namespace :db do
           StashItem.create!(
             owner: user,
             product_color: color,
-            ownership_status: %w[owned wish_list].sample,
-            favorite: [ true, false, false, false ].sample
+            ownership_status: %w[owned wish_list].sample
           )
         end
       end

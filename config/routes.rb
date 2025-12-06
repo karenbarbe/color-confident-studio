@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
- root "pages#home"
+  root "pages#home"
 
   get "/dashboard" => "pages#dashboard", as: :dashboard
 
@@ -19,10 +19,11 @@ Rails.application.routes.draw do
   resource :session, only: [ :new, :create, :destroy ]
   resources :passwords, param: :token
 
+  resources :color_slots
+  resources :palettes
   resources :product_colors, only: [ :index, :show ]
   resources :stash_items do
     member do
-      patch :toggle_favorite
       patch :update_ownership_status
     end
   end

@@ -9,13 +9,13 @@
       <span class="dock-item-label">Home</span>
     <% end %>
 
-    <%= link_to color_libraries_path, class: "dock-item group #{controller_name == 'color_libraries' ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to color_libraries_path, class: "dock-item group #{(controller_name == 'color_libraries' || (controller_name == 'product_colors' && action_name == 'show')) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:swatch_outline) %>
       <span class="dock-item-label">Browse</span>
     <% end %>
 
-    <%= link_to root_path, class: "dock-item group #{current_page?(root_path) ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to new_palette_path, class: "dock-item group #{current_page?(new_palette_path) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:create_outline) %>
       <span class="dock-item-label">Create</span>
@@ -23,11 +23,11 @@
 
     <%= link_to stash_items_path, class: "dock-item group #{controller_name == 'stash_items' ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
-      <%= icon(:stash_outline) %>
+      <%= icon(:heart_outline) %>
       <span class="dock-item-label">Stash</span>
     <% end %>
 
-    <%= link_to root_path, class: "dock-item group #{current_page?(root_path) ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to palettes_path, class: "dock-item group #{current_page?(palettes_path) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:palette_outline) %>
       <span class="dock-item-label">Palettes</span>

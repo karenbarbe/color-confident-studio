@@ -1,5 +1,5 @@
 class StashItemsController < ApplicationController
-  before_action :set_stash_item, only: %i[ toggle_favorite show edit update destroy ]
+  before_action :set_stash_item, only: %i[ show edit update destroy ]
   layout "dock"
 
   # GET /stash_items or /stash_items.json
@@ -39,16 +39,6 @@ class StashItemsController < ApplicationController
       end
     end
   end
-
-  def toggle_favorite
-    @stash_item.update(favorite: !@stash_item.favorite)
-
-    respond_to do |format|
-      format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item favorite status updated." }
-      format.json { render :show, status: :ok, location: @stash_item }
-    end
-  end
-
   def update_ownership_status
     if @stash_item.update(ownership_status: params[:ownership_status])
       respond_to do |format|
@@ -78,10 +68,11 @@ class StashItemsController < ApplicationController
 
   # DELETE /stash_items/1 or /stash_items/1.json
   def destroy
+    @product_color = @stash_item.product_color
     @stash_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to stash_items_path, status: :see_other, notice: "Item was successfully removed from your stash." }
+      format.html { redirect_back fallback_location: stash_items_path, status: :see_other, notice: "Item was successfully removed from your stash." }
       format.json { head :no_content }
     end
   end
