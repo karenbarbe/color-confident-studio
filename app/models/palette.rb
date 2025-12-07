@@ -23,7 +23,13 @@ class Palette < ApplicationRecord
   has_many :color_slots, dependent: :destroy
   has_many :product_colors, through: :color_slots
 
-  enum status: { draft: "draft", published: "published" }
+  enum :status, { draft: "draft", published: "published" }
+
+  scope :with_content, -> {
+    left_joins(:color_slots)
+      .group("palettes.id")
+      .having("palettes.name IS NOT NULL AND palettes.name != '' OR COUNT(color_slots.id) > 0")
+    }
 
   validates :name, presence: true, if: :published?
 
