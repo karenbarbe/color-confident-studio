@@ -15,7 +15,7 @@
       <span class="dock-item-label">Browse</span>
     <% end %>
 
-    <%= link_to new_palette_path, class: "dock-item group #{current_page?(new_palette_path) ? 'active' : 'text-gray-500'}" do %>
+     <%= button_to palettes_path, method: :post, class: "dock-item group md:w-full #{(controller_name == 'palettes' && action_name == 'studio') ? 'active' : 'text-gray-500'}", form: { class: "contents" }, data: { turbo: false } do %>
       <span class="dock-indicator"></span>
       <%= icon(:create_outline) %>
       <span class="dock-item-label">Create</span>
@@ -27,7 +27,7 @@
       <span class="dock-item-label">Stash</span>
     <% end %>
 
-    <%= link_to palettes_path, class: "dock-item group #{current_page?(palettes_path) ? 'active' : 'text-gray-500'}" do %>
+    <%= link_to palettes_path, class: "dock-item group #{(controller_name == 'palettes' && (action_name == 'index' || action_name == 'show')) ? 'active' : 'text-gray-500'}" do %>
       <span class="dock-indicator"></span>
       <%= icon(:palette_outline) %>
       <span class="dock-item-label">Palettes</span>
