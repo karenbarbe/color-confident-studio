@@ -1,0 +1,25 @@
+<%# locals: (slot:, palette:) %>
+
+<div class="relative group">
+  <%# Color swatch %>
+  <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg shadow-sm <%= 'border border-gray-200' if slot.product_color.oklch_l && slot.product_color.oklch_l >= 0.95 %>"
+       style="background-color: #<%= slot.product_color.hex_color %>;"
+       title="<%= slot.product_color.vendor_code %> - <%= slot.product_color.name %>">
+  </div>
+
+  <%# Remove button %>
+  <%= button_to palette_color_slot_path(palette, slot),
+      method: :delete,
+      class: "absolute -top-2 -right-2 size-6 bg-white rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity",
+      title: "Remove color",
+      data: { turbo_confirm: "Remove this color?" } do %>
+    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  <% end %>
+
+  <%# Color code label %>
+  <p class="text-xs text-gray-600 text-center mt-1 truncate w-16 sm:w-20">
+    <%= slot.product_color.vendor_code %>
+  </p>
+</div>
