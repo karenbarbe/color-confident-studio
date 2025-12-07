@@ -18,9 +18,7 @@
       <% end %>
     </div>
     <div class="flex gap-2">
-      <%= link_to studio_palette_path(@palette), class: "btn btn-ghost btn-sm" do %>
-        Edit
-      <% end %>
+      <%= link_to "Edit", studio_palette_path(@palette), class: "btn btn-ghost btn-sm" %>
     </div>
   </div>
 
@@ -72,8 +70,8 @@
                style="background-color: #<%= color.hex_color %>;"></div>
           <div>
             <p class="font-medium text-gray-900"><%= color.vendor_code %></p>
-            <p class="text-sm text-gray-500"><%= color.name %></p>
-            <p class="text-xs text-gray-400"><%= color.brand.name %></p>
+            <p class="text-sm text-gray-700"><%= color.name %></p>
+            <p class="text-xs text-gray-500"><%= color.brand.name %></p>
           </div>
         </div>
       <% end %>
@@ -89,7 +87,8 @@
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>
             <div>
               <p class="font-medium text-gray-900 text-sm"><%= slot.product_color.vendor_code %></p>
-              <p class="text-xs text-gray-500"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-700"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-500"><%= slot.product_color.brand.name %></p>
             </div>
           </div>
         <% end %>
@@ -106,7 +105,8 @@
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>
             <div>
               <p class="font-medium text-gray-900 text-sm"><%= slot.product_color.vendor_code %></p>
-              <p class="text-xs text-gray-500"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-700"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-500"><%= slot.product_color.brand.name %></p>
             </div>
           </div>
         <% end %>
@@ -123,7 +123,8 @@
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>
             <div>
               <p class="font-medium text-gray-900 text-sm"><%= slot.product_color.vendor_code %></p>
-              <p class="text-xs text-gray-500"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-700"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-500"><%= slot.product_color.brand.name %></p>
             </div>
           </div>
         <% end %>
@@ -134,7 +135,7 @@
 
   <%# Actions %>
   <div class="flex justify-between items-center pt-4">
-    <%= link_to "← Back to palettes", palettes_path, class: "btn btn-ghost" %>
+    <%= link_to "Back to palettes", palettes_path, class: "btn btn-ghost" %>
 
     <%= button_to "Delete palette",
         palette_path(@palette),

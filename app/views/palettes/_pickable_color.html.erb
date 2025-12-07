@@ -3,6 +3,7 @@
 <%= button_to palette_color_slots_path(palette),
     method: :post,
     params: { color_slot: { product_color_id: product_color.id, slot_type: section } },
+    form: { class: "contents" },
     class: "group text-left" do %>
 
   <%# Color swatch %>

@@ -4,19 +4,28 @@
   <%# Color preview strip %>
   <div class="h-16 flex">
     <% if palette.background_color %>
-      <div class="w-1/4 h-full" style="background-color: #<%= palette.background_color.hex_color %>;"></div>
+      <div class="w-4/10 h-full" style="background-color: #<%= palette.background_color.hex_color %>;"></div>
     <% else %>
-      <div class="w-1/4 h-full bg-gray-100 flex items-center justify-center">
+      <div class="w-4/10 h-full bg-gray-100 flex items-center justify-center">
         <span class="text-xs text-gray-400">BG</span>
       </div>
     <% end %>
 
-    <div class="flex-1 flex">
-      <% palette.main_slots.limit(3).each do |slot| %>
+    <div class="w-3/10 flex">
+      <% palette.main_slots.each do |slot| %>
         <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
-      <% (3 - palette.main_slots.count).times do %>
-        <div class="flex-1 h-full bg-gray-50"></div>
+    </div>
+
+    <div class="w-2/10 flex">
+      <% palette.secondary_slots.each do |slot| %>
+        <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+      <% end %>
+    </div>
+
+    <div class="w-1/10 flex">
+      <% palette.accent_slots.each do |slot| %>
+        <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
     </div>
   </div>
