@@ -1,59 +1,31 @@
-<% categories = Brand.categories.keys %>
-<% brands_by_category = Brand.all.group_by(&:category)%>
-
-<div class="navbar bg-base-100 shadow-sm z-100">
+<div class="navbar bg-base-100 shadow-sm z-50 md:pl-52">
   <div class="navbar-start">
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-        </svg>
-      </div>
-      <ul
-        tabindex="-1"
-        class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-72 px-2 py-4 shadow">
-        <% if authenticated? %>
-          <% categories.each do |category| %>
-            <li>
-              <a class="font-semibold pointer-events-none"><%= category.titleize %></a>
-              <ul class="p-2">
-                <% brands_by_category[category].each do |brand| %>
-                  <li><%= link_to brand.name, color_library_path(category, brand.slug), class: "text-sm" %></li>
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
+    <%# Mobile %>
+    <label for="app-drawer" class="btn btn-ghost drawer-button md:hidden" aria-label="Open menu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+      </svg>
+    </label>
 
-        <% else %>
-          <li>
-            <%= link_to "Get started", signup_path, class: "font-semibold"%>
-          </li>
-        <% end%>
-
-      </ul>
-
-    </div>
-    <%= link_to root_path, class: "btn btn-ghost text-xl flex items-center" do %>
-      <!-- Mobile label -->
-      <span class="md:hidden">Color app</span>
-
-      <!-- Desktop label -->
-      <span class="hidden md:inline">Color Confident Studio</span>
+    <%# Mobile logo %>
+    <%= link_to root_path, class: "btn btn-ghost md:hidden" do %>
+      <%= render "shared/logo_isotype" %>
     <% end %>
 
+    <%# Desktop logo %>
+    <%= link_to root_path, class: "hidden md:flex btn btn-ghost text-xl items-center gap-2" do %>
+      <%= render "shared/logo_full" %>
+    <% end %>
   </div>
 
   <div class="navbar-end gap-2">
-    <% if authenticated? %>
-      <%= button_to "Sign out", session_path, method: :delete, class: "btn btn-neutral" %>
-    <% else %>
+    <% unless authenticated? %>
       <% unless current_page?(login_path) %>
-        <%= link_to "Log in", login_path, class: "btn btn-outline"%>
+        <%= link_to "Log in", login_path, class: "btn btn-ghost" %>
       <% end %>
       <% unless current_page?(signup_path) %>
         <%= link_to "Sign up", signup_path, class: "btn btn-neutral" %>
-
       <% end %>
-
     <% end %>
   </div>
 </div>
