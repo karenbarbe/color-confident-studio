@@ -1,7 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* Used for the horizontal color family pill navigation */
+/* ============================================
+   HORIZONTAL COLOR FAMILY PILL SCROLLBAR
+   ============================================ */
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -11,50 +14,54 @@
   display: none;           
 }
 
-/* Dock item base styles */
-.dock-item {
-  @apply relative flex flex-col items-center justify-center py-2 px-3 transition-colors;
+/* ============================================
+   SIDEBAR
+   ============================================ */
+
+.sidebar-item {
+  @apply relative flex items-center gap-3 py-2.5 px-3 rounded-lg transition-all duration-200;
 }
 
-.dock-item:hover {
-  @apply text-gray-900;
+.sidebar-item:hover {
+  @apply bg-base-200 text-base-content;
 }
 
-.dock-item.active {
-  @apply text-gray-900;
+.sidebar-item.active {
+  @apply bg-primary/10 text-primary font-medium;
 }
 
-/* Dock item label */
-.dock-item-label {
-  @apply text-xs mt-1;
+.sidebar-indicator {
+  @apply absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full opacity-0 transition-opacity duration-200;
 }
 
-/* Dock indicator - hidden by default */
-.dock-indicator {
-  @apply absolute bg-gray-900 rounded-full opacity-0 transition-opacity;
-  /* Mobile: horizontal indicator at top */
-  bottom: 2;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 4px;
-}
-
-.dock-item.active .dock-indicator {
+.sidebar-item.active .sidebar-indicator {
   @apply opacity-100;
 }
 
-/* Desktop: vertical indicator on left */
-@media (min-width: 768px) {
-  .dock-item {
-    @apply py-3 px-4;
-  }
+.sidebar-item-btn {
+  @apply flex items-center gap-3 py-1.5 px-3 rounded-lg cursor-pointer transition-all duration-200;
+}
 
-  .dock-indicator {
-    top: 50%;
-    left: 4;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 40px;
-  }
+.sidebar-item-btn:hover {
+  @apply bg-base-200 text-base-content;
+}
+
+/* ============================================
+   MOBILE DRAWER (overrides)
+   ============================================ */
+
+.drawer-side .sidebar-indicator {
+  @apply hidden;
+}
+
+.drawer-side .sidebar-item {
+  @apply py-3;
+}
+
+/* ============================================
+   FLYOUT DROPDOWN
+   ============================================ */
+
+.dropdown:hover .sidebar-item {
+  @apply bg-base-200;
 }
