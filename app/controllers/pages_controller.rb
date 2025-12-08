@@ -8,6 +8,5 @@ class PagesController < ApplicationController
     end
   end
   def dashboard
-    render layout: "dock"
   end
 end
