@@ -1,15 +1,147 @@
-<% content_for :title, "Showing palette" %>
+<% content_for :title, @palette.name %>
 
-<div class="md:w-2/3 w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+<div class="container mx-auto mt-8 px-4 pb-8 space-y-6">
+
+  <%# Flash messages %>
+  <% if notice %>
+    <div class="bg-green-50 text-green-700 px-4 py-3 rounded-lg">
+      <%= notice %>
+    </div>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing palette</h1>
+  <%# Header %>
+  <div class="flex justify-between items-start">
+    <div>
+      <h1 class="font-bold text-2xl text-gray-900"><%= @palette.name %></h1>
+      <% if @palette.description.present? %>
+        <p class="text-gray-500 mt-1"><%= @palette.description %></p>
+      <% end %>
+    </div>
+    <div class="flex gap-2">
+      <%= link_to "Edit", studio_palette_path(@palette), class: "btn btn-ghost btn-sm" %>
+    </div>
+  </div>
 
-  <%= render @palette %>
+  <%# Full palette preview %>
+  <div class="bg-base-100 rounded-xl shadow-sm overflow-hidden">
+    <%# Background with colors on top %>
+    <div class="relative h-64 sm:h-80" style="background-color: #<%= @palette.background_color&.hex_color || 'f5f5f5' %>;">
+      <%# Color swatches arranged on background %>
+      <div class="absolute inset-0 flex items-center justify-center p-8">
+        <div class="flex flex-wrap justify-center gap-4">
+          <%# Main colors  %>
+          <% @palette.main_slots.includes(:product_color).each do |slot| %>
+            <div class="w-16 h-20 sm:w-20 sm:h-24 rounded-lg shadow-lg"
+                 style="background-color: #<%= slot.product_color.hex_color %>;"
+                 title="Main: <%= slot.product_color.vendor_code %>">
+            </div>
+          <% end %>
 
-  <%= link_to "Edit this palette", edit_palette_path(@palette), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to palettes", palettes_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this palette", @palette, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+          <%# Secondary colors %>
+          <% @palette.secondary_slots.includes(:product_color).each do |slot| %>
+            <div class="w-12 h-16 sm:w-16 sm:h-20 rounded-lg shadow-lg"
+                 style="background-color: #<%= slot.product_color.hex_color %>;"
+                 title="Secondary: <%= slot.product_color.vendor_code %>">
+            </div>
+          <% end %>
+
+          <%# Accent colors %>
+          <% @palette.accent_slots.includes(:product_color).each do |slot| %>
+            <div class="w-10 h-12 sm:w-12 sm:h-16 rounded-lg shadow-lg"
+                 style="background-color: #<%= slot.product_color.hex_color %>;"
+                 title="Accent: <%= slot.product_color.vendor_code %>">
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# Color details by section %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <%# Background %>
+    <div class="bg-base-100 rounded-xl shadow-sm p-5">
+      <h3 class="font-semibold text-gray-900 mb-3">Background</h3>
+      <% if @palette.background_slot %>
+        <% color = @palette.background_color %>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-lg shadow-sm"
+               style="background-color: #<%= color.hex_color %>;"></div>
+          <div>
+            <p class="font-medium text-gray-900"><%= color.vendor_code %></p>
+            <p class="text-sm text-gray-700"><%= color.name %></p>
+            <p class="text-xs text-gray-500"><%= color.brand.name %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Main colors %>
+    <div class="bg-base-100 rounded-xl shadow-sm p-5">
+      <h3 class="font-semibold text-gray-900 mb-3">Main colors</h3>
+      <div class="space-y-2">
+        <% @palette.main_slots.includes(product_color: :brand).each do |slot| %>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg shadow-sm"
+                 style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+            <div>
+              <p class="font-medium text-gray-900 text-sm"><%= slot.product_color.vendor_code %></p>
+              <p class="text-xs text-gray-700"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-500"><%= slot.product_color.brand.name %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Secondary colors %>
+    <div class="bg-base-100 rounded-xl shadow-sm p-5">
+      <h3 class="font-semibold text-gray-900 mb-3">Secondary colors</h3>
+      <div class="space-y-2">
+        <% @palette.secondary_slots.includes(product_color: :brand).each do |slot| %>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg shadow-sm"
+                 style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+            <div>
+              <p class="font-medium text-gray-900 text-sm"><%= slot.product_color.vendor_code %></p>
+              <p class="text-xs text-gray-700"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-500"><%= slot.product_color.brand.name %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Accent colors %>
+    <div class="bg-base-100 rounded-xl shadow-sm p-5">
+      <h3 class="font-semibold text-gray-900 mb-3">Accent colors</h3>
+      <div class="space-y-2">
+        <% @palette.accent_slots.includes(product_color: :brand).each do |slot| %>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg shadow-sm"
+                 style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+            <div>
+              <p class="font-medium text-gray-900 text-sm"><%= slot.product_color.vendor_code %></p>
+              <p class="text-xs text-gray-700"><%= slot.product_color.name %></p>
+              <p class="text-xs text-gray-500"><%= slot.product_color.brand.name %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+
+  <%# Actions %>
+  <div class="flex justify-between items-center pt-4">
+    <%= link_to "Back to palettes", palettes_path, class: "btn btn-ghost" %>
+
+    <%= button_to "Delete palette",
+        palette_path(@palette),
+        method: :delete,
+        class: "btn btn-ghost text-red-600",
+        data: { turbo_confirm: "Are you sure you want to delete this palette?" } %>
+  </div>
+
 </div>

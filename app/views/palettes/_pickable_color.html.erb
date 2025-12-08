@@ -1,0 +1,19 @@
+<%# locals: (product_color:, palette:, section:) %>
+
+<%= button_to palette_color_slots_path(palette),
+    method: :post,
+    params: { color_slot: { product_color_id: product_color.id, slot_type: section } },
+    form: { class: "contents" },
+    class: "group text-left" do %>
+
+  <%# Color swatch %>
+  <div class="w-full aspect-square rounded-lg shadow-sm group-hover:ring-2 group-hover:ring-primary group-hover:ring-offset-2 transition-all cursor-pointer <%= 'border border-gray-200' if product_color.oklch_l && product_color.oklch_l >= 0.95 %>"
+       style="background-color: #<%= product_color.hex_color %>;"
+       title="<%= product_color.vendor_code %> - <%= product_color.name %>">
+  </div>
+
+  <%# Color info %>
+  <p class="text-xs text-gray-600 text-center mt-1 truncate">
+    <%= product_color.vendor_code %>
+  </p>
+<% end %>

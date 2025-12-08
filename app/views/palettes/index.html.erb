@@ -1,25 +1,61 @@
-<% content_for :title, "Palettes" %>
+<% content_for :title, "My palettes" %>
 
-<div class="container mx-auto mt-8 px-4">
+<div class="container mx-auto mt-8 px-4 space-y-8">
 
+  <%# Header %>
   <div class="flex justify-between items-center">
-    <h1 class="font-bold text-3xl">Palettes</h1>
+    <div>
+      <h1 class="font-bold text-3xl text-gray-900">My palettes</h1>
+      <p class="text-gray-500 mt-1">Your color combinations</p>
+    </div>
+    <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-primary" %>
   </div>
 
-  <div id="palettes" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @palettes.any? %>
-      <% @palettes.each do |palette| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render palette %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", palette, class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_palette_path(palette), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", palette, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  <div class="tabs tabs-border">
+    <input type="radio" name="palettes_tab" class="tab" aria-label="Saved palettes" checked>
+    <div class="tab-content border-base-300 bg-base-100 px-4 p-8">
+      <%# Saved palettes tab %>
+      <section class="space-y-4">
+        <% if @palettes.any? %>
+          <h2 class="text-lg font-semibold text-gray-700">Saved palettes</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <% @palettes.each do |palette| %>
+              <%= render "palette_card", palette: palette, is_draft: false %>
+            <% end %>
           </div>
+        <% else %>
+          <% unless @draft_palettes.any? %>
+            <div class="text-center py-16">
+              <h3 class="text-lg font-medium text-gray-900">No palettes yet</h3>
+              <p class="text-gray-500 mt-1">Create your first color palette to get started</p>
+              <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-neutral btn-outline mt-4" %>
+            </div>
+          <% end %>
+        <% end %>
+      </section>
+
+    </div>
+    <%#  Draft palettes tab %>
+    <input type="radio" name="palettes_tab" class="tab" aria-label="Draft palettes">
+    <div class="tab-content border-base-300 bg-base-100 p-10">
+      <% if @draft_palettes.any? %>
+        <section class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-700">Drafts</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <% @draft_palettes.each do |palette| %>
+              <%= render "palette_card", palette: palette, is_draft: true %>
+            <% end %>
+          </div>
+        </section>
+      <% else %>
+        <div class="text-center py-16">
+          <h3 class="text-lg font-medium text-gray-900">No palettes yet</h3>
+          <p class="text-gray-500 mt-1">Create your first color palette to get started</p>
+          <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-neutral btn-outline mt-4" %>
         </div>
       <% end %>
-    <% else %>
-      <p class="text-center my-10">No palettes yet.</p>
-    <% end %>
+
+    </div>
   </div>
+
 </div>

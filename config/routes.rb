@@ -19,8 +19,15 @@ Rails.application.routes.draw do
   resource :session, only: [ :new, :create, :destroy ]
   resources :passwords, param: :token
 
-  resources :color_slots
-  resources :palettes
+  resources :palettes do
+    member do
+      get :studio
+      get :pick_color
+      patch :publish
+    end
+    resources :color_slots, only: [ :create, :destroy  ]
+  end
+
   resources :product_colors, only: [ :index, :show ]
   resources :stash_items do
     member do

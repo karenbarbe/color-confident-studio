@@ -1,0 +1,97 @@
+<% content_for :title, "Add #{@section} color" %>
+
+<div class="container mx-auto mt-8 px-4 pb-8 space-y-6">
+
+  <%# Header %>
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-2xl text-gray-900">Add <%= @section %> color</h1>
+      <p class="text-gray-500 mt-1">
+        <% if @category == "fabric" %>
+          Choose a fabric color for your background
+        <% else %>
+          Choose a thread color
+        <% end %>
+      </p>
+    </div>
+    <%= link_to studio_palette_path(@palette), class: "btn btn-ghost btn-sm" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to palette
+    <% end %>
+  </div>
+
+  <%# From Stash section %>
+  <section class="space-y-4">
+    <div class="flex justify-between items-center">
+      <h2 class="font-semibold text-lg text-gray-900">From your stash</h2>
+      <span class="text-sm text-gray-500"><%= @stash_product_colors.size %> colors</span>
+    </div>
+
+    <% if @stash_product_colors.any? %>
+      <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+        <% @stash_product_colors.each do |product_color| %>
+          <%= render "pickable_color", product_color: product_color, palette: @palette, section: @section %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-gray-50 rounded-lg p-6 text-center">
+        <p class="text-gray-500">
+          No <%= @category %> colors in your stash yet.
+        </p>
+        <p class="text-sm text-gray-400 mt-1">
+          Browse the libraries below to find colors, or
+          <%= link_to "add colors to your stash", color_library_category_path(@category), class: "link link-primary" %>
+          first.
+        </p>
+      </div>
+    <% end %>
+  </section>
+
+  <%# Divider %>
+  <div class="flex items-center gap-4">
+    <div class="flex-1 border-t border-gray-200"></div>
+    <span class="text-sm text-gray-400">or browse libraries</span>
+    <div class="flex-1 border-t border-gray-200"></div>
+  </div>
+
+  <%# Browse Libraries section %>
+  <section class="space-y-4">
+    <h2 class="font-semibold text-lg text-gray-900">Browse <%= @category %> libraries</h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      <% @brands.each do |brand| %>
+        <%= link_to pick_color_palette_path(@palette, section: @section, brand_id: brand.id),
+            class: "bg-base-100 rounded-lg p-4 shadow-sm border border-base-200 hover:border-primary hover:shadow-md transition-all" do %>
+          <h3 class="font-medium text-gray-900"><%= brand.name %></h3>
+          <p class="text-sm text-gray-500"><%= brand.product_colors_count %> colors</p>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <%# Brand colors (if a brand is selected) %>
+  <% if params[:brand_id].present? %>
+    <% @selected_brand = Brand.find(params[:brand_id]) %>
+    <% @brand_colors = @selected_brand.product_colors.where.not(id: @palette_color_ids).order(:color_family, :name) %>
+
+    <section class="space-y-4 pt-4 border-t border-gray-200">
+      <div class="flex justify-between items-center">
+        <h2 class="font-semibold text-lg text-gray-900"><%= @selected_brand.name %></h2>
+        <span class="text-sm text-gray-500"><%= @brand_colors.size %> available</span>
+      </div>
+
+      <% if @brand_colors.any? %>
+        <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
+          <% @brand_colors.each do |product_color| %>
+            <%= render "pickable_color", product_color: product_color, palette: @palette, section: @section %>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-gray-500 text-center py-4">All colors from this brand are already in your palette.</p>
+      <% end %>
+    </section>
+  <% end %>
+
+</div>
