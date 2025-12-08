@@ -129,7 +129,7 @@ class PalettesController < ApplicationController
   end
 
   def palette_params
-    params.expect(palette: [:name, :description])
+    params.expect(palette: [ :name, :description ])
   end
 
   def load_studio_slots
@@ -150,7 +150,7 @@ class PalettesController < ApplicationController
   def find_empty_draft
     Current.user.palettes
            .draft
-           .where(name: [nil, ""])
+           .where(name: [ nil, "" ])
            .left_joins(:color_slots)
            .group("palettes.id")
            .having("COUNT(color_slots.id) = 0")
