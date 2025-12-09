@@ -613,6 +613,7 @@ DEPENDENCIES
   capybara
   carrierwave
   cloudinary
+  csv
   debug
   dev_toolbar (~> 2.1.0)
   devise
