@@ -13,7 +13,7 @@
 
   <div class="tabs tabs-border">
     <input type="radio" name="palettes_tab" class="tab" aria-label="Saved palettes" checked>
-    <div class="tab-content border-base-300 bg-base-100 px-4 p-8">
+    <div class="tab-content border-base-300 bg-base-100 px-4 py-8">
       <%# Saved palettes tab %>
       <section class="space-y-4">
         <% if @palettes.any? %>
@@ -37,7 +37,7 @@
     </div>
     <%#  Draft palettes tab %>
     <input type="radio" name="palettes_tab" class="tab" aria-label="Draft palettes">
-    <div class="tab-content border-base-300 bg-base-100 p-10">
+    <div class="tab-content border-base-300 bg-base-100 px-4 py-8">
       <% if @draft_palettes.any? %>
         <section class="space-y-4">
           <h2 class="text-lg font-semibold text-gray-700">Drafts</h2>
