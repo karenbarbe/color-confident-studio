@@ -11,6 +11,14 @@ development:
 test:
   <<: *default
 
+# =============================================================================
+# PRODUCTION: Removed separate database reference for single-database deployment
+# =============================================================================
+# Original setting was: database: cache
+# This required a separate 'cache' database connection in database.yml
+# For Render's free tier, we omit this so it uses the primary database.
+# Note: We're also using :memory_store in production.rb, so Solid Cache
+# won't actually be used, but this prevents the connection error on boot.
+# =============================================================================
 production:
-  database: cache
   <<: *default

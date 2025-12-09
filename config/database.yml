@@ -105,16 +105,24 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 # =============================================================================
-# PRODUCTION: Simplified for single-database deployment (Render free tier)
+# PRODUCTION: Single-database deployment for Render free tier
 # =============================================================================
-# Note: The original multi-database setup (cache, queue, cable) requires
-# multiple PostgreSQL databases. For Render's free/basic tier, we use a
-# single database. Solid Queue and Solid Cable will create their tables
-# in this same database.
-#
-# If you upgrade to a plan with multiple databases, you can restore the
-# multi-database configuration.
+# All Solid* gems (Cache, Queue, Cable) share the same database.
+# The tables will be created in the primary database.
+# We're using :memory_store, :inline, and :async adapters in production.rb
+# and cable.yml, but we still need these entries to prevent connection errors
+# when the gems initialize.
 # =============================================================================
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  primary: &primary_production
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+  cache:
+    <<: *primary_production
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    migrations_paths: db/cable_migrate
