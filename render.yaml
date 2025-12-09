@@ -2,18 +2,23 @@ services:
   - type: web
     name: color-confident-demo
     runtime: ruby
-    plan: starter
+    plan: free
     buildCommand: './bin/render-build.sh'
     startCommand: './bin/render-start.sh'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: learn-db
+          name: color-confident-demo-db
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
       - key: WEB_CONCURRENCY
         value: 2
+      - key: RAILS_ENV
+        value: production
+      - key: RACK_ENV
+        value: production
+
 databases:
   - name: color-confident-demo-db
-    plan: basic-256mb
+    plan: free

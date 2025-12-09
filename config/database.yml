@@ -104,20 +104,17 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+# =============================================================================
+# PRODUCTION: Simplified for single-database deployment (Render free tier)
+# =============================================================================
+# Note: The original multi-database setup (cache, queue, cable) requires
+# multiple PostgreSQL databases. For Render's free/basic tier, we use a
+# single database. Solid Queue and Solid Cable will create their tables
+# in this same database.
+#
+# If you upgrade to a plan with multiple databases, you can restore the
+# multi-database configuration.
+# =============================================================================
 production:
-  primary: &primary_production
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
-    encoding: utf8
-  cache:
-    <<: *primary_production
-    database: database_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: database_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: database_production_cable
-    migrations_paths: db/cable_migrate
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
