@@ -24,10 +24,41 @@
 
   <body class="min-h-screen antialiased">
 
-    <%= render "shared/navbar" %>
-    <main class="mx-auto mt-8 w-full space-y-4">
-      <%= yield %>
-    </main>
+    <div class="drawer">
+      <input id="app-drawer" type="checkbox" class="drawer-toggle" />
+
+      <%# Main page content %>
+      <div class="drawer-content flex flex-col">
+        <%= render "shared/navbar" %>
+
+        <% if authenticated? %>
+          <%= render "shared/sidebar" %>
+        <% end %>
+
+        <main class="mt-8 pb-8 w-full <%= 'md:pl-52' if authenticated? %>">
+
+          <%= yield :full_width_before %>
+
+          <div class="mx-auto px-4 space-y-4
+              md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+            <%= yield %>
+          </div>
+
+          <%= yield :full_width_after %>
+        </main>
+
+      </div>
+
+      <%# Drawer sidebar mobile %>
+      <div class="drawer-side z-50">
+        <label for="app-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        <% if authenticated? %>
+          <%= render "shared/drawer_content" %>
+        <% else %>
+          <%= render "shared/drawer_content_guest" %>
+        <% end %>
+      </div>
+    </div>
 
   </body>
 

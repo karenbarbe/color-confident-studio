@@ -1,5 +1,4 @@
 class ColorLibrariesController < ApplicationController
-  layout "dock"
   def index
     @categories = Brand.categories.keys
     @brands_by_category = Brand.all.group_by(&:category)

@@ -1,0 +1,111 @@
+<aside class="hidden md:flex fixed top-0 left-0 bottom-0 w-52 bg-base-100 border-r border-base-300 flex-col z-40">
+  <%# Logo %>
+  <div class="p-4 border-b border-base-300">
+    <%= link_to root_path, class: "flex items-center gap-2" do %>
+      <%= render "shared/logo_isotype" %>
+      <span class="font-semibold text-lg">Color Confident</span>
+    <% end %>
+  </div>
+
+  <%# Navigation items %>
+  <nav class="flex-1 flex flex-col py-4">
+    <ul class="menu menu-md gap-1 px-2 flex-1">
+      <%# Home %>
+      <li>
+        <%= link_to dashboard_path, class: sidebar_item_classes(:home) do %>
+          <span class="sidebar-indicator"></span>
+          <%= icon(:home_outline, css_class: "size-5") %>
+          <span>Home</span>
+        <% end %>
+      </li>
+
+      <%# Browse %>
+      <li>
+        <%= link_to color_libraries_path, class: sidebar_item_classes(:browse) do %>
+          <span class="sidebar-indicator"></span>
+          <%= icon(:swatch_outline, css_class: "size-5") %>
+          <span>Browse</span>
+        <% end %>
+      </li>
+
+      <%# Create %>
+      <li>
+        <%= button_to palettes_path, method: :post, class: sidebar_item_classes(:create), form: { class: "contents" }, data: { turbo: false } do %>
+          <span class="sidebar-indicator"></span>
+          <%= icon(:create_outline, css_class: "size-5") %>
+          <span>Create</span>
+        <% end %>
+      </li>
+
+      <%# Stash %>
+      <li>
+        <%= link_to stash_items_path, class: sidebar_item_classes(:stash) do %>
+          <span class="sidebar-indicator"></span>
+          <%= icon(:heart_outline, css_class: "size-5") %>
+          <span>Stash</span>
+        <% end %>
+      </li>
+
+      <%# Palettes %>
+      <li>
+        <%= link_to palettes_path, class: sidebar_item_classes(:palettes) do %>
+          <span class="sidebar-indicator"></span>
+          <%= icon(:palette_outline, css_class: "size-5") %>
+          <span>Palettes</span>
+        <% end %>
+      </li>
+
+      <%# More %>
+      <li class="dropdown dropdown-right dropdown-hover">
+        <div tabindex="0" role="button" class="sidebar-item group text-base-content/60">
+          <span class="sidebar-indicator"></span>
+          <%= icon(:ellipsis_horizontal_outline, css_class: "size-5") %>
+          <span>More</span>
+        </div>
+        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-48 p-2 shadow-lg border border-base-300 ml-2">
+          <li class="menu-title text-xs uppercase tracking-wider opacity-60">Coming soon</li>
+          <li><a class="opacity-50 cursor-not-allowed">Settings</a></li>
+          <li><a class="opacity-50 cursor-not-allowed">Help</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <%# User profile %>
+    <div class="mt-auto px-2 pb-2">
+      <div class="dropdown dropdown-right dropdown-end dropdown-hover w-full">
+        <div tabindex="0" role="button" class="sidebar-item group text-base-content/60 w-full justify-start">
+          <%# User initials avatar %>
+          <div class="avatar avatar-placeholder">
+            <div class="bg-linear-to-br from-primary to-secondary text-primary-content rounded-full w-8">
+              <span class="text-xs font-medium"><%= user_initials(Current.user) %></span>
+            </div>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="truncate font-medium"><%= Current.user.first_name %></span>
+            <span class="truncate text-xs text-base-content/60"><%= Current.user.email_address %></span>
+          </div>
+
+        </div>
+        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-48 p-2 shadow-lg border border-base-300 ml-2">
+          <li>
+            <%= link_to user_path(Current.user) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              Profile
+            <% end %>
+          </li>
+          <li>
+            <%= button_to session_path, method: :delete, class: "sidebar-item-btn text-error", form: { class: "contents" }, data: { turbo: false } do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+              </svg>
+              Sign out
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</aside>

@@ -1,7 +1,7 @@
 class PalettesController < ApplicationController
   before_action :set_palette, only: %i[show edit update destroy studio pick_color publish]
   before_action :ensure_current_user_is_creator, only: %i[show edit update destroy studio pick_color publish]
-  layout "dock"
+
 
   # GET /palettes
   def index
