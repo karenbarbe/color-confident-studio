@@ -35,9 +35,18 @@
           <%= render "shared/sidebar" %>
         <% end %>
 
-        <main class="container mx-auto mt-8 pb-8 px-4 w-full space-y-4 <%= 'md:pl-56' if authenticated? %>">
-          <%= yield %>
+        <main class="mt-8 pb-8 w-full <%= 'md:pl-52' if authenticated? %>">
+
+          <%= yield :full_width_before %>
+
+          <div class="mx-auto px-4 space-y-4
+              md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+            <%= yield %>
+          </div>
+
+          <%= yield :full_width_after %>
         </main>
+
       </div>
 
       <%# Drawer sidebar mobile %>
