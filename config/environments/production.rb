@@ -46,11 +46,25 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
-  # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  # =============================================================================
+  # MODIFIED FOR SINGLE-DATABASE DEPLOYMENT (Render free tier)
+  # =============================================================================
+  # Original Rails 8 settings used solid_cache_store and solid_queue, which
+  # expect separate database connections. For a single-database demo deployment,
+  # we use simpler in-memory alternatives.
+  #
+  # To restore full Solid Cache/Queue functionality with multiple databases,
+  # change these back to:
+  #   config.cache_store = :solid_cache_store
+  #   config.active_job.queue_adapter = :solid_queue
+  # =============================================================================
 
-  # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
+  # Use memory store for caching (sufficient for demos, resets on restart)
+  config.cache_store = :memory_store
+
+  # Use inline queue adapter (jobs run immediately, no background processing)
+  # For a demo this is fine; jobs will execute synchronously
+  config.active_job.queue_adapter = :inline
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
