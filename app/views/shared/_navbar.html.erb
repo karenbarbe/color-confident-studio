@@ -1,34 +1,62 @@
-<div class="navbar bg-base-100 shadow-sm z-50 md:pl-52 fixed top-0 left-0 right-0 transition-transform duration-300"
-      data-controller="navbar-scroll"
-      data-navbar-scroll-threshold-value="50"
-      data-navbar-scroll-dead-zone-value="5">
-  <div class="navbar-start">
-    <%# Mobile %>
-    <label for="app-drawer" class="btn btn-ghost drawer-button md:hidden" aria-label="Open menu">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-      </svg>
-    </label>
+<% if authenticated? %>
+  <%# Mobile only navbar %>
+  <div class="navbar bg-base-100 shadow-sm z-50 fixed top-0 left-0 right-0 transition-transform duration-300 md:hidden"
+       data-controller="navbar-scroll"
+       data-navbar-scroll-threshold-value="50"
+       data-navbar-scroll-dead-zone-value="5">
+    <div class="navbar-start">
 
-    <%# Mobile logo %>
-    <%= link_to root_path, class: "btn btn-ghost md:hidden" do %>
-      <%= render "shared/logo_isotype" %>
-    <% end %>
+      <label for="app-drawer" class="btn btn-ghost drawer-button" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+        </svg>
+      </label>
 
-    <%# Desktop logo %>
-    <%= link_to root_path, class: "hidden md:flex btn btn-ghost text-xl items-center gap-2" do %>
-      <%= render "shared/logo_full" %>
-    <% end %>
+      <%# Logo %>
+      <%= link_to root_path, class: "btn btn-ghost" do %>
+        <%= render "shared/logo_isotype" %>
+      <% end %>
+    </div>
+
+    <div class="navbar-end">
+      <label class="btn btn-ghost btn-circle" aria-label="Search">
+        <%= icon(:search_outline, css_class: "size-5") %>
+      </label>
+    </div>
   </div>
 
-  <div class="navbar-end gap-2">
-    <% unless authenticated? %>
+<% else %>
+  <%# Guest %>
+  <div class="navbar bg-base-100 shadow-sm z-50 fixed top-0 left-0 right-0 transition-transform duration-300"
+       data-controller="navbar-scroll"
+       data-navbar-scroll-threshold-value="50"
+       data-navbar-scroll-dead-zone-value="5">
+    <div class="navbar-start">
+     
+      <label for="app-drawer" class="btn btn-ghost drawer-button md:hidden" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+        </svg>
+      </label>
+
+      <%# Mobile logo %>
+      <%= link_to root_path, class: "btn btn-ghost md:hidden" do %>
+        <%= render "shared/logo_isotype" %>
+      <% end %>
+
+      <%# Desktop logo %>
+      <%= link_to root_path, class: "hidden md:flex btn btn-ghost text-xl items-center gap-2" do %>
+        <%= render "shared/logo_full" %>
+      <% end %>
+    </div>
+
+    <div class="navbar-end gap-2">
       <% unless current_page?(login_path) %>
         <%= link_to "Log in", login_path, class: "btn btn-ghost" %>
       <% end %>
       <% unless current_page?(signup_path) %>
         <%= link_to "Sign up", signup_path, class: "btn btn-neutral" %>
       <% end %>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>
