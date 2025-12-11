@@ -8,22 +8,10 @@ development:
 test:
   adapter: test
 
-# =============================================================================
-# PRODUCTION: Using async adapter for single-database deployment (Render free tier)
-# =============================================================================
-# The original solid_cable adapter requires a separate 'cable' database connection.
-# For Render's free/basic tier with a single database, we use the async adapter.
-#
-# Limitation: async only works within a single process, so ActionCable broadcasts
-# won't work across multiple dynos/instances. This is fine for demos and small apps.
-#
-# To restore solid_cable with multiple databases:
-#   adapter: solid_cable
-#   connects_to:
-#     database:
-#       writing: cable
-#   polling_interval: 0.1.seconds
-#   message_retention: 1.day
-# =============================================================================
 production:
-  adapter: async
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
