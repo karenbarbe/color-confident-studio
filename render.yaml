@@ -2,7 +2,7 @@ services:
   - type: web
     name: color-confident-studio
     runtime: ruby
-    plan: free
+    plan: starter
     buildCommand: "./bin/render-build.sh"
     startCommand: "./bin/render-start.sh"
     envVars:
