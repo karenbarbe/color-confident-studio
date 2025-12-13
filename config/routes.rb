@@ -3,11 +3,11 @@ Rails.application.routes.draw do
 
   get "/dashboard" => "pages#dashboard", as: :dashboard
 
-  # Color Libraries routes
-  get "/color-libraries" => "color_libraries#index", as: :color_libraries
-  get "/color-libraries/:category" => "color_libraries#category", as: :color_library_category
-  get "/color-libraries/:category/:brand_slug" => "color_libraries#show", as: :color_library
-  get "/color-libraries/:category/:brand_slug/:color_id" => "product_colors#show", as: :color_library_color
+  # Color charts routes
+  get "/color-charts" => "color_charts#index", as: :color_charts
+  get "/color-charts/:category" => "color_charts#category", as: :color_chart_category
+  get "/color-charts/:category/:brand_slug" => "color_charts#show", as: :color_chart
+  get "/color-charts/:category/:brand_slug/:color_id" => "product_colors#show", as: :color_chart_color
 
   # Custom sign in and sign out routes
   get "/login" => "sessions#new", as: :login
