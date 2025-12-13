@@ -33,7 +33,7 @@ module SidebarHelper
 
   def sidebar_item_classes(item)
     base_classes = "sidebar-item group"
-    active_classes = sidebar_item_active?(item) ? "active" : "text-base-content/60"
+    active_classes = sidebar_item_active?(item) ? "active" : "text-base-content/70"
     "#{base_classes} #{active_classes}"
   end
 end

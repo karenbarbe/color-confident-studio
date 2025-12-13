@@ -1,9 +1,8 @@
 <% content_for :title, "#{@brand.name} Color Library" %>
 
 <div class="mx-auto w-full space-y-4" data-controller="scroll-spy"
-data-scroll-spy-active-classes-value="bg-gray-900 text-white"
-data-scroll-spy-inactive-classes-value="bg-gray-100 text-gray-700"
->
+data-scroll-spy-active-classes-value="bg-base-content text-base-100 hover:bg-base-content/20 hover:text-base-content"
+data-scroll-spy-inactive-classes-value="bg-base-200 text-base-content/70 hover:bg-base-content/20 hover:text-base-content">
   <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
 
   <%= render "shared/color_library_nav", colors_by_family: @colors_by_family %>

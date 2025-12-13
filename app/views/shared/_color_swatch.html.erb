@@ -24,8 +24,8 @@
   <%# Color info %>
   <div class="mt-1 sm:mt-1.5 px-0.5 flex justify-between items-start">
     <%= link_to color_library_color_path(color.brand.category, color.brand.slug, color.id), class: "min-w-0 flex-1" do %>
-      <p class="text-sm font-semibold text-gray-900 truncate"><%= color.vendor_code %></p>
-      <p class="text-xs sm:text-sm text-gray-500 truncate leading-tight"><%= color.name %></p>
+      <p class="text-sm font-semibold text-base-content truncate"><%= color.vendor_code %></p>
+      <p class="text-xs sm:text-sm text-base-content/70 truncate leading-tight"><%= color.name %></p>
     <% end %>
     <%= render "shared/more_options_dropdown", is_in_stash: is_in_stash, color: color, stash_item: stash_item %>
   </div>

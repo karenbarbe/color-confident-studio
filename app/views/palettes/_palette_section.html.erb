@@ -7,10 +7,10 @@
   <%# Section header %>
   <div class="flex justify-between items-start">
     <div>
-      <h2 class="font-semibold text-gray-900"><%= title %></h2>
-      <p class="text-sm text-gray-500"><%= subtitle %></p>
+      <h2 class="font-semibold text-base-content"><%= title %></h2>
+      <p class="text-sm text-base-content/50"><%= subtitle %></p>
     </div>
-    <span class="text-sm text-gray-400"><%= current_count %>/<%= max %></span>
+    <span class="text-sm text-base-content/50"><%= current_count %>/<%= max %></span>
   </div>
 
   <%# Color slots grid %>
@@ -23,7 +23,7 @@
     <%# Add button (if not full) %>
     <% unless is_full %>
       <%= link_to pick_color_palette_path(palette, section: section),
-          class: "w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors" do %>
+          class: "w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-dashed border-base-content/20 flex items-center justify-center text-base-content/50 hover:border-base-content/40 hover:text-base-content/50 transition-colors" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
         </svg>
@@ -33,7 +33,7 @@
     <%# Empty state placeholders to show minimum requirement %>
     <% if current_count == 0 && min > 0 %>
       <% (min - 1).times do %>
-        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-dashed border-base-content/20 flex items-center justify-center">
           <span class="text-xs text-gray-300">+</span>
         </div>
       <% end %>

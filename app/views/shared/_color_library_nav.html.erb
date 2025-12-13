@@ -1,4 +1,4 @@
-<nav class="sticky top-0 z-40 bg-white py-3">
+<nav class="sticky top-0 z-40 bg-base-100 py-3">
 
   <%# Color family pills %>
   <ul class="flex gap-2 overflow-x-auto scrollbar-hide py-4" data-scroll-spy-target="pillContainer">
@@ -7,7 +7,7 @@
       <li>
         <a
           href="#<%= family.parameterize %>"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors" data-scroll-spy-target="pill"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors" data-scroll-spy-target="pill"
 data-action="click->scroll-spy#scrollToSection">
           <span class="size-3 rounded-full <%= tag_info&.dig(:color) || 'bg-gray-400' %>"></span>
           <%= family %>
