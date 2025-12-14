@@ -1,4 +1,4 @@
-class ColorLibrariesController < ApplicationController
+class ColorChartsController < ApplicationController
   def index
     @categories = Brand.categories.keys
     @brands_by_category = Brand.all.group_by(&:category)

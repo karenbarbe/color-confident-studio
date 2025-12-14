@@ -1,9 +1,9 @@
-<% content_for :title, "Color libraries" %>
+<% content_for :title, "Color chart" %>
 
 <div class="mx-auto mt-8 w-full space-y-8">
   <div>
-    <h1 class="font-bold text-3xl text-base-content">Color libraries</h1>
-    <p class="text-base-content/70 mt-1">Browse color libraries for your projects</p>
+    <h1 class="font-bold text-3xl text-base-content">Color charts</h1>
+    <p class="text-base-content/70 mt-1">Browse color charts for your projects</p>
   </div>
 
   <div class="space-y-8">
@@ -12,7 +12,7 @@
         <h2 class="mb-4 font-semibold text-sm tracking-wide text-base-content/70 uppercase"><%= category %></h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <% @brands_by_category[category].each do |brand| %>
-            <%= link_to color_library_path(category, brand.slug), 
+            <%= link_to color_chart_path(category, brand.slug), 
                 class: "group block" do %>
               <div class="min-h-28 h-full flex flex-col justify-between p-5 rounded-xl 
                           bg-base-100 border border-base-content/20 

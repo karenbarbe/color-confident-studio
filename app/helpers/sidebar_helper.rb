@@ -16,7 +16,7 @@ module SidebarHelper
     when :home
       current_page?(dashboard_path)
     when :browse
-      controller_name == "color_libraries" ||
+      controller_name == "color_charts" ||
         (controller_name == "product_colors" && action_name == "show")
     when :create
       controller_name == "palettes" && action_name == "studio"
