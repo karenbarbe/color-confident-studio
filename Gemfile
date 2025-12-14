@@ -88,6 +88,7 @@ group :development do
   gem "rails_db", "~> 2.5.0"
   gem "rails-erd"
   gem "rufo"
+  gem "bullet"
 end
 
 group :development, :test do
