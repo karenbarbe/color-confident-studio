@@ -74,7 +74,7 @@
   <%# Brand colors (if a brand is selected) %>
   <% if params[:brand_id].present? %>
     <% @selected_brand = Brand.find(params[:brand_id]) %>
-    <% @brand_colors = @selected_brand.product_colors.where.not(id: @palette_color_ids).order(:color_family, :name) %>
+    <% @brand_colors = @selected_brand.product_colors.where.not(id: @palette_color_ids).order(:color_family, :name).to_a %>
 
     <section class="space-y-4 pt-4 border-t border-gray-200">
       <div class="flex justify-between items-center">
