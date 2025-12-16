@@ -3,8 +3,10 @@
 <div class="bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-200">
   <%# Color preview strip %>
   <div class="h-16 flex">
-    <% if palette.background_color %>
-      <div class="w-4/10 h-full" style="background-color: #<%= palette.background_color.hex_color %>;"></div>
+    <% background = palette.section_slots("background") %>
+    <% if background.present? %>
+    <% color = background.first.product_color %>
+      <div class="w-4/10 h-full" style="background-color: #<%= color.hex_color %>;"></div>
     <% else %>
       <div class="w-4/10 h-full bg-gray-100 flex items-center justify-center">
         <span class="text-xs text-gray-400">BG</span>
@@ -12,19 +14,19 @@
     <% end %>
 
     <div class="w-3/10 flex">
-      <% palette.main_slots.each do |slot| %>
+      <% palette.section_slots("main").each do |slot| %>
         <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
     </div>
 
     <div class="w-2/10 flex">
-      <% palette.secondary_slots.each do |slot| %>
+      <% palette.section_slots("secondary").each do |slot| %>
         <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
     </div>
 
     <div class="w-1/10 flex">
-      <% palette.accent_slots.each do |slot| %>
+      <% palette.section_slots("acccent").each do |slot| %>
         <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
     </div>
@@ -38,7 +40,7 @@
           <%= palette.name.presence || "Untitled palette" %>
         </h3>
         <p class="text-sm text-gray-500">
-          <%= palette.color_slots.count %> colors
+          <%= palette.color_slots.length %> colors
           <% if is_draft %>
             <span class="text-amber-600">• Draft</span>
           <% end %>

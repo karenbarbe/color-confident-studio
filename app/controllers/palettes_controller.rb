@@ -5,8 +5,8 @@ class PalettesController < ApplicationController
 
   # GET /palettes
   def index
-    @palettes = Current.user.palettes.published.order(created_at: :desc)
-    @draft_palettes = Current.user.palettes.draft.with_content.order(updated_at: :desc)
+    @palettes = Current.user.palettes.published.includes(color_slots: :product_color).order(created_at: :desc)
+    @draft_palettes = Current.user.palettes.draft.with_content.includes(color_slots: :product_color).order(updated_at: :desc)
   end
 
   # GET /palettes/1
@@ -56,10 +56,10 @@ class PalettesController < ApplicationController
 
   # GET /palettes/1/studio
   def studio
-    @background_slots = @palette.color_slots.background.includes(product_color: :brand)
-    @main_slots = @palette.color_slots.main.includes(product_color: :brand)
-    @secondary_slots = @palette.color_slots.secondary.includes(product_color: :brand)
-    @accent_slots = @palette.color_slots.accent.includes(product_color: :brand)
+    @background_slots = @palette.section_slots("background")
+    @main_slots = @palette.section_slots("main")
+    @secondary_slots = @palette.section_slots("secondary")
+    @accent_slots = @palette.section_slots("accent")
   end
 
   # GET /palettes/1/pick_color?section=main
@@ -119,7 +119,7 @@ class PalettesController < ApplicationController
   private
 
   def set_palette
-    @palette = Palette.find(params[:id])
+    @palette = Palette.includes(color_slots: { product_color: :brand }).find(params[:id])
   end
 
   def ensure_current_user_is_creator
@@ -133,10 +133,10 @@ class PalettesController < ApplicationController
   end
 
   def load_studio_slots
-    @background_slots = @palette.color_slots.background.includes(product_color: :brand)
-    @main_slots = @palette.color_slots.main.includes(product_color: :brand)
-    @secondary_slots = @palette.color_slots.secondary.includes(product_color: :brand)
-    @accent_slots = @palette.color_slots.accent.includes(product_color: :brand)
+    @background_slots = @palette.section_slots("background")
+    @main_slots = @palette.section_slots("main")
+    @secondary_slots = @palette.section_slots("secondary")
+    @accent_slots = @palette.section_slots("accent")
   end
 
   def add_palette_colors_to_stash

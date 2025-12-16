@@ -30,7 +30,7 @@
       <div class="absolute inset-0 flex items-center justify-center p-8">
         <div class="flex flex-wrap justify-center gap-4">
           <%# Main colors  %>
-          <% @palette.main_slots.includes(:product_color).each do |slot| %>
+          <% @palette.section_slots("main").each do |slot| %>
             <div class="w-16 h-20 sm:w-20 sm:h-24 rounded-lg shadow-lg"
                  style="background-color: #<%= slot.product_color.hex_color %>;"
                  title="Main: <%= slot.product_color.vendor_code %>">
@@ -38,7 +38,7 @@
           <% end %>
 
           <%# Secondary colors %>
-          <% @palette.secondary_slots.includes(:product_color).each do |slot| %>
+          <% @palette.section_slots("secondary").each do |slot| %>
             <div class="w-12 h-16 sm:w-16 sm:h-20 rounded-lg shadow-lg"
                  style="background-color: #<%= slot.product_color.hex_color %>;"
                  title="Secondary: <%= slot.product_color.vendor_code %>">
@@ -46,7 +46,7 @@
           <% end %>
 
           <%# Accent colors %>
-          <% @palette.accent_slots.includes(:product_color).each do |slot| %>
+          <% @palette.section_slots("accent").each do |slot| %>
             <div class="w-10 h-12 sm:w-12 sm:h-16 rounded-lg shadow-lg"
                  style="background-color: #<%= slot.product_color.hex_color %>;"
                  title="Accent: <%= slot.product_color.vendor_code %>">
@@ -63,8 +63,9 @@
     <%# Background %>
     <div class="bg-base-100 rounded-xl shadow-sm p-5">
       <h3 class="font-semibold text-gray-900 mb-3">Background</h3>
-      <% if @palette.background_slot %>
-        <% color = @palette.background_color %>
+      <% background = @palette.section_slots("background") %>
+      <% if background.present? %>
+        <% color = background.first.product_color %>
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 rounded-lg shadow-sm"
                style="background-color: #<%= color.hex_color %>;"></div>
@@ -81,7 +82,7 @@
     <div class="bg-base-100 rounded-xl shadow-sm p-5">
       <h3 class="font-semibold text-gray-900 mb-3">Main colors</h3>
       <div class="space-y-2">
-        <% @palette.main_slots.includes(product_color: :brand).each do |slot| %>
+        <% @palette.section_slots("main").each do |slot| %>
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg shadow-sm"
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>
@@ -99,7 +100,7 @@
     <div class="bg-base-100 rounded-xl shadow-sm p-5">
       <h3 class="font-semibold text-gray-900 mb-3">Secondary colors</h3>
       <div class="space-y-2">
-        <% @palette.secondary_slots.includes(product_color: :brand).each do |slot| %>
+        <% @palette.section_slots("secondary").each do |slot| %>
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg shadow-sm"
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>
@@ -117,7 +118,7 @@
     <div class="bg-base-100 rounded-xl shadow-sm p-5">
       <h3 class="font-semibold text-gray-900 mb-3">Accent colors</h3>
       <div class="space-y-2">
-        <% @palette.accent_slots.includes(product_color: :brand).each do |slot| %>
+        <% @palette.section_slots("accent").each do |slot| %>
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg shadow-sm"
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>

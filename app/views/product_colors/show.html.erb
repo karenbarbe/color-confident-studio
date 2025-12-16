@@ -23,9 +23,9 @@
           
           <%# Brand name and category %>
           <div class="flex items-center gap-2 mt-2 text-sm text-base-content/70">
-            <%= link_to @product_color.brand.name, color_chart_path(@product_color.brand.category, @product_color.brand.slug), class: "link link-hover" %>
+            <%= link_to @brand.name, color_chart_path(@brand.category, @brand.slug), class: "link link-hover" %>
             <span class="text-base-content/50">•</span>
-            <%= link_to @product_color.brand.category.titleize, color_chart_category_path(@product_color.brand.category), class: "link link-hover" %>
+            <%= link_to @brand.category.titleize, color_chart_category_path(@brand.category), class: "link link-hover" %>
           </div>
         </div>
         

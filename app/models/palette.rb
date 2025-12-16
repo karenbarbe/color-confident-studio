@@ -41,24 +41,12 @@ class Palette < ApplicationRecord
   }.freeze
 
   # Methods for accessing colors by slot type
-  def background_slot
-    color_slots.background.first
+  def section_slots(section)
+    color_slots.select { |slot| slot.slot_type == section }
   end
 
   def background_color
-    background_slot&.product_color
-  end
-
-  def main_slots
-    color_slots.main
-  end
-
-  def secondary_slots
-    color_slots.secondary
-  end
-
-  def accent_slots
-    color_slots.accent
+    section_slots("background").first&.product_color
   end
 
   # Validation helpers
