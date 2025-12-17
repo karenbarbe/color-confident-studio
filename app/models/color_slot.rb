@@ -60,7 +60,7 @@ class ColorSlot < ApplicationRecord
     return unless palette && slot_type
 
     max = Palette::SLOT_LIMITS[slot_type][:max]
-    current_count = palette.section_slots(slot_type)
+    current_count = palette.section_slots(slot_type).select(&:persisted?).length
 
     if current_count >= max
       errors.add(:base, "##{slot_type.capitalize} section is full (maximum #{max})")
