@@ -41,8 +41,8 @@ class Palette < ApplicationRecord
   }.freeze
 
   # Methods for accessing colors by slot type
-  def section_slots(section)
-    color_slots.select { |slot| slot.slot_type == section }
+  def section_slots(slot_type)
+    color_slots.select { |slot| slot.slot_type == slot_type }
   end
 
   def background_color
@@ -50,16 +50,13 @@ class Palette < ApplicationRecord
   end
 
   # Validation helpers
-  def slot_count_for(slot_type)
-    color_slots.where(slot_type: slot_type).count
-  end
 
   def slot_full?(slot_type)
-    slot_count_for(slot_type) >= SLOT_LIMITS[slot_type][:max]
+    section_slots(slot_type).length >= SLOT_LIMITS[slot_type][:max]
   end
 
   def slot_minimum_met?(slot_type)
-    slot_count_for(slot_type) >= SLOT_LIMITS[slot_type][:min]
+    section_slots(slot_type).length >= SLOT_LIMITS[slot_type][:min]
   end
 
   def all_minimums_met?
@@ -75,7 +72,7 @@ class Palette < ApplicationRecord
     missing << "Palette name is required" if name.blank?
 
     SLOT_LIMITS.each do |slot_type, limits|
-      current = slot_count_for(slot_type)
+      current = section_slots(slot_type).length
       if current < limits[:min]
         needed = limits[:min] - current
         missing << "#{slot_type.capitalize} needs #{needed} more color#{'s' if needed > 1}"
