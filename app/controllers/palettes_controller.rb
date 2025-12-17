@@ -119,7 +119,13 @@ class PalettesController < ApplicationController
   private
 
   def set_palette
-    @palette = Palette.includes(color_slots: { product_color: :brand }).find(params[:id])
+    if action_name == "studio"
+      @palette = Palette.includes(color_slots: :product_color).find(params[:id])
+    elsif action_name == "pick_color"
+      @palette = Palette.includes(:color_slots).find(params[:id])
+    else
+      @palette = Palette.includes(color_slots: { product_color: :brand }).find(params[:id])
+    end
   end
 
   def ensure_current_user_is_creator
