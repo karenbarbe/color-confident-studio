@@ -60,6 +60,8 @@ class ColorSlot < ApplicationRecord
     return unless palette && slot_type
 
     max = Palette::SLOT_LIMITS[slot_type][:max]
+    # Count only persisted slots to avoid counting unsaved duplicates
+    # This could also be achieved with `where(slot_type: slot_type).count` but we want to avoid an extra DB query
     current_count = palette.section_slots(slot_type).select(&:persisted?).length
 
     if current_count >= max
