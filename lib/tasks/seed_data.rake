@@ -1,6 +1,17 @@
 namespace :db do
   namespace :seed do
     desc "Load all seed data"
+
+    def fetch_csv_from_github(filename)
+      require "http"
+      require "base64"
+
+      url = "https://api.github.com/repos/karenbarbe/color-confident-data/contents/#{filename}"
+      response = HTTP.auth("Bearer #{Rails.application.credentials.github.seed_data_token}").get(url)
+      data = JSON.parse(response.body.to_s)
+      Base64.decode64(data["content"])
+    end
+
     task all: :environment do
       require "csv"
 
@@ -8,7 +19,8 @@ namespace :db do
 
       # 1. Load brands
       puts "Loading brands..."
-      CSV.foreach(Rails.root.join("db", "seeds", "brands.csv"), headers: true) do |row|
+      brands_content = fetch_csv_from_github("brands.csv")
+      CSV.parse(brands_content, headers: true) do |row|
         Brand.find_or_create_by!(slug: row["slug"]) do |brand|
           brand.name = row["name"]
           brand.category = row["category"]
@@ -29,13 +41,11 @@ namespace :db do
 
       product_color_files.each do |brand_slug, csv_filename|
         brand = Brand.find_by!(slug: brand_slug)
-        csv_path = Rails.root.join("db", "seeds", csv_filename)
-
-        next unless File.exist?(csv_path)
+        colors_content = fetch_csv_from_github(csv_filename)
 
         puts "  Loading colors for #{brand.name}..."
 
-        CSV.foreach(csv_path, headers: true) do |row|
+        CSV.parse(colors_content, headers: true) do |row|
           ProductColor.find_or_create_by!(brand: brand, vendor_code: row["vendor_code"]) do |color|
             color.name = row["name"]
             color.hex_color = row["hex_color"]

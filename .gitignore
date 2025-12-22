@@ -42,3 +42,6 @@ examples.txt
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+/notes/*.md
+/db/seeds/*.csv
+.DS_Store
