@@ -2,6 +2,9 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    # Resume session even on pages that skip authentication,
+    # so logged-in users still get personalized features (e.g., stash indicators)
+    before_action :resume_session
     before_action :require_authentication
     helper_method :authenticated?
   end
