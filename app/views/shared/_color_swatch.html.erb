@@ -1,7 +1,7 @@
 <% is_in_stash = case view_context
                  when "stash"
                    true
-                 when "library"
+                 when "chart"
                    @stashed_color_ids&.include?(color.id)
                  else
                    false
@@ -11,7 +11,7 @@
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id) do %>
     <div class="w-full aspect-square rounded-lg sm:rounded-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
-      <% if view_context == 'library' && is_in_stash %>
+      <% if view_context == 'chart' && is_in_stash %>
         <div class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 size-6 sm:size-7 flex justify-center items-center rounded-full bg-white/85">
           <div class="size-3.5 sm:size-4 flex justify-center items-center text-gray-700">
             <%= icon(:heart_solid) %>

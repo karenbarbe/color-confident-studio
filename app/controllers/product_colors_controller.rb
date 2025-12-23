@@ -1,4 +1,5 @@
 class ProductColorsController < ApplicationController
+  allow_unauthenticated_access(only: :show)
   before_action :set_product_color, only: %i[ show ]
 
   # GET /product_colors or /product_colors.json

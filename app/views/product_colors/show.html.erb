@@ -1,6 +1,8 @@
 <div class="mx-auto mt-8">
   <div class="mx-auto max-w-sm">
-    <% stash_item = Current.user.stash_items.find_by(product_color_id: @product_color.id) %>
+    <% if Current.user.present? %>
+      <% stash_item = Current.user.stash_items.find_by(product_color_id: @product_color.id) %>
+    <% end %>
     
     <%# Color card %>
     <div class="bg-base-100 rounded-2xl shadow-sm overflow-hidden">
