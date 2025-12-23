@@ -42,10 +42,6 @@ examples.txt
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
-<<<<<<< HEAD
-/notes/*
-=======
 /notes/*.md
 /db/seeds/*.csv
->>>>>>> 585f1c9 (Move seed data changes to new branch)
 .DS_Store
