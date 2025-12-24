@@ -1,0 +1,10 @@
+<%= turbo_stream.replace "color-detail-content" do %>
+  <%= render "product_colors/color_detail", 
+      product_color: @product_color, 
+      brand: @brand, 
+      stash_item: nil %>
+<% end %>
+
+<%= turbo_stream.replace dom_id(@product_color, :stash_indicator) do %>
+  <%= render "shared/swatch_stash_indicator", product_color: @product_color, is_in_stash: false %>
+<% end %>

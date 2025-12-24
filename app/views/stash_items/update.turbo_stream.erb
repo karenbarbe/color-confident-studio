@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "color-detail-content" do %>
+  <%= render "product_colors/color_detail", 
+      product_color: @product_color, 
+      brand: @brand, 
+      stash_item: @stash_item %>
+<% end %>
