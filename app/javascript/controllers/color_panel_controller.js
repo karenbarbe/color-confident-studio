@@ -14,9 +14,7 @@ export default class extends Controller {
   }
 
   open() {
-    // Make visible first, then animate in
     this.panelTarget.classList.remove("invisible")
-    // Small delay to ensure visibility change happens before transform
     requestAnimationFrame(() => {
       this.panelTarget.classList.add("open")
     })
@@ -30,8 +28,7 @@ export default class extends Controller {
     this.backdropTarget.classList.add("hidden")
     document.body.classList.remove("overflow-hidden", "md:overflow-auto")
     document.removeEventListener("keydown", this.handleEscape)
-    
-    // Wait for the slide-out animation to finish, then hide completely
+
     this.panelTarget.addEventListener("transitionend", () => {
       if (!this.panelTarget.classList.contains("open")) {
         this.panelTarget.classList.add("invisible")
