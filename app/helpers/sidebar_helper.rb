@@ -25,15 +25,45 @@ module SidebarHelper
     when :palettes
       controller_name == "palettes" && (action_name == "index" || action_name == "show")
     when :more
-      false # "More" dropdown is never active
+      false
     else
       false
     end
   end
 
+  # Legacy method - kept for backwards compatibility
   def sidebar_item_classes(item)
-    base_classes = "sidebar-item group"
-    active_classes = sidebar_item_active?(item) ? "active" : "text-base-content/70"
-    "#{base_classes} #{active_classes}"
+    classes = [ "sidebar-item" ]
+    classes << "active" if sidebar_item_active?(item)
+    classes.join(" ")
+  end
+
+  def sidebar_nav_classes(item)
+    base_classes = %w[
+      flex
+      items-center
+      gap-3
+      h-10
+      px-3
+      rounded-lg
+      transition-colors
+      w-full
+    ]
+
+    if sidebar_item_active?(item)
+      # Active state
+      base_classes + %w[
+        bg-base-content/10
+        text-base-content
+        font-medium
+      ]
+    else
+      # Default state
+      base_classes + %w[
+        text-base-content/70
+        hover:bg-base-content/5
+        hover:text-base-content
+      ]
+    end.join(" ")
   end
 end

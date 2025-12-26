@@ -1,105 +1,148 @@
-<aside class="hidden md:flex fixed top-0 left-0 bottom-0 w-52 bg-base-100 border-r border-base-content/20 flex-col z-40">
+<aside data-controller="sidebar" 
+       data-sidebar-target="sidebar"
+       data-action="mouseenter->sidebar#expand mouseleave->sidebar#collapse"
+  class="sidebar hidden md:flex fixed top-0 left-0 bottom-0 bg-base-100 border-r border-base-content/20 flex-col py-2 z-50">
+
   <%# Logo %>
-  <div class="p-4">
-    <%= link_to root_path, class: "flex items-center gap-2" do %>
-      <%= render "shared/logo_isotype" %>
-      <span class="font-semibold text-lg">Color Confident</span>
+  <div class="h-16 px-0 flex items-center w-full">
+    <%= link_to root_path,
+      class: "sidebar-logo-link flex items-center h-10 rounded-lg w-full min-w-0 overflow-hidden" do %>
+      <span class="sidebar-icon sidebar-logo-icon">
+        <%= render "shared/logo_isotype" %>
+      </span>
+      <span class="sidebar-label sidebar-logo-label font-semibold text-lg leading-none truncate">
+        Color Confident
+      </span>
     <% end %>
   </div>
 
   <%# Search bar %>
-  <div class="px-4 pb-4">
-    <label class="input input-bordered input-sm flex items-center gap-2 w-full">
-      <%= icon(:search_outline, css_class: "size-4 opacity-50") %>
-      <input type="text" 
-           placeholder="Search colors, palettes..." 
-           class="grow bg-transparent border-none focus:outline-none text-sm" />
-    </label>
+  <div class="px-3 h-16 flex flex-col justify-center overflow-hidden">
+    <div class="sidebar-label">
+      <label class="input input-bordered input-sm flex items-center gap-2 w-full">
+        <%= icon(:search_outline, css_class: "size-4 opacity-50") %>
+        <input type="text" 
+               placeholder="Search colors, palettes..." 
+               class="grow bg-transparent border-none focus:outline-none text-sm" />
+      </label>
+    </div>
   </div>
 
   <%# Navigation items %>
-  <nav class="flex-1 flex flex-col py-4">
-    <ul class="menu menu-md gap-1 px-2 flex-1">
+  <nav class="flex-1 flex flex-col py-2 px-2">
+    <ul class="flex flex-col gap-1 flex-1">
       <%# Home %>
       <li>
-        <%= link_to dashboard_path, class: sidebar_item_classes(:home) do %>
-          <span class="sidebar-indicator"></span>
-          <%= icon(:home_outline, css_class: "size-5") %>
-          <span>Home</span>
+        <%= link_to dashboard_path, 
+            class: sidebar_nav_classes(:home), 
+            title: "Home" do %>
+          <span class="sidebar-icon">
+            <%= icon(:home_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Home</span>
         <% end %>
       </li>
 
       <%# Browse %>
       <li>
-        <%= link_to color_charts_path, class: sidebar_item_classes(:browse) do %>
-          <span class="sidebar-indicator"></span>
-          <%= icon(:swatch_outline, css_class: "size-5") %>
-          <span>Browse</span>
+        <%= link_to color_charts_path, 
+            class: sidebar_nav_classes(:browse), 
+            title: "Browse" do %>
+          <span class="sidebar-icon">
+            <%= icon(:swatch_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Browse</span>
         <% end %>
       </li>
 
-      <%# Create %>
+      <%# Create  %>
       <li>
-        <%= button_to palettes_path, method: :post, class: sidebar_item_classes(:create), form: { class: "contents" }, data: { turbo: false } do %>
-          <span class="sidebar-indicator"></span>
-          <%= icon(:create_outline, css_class: "size-5") %>
-          <span>Create</span>
+        <%= button_to palettes_path, 
+            method: :post, 
+            class: sidebar_nav_classes(:create), 
+            title: "Create", 
+            form: { class: "w-full" }, 
+            data: { turbo: false } do %>
+          <span class="sidebar-icon">
+            <%= icon(:create_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Create</span>
         <% end %>
       </li>
 
       <%# Stash %>
       <li>
-        <%= link_to stash_items_path, class: sidebar_item_classes(:stash) do %>
-          <span class="sidebar-indicator"></span>
-          <%= icon(:heart_outline, css_class: "size-5") %>
-          <span>Stash</span>
+        <%= link_to stash_items_path, 
+            class: sidebar_nav_classes(:stash), 
+            title: "Stash" do %>
+          <span class="sidebar-icon">
+            <%= icon(:heart_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Stash</span>
         <% end %>
       </li>
 
       <%# Palettes %>
       <li>
-        <%= link_to palettes_path, class: sidebar_item_classes(:palettes) do %>
-          <span class="sidebar-indicator"></span>
-          <%= icon(:palette_outline, css_class: "size-5") %>
-          <span>Palettes</span>
+        <%= link_to palettes_path, 
+            class: sidebar_nav_classes(:palettes), 
+            title: "Palettes" do %>
+          <span class="sidebar-icon">
+            <%= icon(:palette_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Palettes</span>
         <% end %>
       </li>
 
       <%# More %>
-      <li class="dropdown dropdown-right">
-        <div tabindex="0" role="button" class="sidebar-item group text-base-content/60">
-          <span class="sidebar-indicator"></span>
-          <%= icon(:ellipsis_horizontal_outline, css_class: "size-5") %>
-          <span>More</span>
+      <li class="dropdown dropdown-right" data-sidebar-target="dropdown">
+        <div tabindex="0" 
+             role="button" 
+             class="flex items-center gap-3 h-10 px-3 rounded-lg cursor-pointer transition-colors text-base-content/70 hover:bg-base-content/5 hover:text-base-content" 
+             title="More">
+          <span class="sidebar-icon">
+            <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">More</span>
         </div>
-        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-48 p-2 shadow-lg border border-base-300 ml-2">
-          <li class="menu-title text-xs uppercase tracking-wider opacity-60">Coming soon</li>
-          <li><a class="opacity-50 cursor-not-allowed">Settings</a></li>
-          <li><a class="opacity-50 cursor-not-allowed">Help</a></li>
+        <ul tabindex="0" class="dropdown-content z-50 w-48 p-2 ml-2 bg-base-100 rounded-lg shadow-lg border border-base-300">
+          <li class="px-3 py-1.5 text-xs uppercase tracking-wider text-base-content/50 font-medium">Coming soon</li>
+          <li>
+            <span class="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/40 cursor-not-allowed">
+              Settings
+            </span>
+          </li>
+          <li>
+            <span class="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/40 cursor-not-allowed">
+              Help
+            </span>
+          </li>
         </ul>
       </li>
     </ul>
 
     <%# User profile %>
-    <div class="mt-auto px-2 pb-2">
-      <div class="dropdown dropdown-right dropdown-end w-full">
-        <div tabindex="0" role="button" class="sidebar-item group text-base-content/60 w-full justify-start">
-          <%# User initials avatar %>
-          <div class="avatar avatar-placeholder">
-            <div class="bg-linear-to-br from-primary to-secondary text-primary-content rounded-full w-8">
-              <span class="text-xs font-medium"><%= user_initials(Current.user) %></span>
+    <div class="mt-auto pt-2">
+      <div class="dropdown dropdown-right dropdown-end w-full" data-sidebar-target="dropdown">
+        <div tabindex="0" 
+             role="button" 
+             class="flex items-center gap-3 h-12 px-3 rounded-lg cursor-pointer transition-colors text-base-content/70 hover:bg-base-content/5 hover:text-base-content w-full" 
+             title="<%= Current.user.first_name %>">
+          <span class="sidebar-icon">
+            <%# User initials avatar %>
+            <div class="size-9 rounded-full bg-linear-to-br from-primary to-secondary flex items-center justify-center shrink-0">
+              <span class="text-sm font-medium text-primary-content"><%= user_initials(Current.user) %></span>
             </div>
-          </div>
-
-          <div class="flex flex-col">
-            <span class="truncate font-medium"><%= Current.user.first_name %></span>
+          </span>
+          <span class="sidebar-user-info">
+            <span class="truncate font-medium text-sm text-base-content"><%= Current.user.first_name %></span>
             <span class="truncate text-xs text-base-content/60"><%= Current.user.email_address %></span>
-          </div>
-
+          </span>
         </div>
-        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-48 p-2 shadow-lg border border-base-300 ml-2">
+        <ul tabindex="0" class="dropdown-content z-50 w-48 p-2 ml-2 bg-base-100 rounded-lg shadow-lg border border-base-300">
           <li>
-            <%= link_to user_path(Current.user) do %>
+            <%= link_to user_path(Current.user), 
+                class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/10 hover:text-base-content transition-colors" do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
@@ -107,7 +150,11 @@
             <% end %>
           </li>
           <li>
-            <%= button_to session_path, method: :delete, class: "sidebar-item-btn", form: { class: "contents" }, data: { turbo: false } do %>
+            <%= button_to session_path, 
+                method: :delete, 
+                class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/10 hover:text-base-content transition-colors w-full text-left", 
+                form: { class: "contents" }, 
+                data: { turbo: false } do %>
               <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
               </svg>

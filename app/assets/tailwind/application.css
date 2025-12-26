@@ -17,59 +17,111 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;           
+  display: none;
 }
 
 /* ============================================
    SIDEBAR
    ============================================ */
 
-.sidebar-item {
-  @apply relative flex items-center gap-3 py-2.5 px-3 rounded-lg transition-all duration-200;
+.sidebar {
+  width: 4rem;
+  transition: width 200ms ease-in-out;
 }
 
-.sidebar-item:hover {
-  @apply bg-base-200 text-base-content;
+.sidebar.sidebar-expanded {
+  width: 13rem;
 }
 
-.sidebar-item.active {
-  @apply bg-primary/10 text-primary font-medium;
+.sidebar-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.sidebar-indicator {
-  @apply absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full opacity-0 transition-opacity duration-200;
+.sidebar-label {
+  opacity: 0;
+  width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    opacity 100ms ease-out,
+    width 200ms ease-in-out,
+    margin-left 200ms ease-in-out;
 }
 
-.sidebar-item.active .sidebar-indicator {
-  @apply opacity-100;
+.sidebar-expanded .sidebar-label {
+  opacity: 1;
+  width: auto;
+  margin-left: 0.75rem; /* gap-3 equivalent */
+  transition:
+    opacity 150ms ease-in 50ms,
+    width 200ms ease-in-out,
+    margin-left 200ms ease-in-out;
 }
 
-.sidebar-item-btn {
-  @apply flex items-center gap-3 py-1.5 px-3 rounded-lg cursor-pointer transition-all duration-200;
+.sidebar-user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  width: 0;
+  margin-left: 0;
+  transition:
+    opacity 100ms ease-out,
+    width 200ms ease-in-out,
+    margin-left 200ms ease-in-out;
 }
 
-.sidebar-item-btn:hover {
-  @apply bg-base-200 text-base-content;
+.sidebar-expanded .sidebar-user-info {
+  opacity: 1;
+  width: auto;
+  margin-left: 0.75rem;
+  transition:
+    opacity 150ms ease-in 50ms,
+    width 200ms ease-in-out,
+    margin-left 200ms ease-in-out;
 }
+
+.sidebar .sidebar-logo-link {
+  justify-content: flex-start;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.sidebar.sidebar-expanded .sidebar-logo-link {
+  padding-left: 0.75rem;   /* matches px-3 */
+  padding-right: 0.75rem;
+}
+/
+.sidebar.sidebar-expanded .sidebar-logo-label {
+  margin-left: 0.5rem;
+}
+
+.sidebar-logo-icon {
+  width: 2.5rem; 
+  height: 2.5rem;
+  flex: 0 0 2.5rem;
+}
+
+.sidebar-logo-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 
 /* ============================================
-   MOBILE DRAWER (overrides)
+   MOBILE DRAWER 
    ============================================ */
 
-.drawer-side .sidebar-indicator {
-  @apply hidden;
-}
-
-.drawer-side .sidebar-item {
-  @apply py-3;
-}
-
-/* ============================================
-   FLYOUT DROPDOWN
-   ============================================ */
-
-.dropdown:hover .sidebar-item {
-  @apply bg-base-200;
+.drawer-side .sidebar-label,
+.drawer-side .sidebar-user-info {
+  opacity: 1;
+  width: auto;
 }
