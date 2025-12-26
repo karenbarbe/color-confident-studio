@@ -35,7 +35,7 @@
           <%= render "shared/sidebar" %>
         <% end %>
 
-        <main class="pt-16 md:pt-8 pb-16 w-full <%= 'md:pl-52' if authenticated? %>">
+        <main class="pt-16 md:pt-8 pb-16 w-full transition-[padding] duration-200 <%= 'md:pl-16' if authenticated? %>">
 
           <%= yield :full_width_before %>
 
@@ -46,6 +46,8 @@
 
           <%= yield :full_width_after %>
         </main>
+
+        <%= render "shared/color_panel" %>
 
       </div>
 
