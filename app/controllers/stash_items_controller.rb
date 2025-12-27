@@ -27,9 +27,12 @@ class StashItemsController < ApplicationController
   # POST /stash_items or /stash_items.json
   def create
     @stash_item = Current.user.stash_items.build(stash_item_params)
+    @product_color = @stash_item.product_color
+    @brand = @product_color.brand
 
     respond_to do |format|
       if @stash_item.save
+        format.turbo_stream
         format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item was successfully created." }
         format.json { render :show, status: :created, location: @stash_item }
       else
@@ -54,8 +57,11 @@ class StashItemsController < ApplicationController
 
   # PATCH/PUT /stash_items/1 or /stash_items/1.json
   def update
+    @product_color = @stash_item.product_color
+    @brand = @product_color.brand
     respond_to do |format|
       if @stash_item.update(stash_item_params)
+        format.turbo_stream
         format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item was successfully updated." }
         format.json { render :show, status: :ok, location: @stash_item }
       else
@@ -68,9 +74,11 @@ class StashItemsController < ApplicationController
   # DELETE /stash_items/1 or /stash_items/1.json
   def destroy
     @product_color = @stash_item.product_color
+    @brand = @product_color.brand
     @stash_item.destroy!
 
     respond_to do |format|
+      format.turbo_stream
       format.html { redirect_back fallback_location: stash_items_path, status: :see_other, notice: "Item was successfully removed from your stash." }
       format.json { head :no_content }
     end

@@ -7,27 +7,23 @@
                    false
                  end %>
 
-<li>
+<li id="<%= dom_id(color, :swatch) %>">
 
-  <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id) do %>
+  <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
     <div class="w-full aspect-square rounded-lg sm:rounded-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
-      <% if view_context == 'chart' && is_in_stash %>
-        <div class="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 size-6 sm:size-7 flex justify-center items-center rounded-full bg-white/85">
-          <div class="size-3.5 sm:size-4 flex justify-center items-center text-gray-700">
-            <%= icon(:heart_solid) %>
-          </div>
-        </div>
+      <% if view_context == 'chart' %>
+        <%= render "shared/swatch_stash_indicator", product_color: color, is_in_stash: is_in_stash %>
       <% end %>
     </div>
   <% end %>
 
   <%# Color info %>
   <div class="mt-1 sm:mt-1.5 px-0.5 flex justify-between items-start">
-    <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), class: "min-w-0 flex-1" do %>
+    <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" }, class: "min-w-0 flex-1" do %>
       <p class="text-sm font-semibold text-base-content truncate"><%= color.vendor_code %></p>
       <p class="text-xs sm:text-sm text-base-content/70 truncate leading-tight"><%= color.name %></p>
     <% end %>
-    <%= render "shared/more_options_dropdown", is_in_stash: is_in_stash, color: color, stash_item: stash_item %>
+    <%# render "shared/more_options_dropdown", is_in_stash: is_in_stash, color: color, stash_item: stash_item %>
   </div>
 
 </li>

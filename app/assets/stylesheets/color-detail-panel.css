@@ -1,0 +1,33 @@
+.color-detail-panel {
+  transition: transform 0.3s ease-out;
+  
+  /* Mobile: Bottom sheet */
+  inset-inline: 0;
+  bottom: 0;
+  height: 85vh;
+  border-radius: 1rem 1rem 0 0;
+  transform: translateY(100%);
+}
+
+/* Mobile: Open state */
+.color-detail-panel.open {
+  transform: translateY(0);
+}
+
+/* Desktop: Side panel */
+@media (min-width: 768px) {
+  .color-detail-panel {
+    inset-inline: auto;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24rem;
+    height: 100%;
+    border-radius: 0;
+    transform: translateX(100%);
+  }
+  
+  .color-detail-panel.open {
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,78 @@
+<%# Expects: product_color, brand, stash_item (can be nil) %>
+
+<div class="mx-auto max-w-sm" id="color-detail-content">
+  <%# Color card %>
+  <div class="bg-base-100 rounded-2xl shadow-sm overflow-hidden">
+
+    <div class="aspect-3/2 w-full" style="background-color: #<%= product_color.hex_color %>"></div>
+
+    <div class="p-5 space-y-4">
+
+      <div>
+        <div class="flex justify-between items-start">
+          <%# Heading %>
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight"><%= product_color.vendor_code %></h1>
+            <% if product_color.name.present? %>
+              <p class="text-lg text-base-content/70"><%= product_color.name %></p>
+            <% end %>
+          </div>
+        </div>
+
+      </div>
+
+      <%# Stash buttons %>
+      <div class="mt-12 flex justify-start items-center gap-2">
+        <% if Current.user.present? %>
+          <% if stash_item %>
+            <%= button_to stash_item_path(stash_item),
+                method: :delete,
+                params: { stash_item: { product_color_id: product_color.id } },
+                title: "Remove from stash",
+                class: "badge badge-soft cursor-pointer flex gap-1" do %>
+              Stash
+              <%= icon(:check_outline) %>
+            <% end %>
+
+            <% is_owned = stash_item.owned? %>
+            <% is_wish_list = stash_item.wish_list? %>
+
+            <% unless is_wish_list %>
+              <%= button_to stash_item_path(stash_item), 
+                  method: :patch,
+                  params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+                  class: "badge cursor-pointer flex-1 #{is_owned ? 'badge-soft badge-secondary' : 'badge-ghost text-base-content/50'}" do %>
+                I have this
+                <% if is_owned %>
+                  <%= icon(:check_outline) %>
+                <% end %>
+              <% end %>
+            <% end %>
+
+            <% unless is_owned %>
+              <%= button_to stash_item_path(stash_item), 
+                  method: :patch,
+                  params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
+                  class: "badge cursor-pointer flex-1 #{is_wish_list ? 'badge-soft badge-secondary' : 'badge-ghost text-base-content/50'}" do %>
+                I want this
+                <% if is_wish_list %>
+                  <%= icon(:check_outline) %>
+                <% end %>
+              <% end %>
+            <% end %>
+
+          <% else %>
+            <%= button_to "Add to stash", stash_items_path,
+                params: { stash_item: { product_color_id: product_color.id } },
+                class: "badge cursor-pointer badge-outline", title: "Add to stash" %>
+          <% end %>
+        <% else %>
+          <%= link_to "Sign in to save", login_path, 
+              data: { turbo_frame: "_top" },
+              class: "badge cursor-pointer badge-outline" %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>
