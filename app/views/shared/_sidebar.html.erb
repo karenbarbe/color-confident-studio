@@ -123,7 +123,7 @@
 
     <%# User profile %>
     <div class="mt-auto pt-2">
-      <div class="dropdown dropdown-right dropdown-end w-full" data-sidebar-target="dropdown">
+      <div class="dropdown dropdown-top w-full" data-sidebar-target="dropdown">
         <div tabindex="0" 
              role="button" 
              class="flex items-center gap-3 h-12 px-3 rounded-lg cursor-pointer transition-colors text-base-content/70 hover:bg-base-content/5 hover:text-base-content w-full" 
@@ -139,13 +139,11 @@
             <span class="truncate text-xs text-base-content/60"><%= Current.user.email_address %></span>
           </span>
         </div>
-        <ul tabindex="0" class="dropdown-content z-50 w-48 p-2 ml-2 bg-base-100 rounded-lg shadow-lg border border-base-300">
+        <ul tabindex="0" class="dropdown-content z-50 w-48 p-2 bg-base-100 rounded-lg shadow-lg border border-base-300">
           <li>
             <%= link_to user_path(Current.user), 
                 class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors" do %>
-              <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
+              <%= icon(:user_outline, css_class: "size-4") %>
               Profile
             <% end %>
           </li>
@@ -155,9 +153,7 @@
                 class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors w-full text-left", 
                 form: { class: "contents" }, 
                 data: { turbo: false } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-              </svg>
+              <%= icon(:sign_out_outline, css_class: "size-4") %>
               Sign out
             <% end %>
           </li>
