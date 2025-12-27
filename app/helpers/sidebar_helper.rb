@@ -31,39 +31,9 @@ module SidebarHelper
     end
   end
 
-  # Legacy method - kept for backwards compatibility
-  def sidebar_item_classes(item)
-    classes = [ "sidebar-item" ]
+  def sidebar_nav_classes(item)
+    classes = [ "sidebar-nav-item" ]
     classes << "active" if sidebar_item_active?(item)
     classes.join(" ")
-  end
-
-  def sidebar_nav_classes(item)
-    base_classes = %w[
-      flex
-      items-center
-      gap-3
-      h-10
-      px-3
-      rounded-lg
-      transition-colors
-      w-full
-    ]
-
-    if sidebar_item_active?(item)
-      # Active state
-      base_classes + %w[
-        bg-base-content/10
-        text-base-content
-        font-medium
-      ]
-    else
-      # Default state
-      base_classes + %w[
-        text-base-content/70
-        hover:bg-base-content/5
-        hover:text-base-content
-      ]
-    end.join(" ")
   end
 end
