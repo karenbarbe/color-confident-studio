@@ -117,11 +117,27 @@
 
 
 /* ============================================
-   MOBILE DRAWER 
+   DRAWER 
    ============================================ */
 
 .drawer-side .sidebar-label,
 .drawer-side .sidebar-user-info {
   opacity: 1;
   width: auto;
+  margin-left: 0.75rem;
+}
+
+.drawer-side .sidebar-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.drawer-side .sidebar-logo-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 2.5rem;
 }
