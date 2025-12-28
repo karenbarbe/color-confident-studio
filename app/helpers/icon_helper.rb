@@ -1,5 +1,5 @@
 module IconHelper
-  def icon(name, css_class: "size-[1.2em]")
+  def icon(name, css_class: "size-[1.2em]", **options)
     icons = {
       arrow_left_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />',
       arrow_right_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />',
@@ -7,6 +7,7 @@ module IconHelper
       bookmark_top_outline: '<path stroke-linejoin="round" d="M4.5 0V19.493L12 15.743L19.5 19.493V0" />',
       check_circle_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />',
       check_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />',
+      chevron_down_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />',
       create_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />',
       ellipsis_horizontal_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />',
       grid_outline: '<rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
