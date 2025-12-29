@@ -24,7 +24,7 @@ namespace :db do
         Brand.find_or_create_by!(slug: row["slug"]) do |brand|
           brand.name = row["name"]
           brand.category = row["category"]
-          brand.featured = row["featured"]
+          brand.description = row["description"]
         end
       end
       puts "  ✓ Loaded #{Brand.count} brands"
