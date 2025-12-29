@@ -1,16 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="scroll-spy"
 export default class extends Controller {
   static targets = ["pill", "section", "pillContainer"]
 
-  static values = {
-    activeClasses: { type: String, default: "bg-gray-900 text-white" },
-    inactiveClasses: { type: String, default: "bg-gray-100 text-gray-700" }
-  }
-
   connect() {
     this.isScrolling = false // Flag to pause observer during programmatic scrolls
+    this.activePill = null   // Track current active pill
 
     this.observer = new IntersectionObserver(
       (entries) => this.handleIntersect(entries),
@@ -27,7 +22,14 @@ export default class extends Controller {
 
     // Set initial active state for first pill
     if (this.pillTargets.length > 0) {
-      this.setActivePill(this.pillTargets[0])
+      this.setActivePill(this.pillTargets[0], { scroll: false })
+      
+      // Scroll to the active pill after layout has settled
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.scrollPillToLeft(this.pillTargets[0])
+        })
+      })
     }
   }
 
@@ -55,26 +57,30 @@ export default class extends Controller {
     })
   }
 
-  setActivePill(activePill) {
-    const activeClasses = this.activeClassesValue.split(" ")
-    const inactiveClasses = this.inactiveClassesValue.split(" ")
+  setActivePill(activePill, options = {}) {
+    const { scroll = true } = options
+    
+    // Skip if already active
+    if (this.activePill === activePill) return
 
+    // Update data-active attribute for all pills (CSS handles styling)
     this.pillTargets.forEach((pill) => {
       if (pill === activePill) {
-        pill.classList.remove(...inactiveClasses)
-        pill.classList.add(...activeClasses)
+        pill.dataset.active = "true"
       } else {
-        pill.classList.remove(...activeClasses)
-        pill.classList.add(...inactiveClasses)
+        delete pill.dataset.active
       }
     })
 
+    this.activePill = activePill
+
     // Scroll pill into view (left-aligned) if container is overflowing
-    this.scrollPillToLeft(activePill)
+    if (scroll) {
+      this.scrollPillToLeft(activePill)
+    }
   }
 
   scrollPillToLeft(pill) {
-    // Find the pill container
     const container = this.hasPillContainerTarget
       ? this.pillContainerTarget
       : pill.closest("ul")
@@ -83,17 +89,21 @@ export default class extends Controller {
 
     // Check if container is actually overflowing (scrollable)
     const isOverflowing = container.scrollWidth > container.clientWidth
-
-    // If not overflowing (e.g., on desktop), don't scroll
     if (!isOverflowing) return
 
-    // Get the pill's position relative to the container
-    const pillLeft = pill.offsetLeft
-    const margin = 16 // Left margin in pixels
+    const pillRect = pill.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+    
+    // Calculate where the pill is relative to the container's visible area
+    const pillLeftRelativeToContainer = pillRect.left - containerRect.left
+    
+    // Calculate the target scroll position (pill at left edge with margin)
+    const margin = 16
+    const targetScroll = container.scrollLeft + pillLeftRelativeToContainer - margin
+    const finalScroll = Math.max(0, targetScroll)
 
-    // Scroll the container so the pill is aligned to the left (with margin)
     container.scrollTo({
-      left: pillLeft - margin,
+      left: finalScroll,
       behavior: "smooth"
     })
   }
