@@ -4,6 +4,7 @@
 #
 #  id                   :bigint           not null, primary key
 #  category             :string           default(NULL)
+#  description          :text
 #  name                 :string
 #  product_colors_count :integer          default(0), not null
 #  slug                 :string
