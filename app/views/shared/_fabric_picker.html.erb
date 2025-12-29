@@ -1,0 +1,56 @@
+<div class="inline-block my-5 relative" data-controller="dropdown">
+  <%# Picker button %>
+  <button type="button"
+          data-fabric-picker-button
+          data-action="click->dropdown#toggle"
+    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer bg-base-100 text-base-content ring-1 ring-base-content/20">
+    <span data-fabric-indicator
+          class="w-4 h-4 rounded-full transition-all ring-1 ring-inset ring-base-content/30 ring-dashed">
+    </span>
+    <span data-fabric-label>Preview on fabric</span>
+    <%= icon(:chevron_down_outline, css_class: "size-4 text-base-content/90 transition-transform", data: { dropdown_target: "icon" }) %>
+  </button>
+
+  <%# Dropdown menu %>
+  <div data-dropdown-target="menu"
+       class="hidden absolute top-full left-0 mt-2 w-56 bg-base-100 rounded-xl shadow-xl ring-1 ring-base-content/10 py-2 z-50">
+
+    <%# Default option %>
+    <button type="button"
+            data-action="click->fabric-preview#reset click->dropdown#close"
+      data-fabric-preview-target="defaultOption"
+      class="hidden w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+      <span class="w-5 h-5 rounded-full border-2 border-dashed border-base-content/70
+ flex items-center justify-center text-base-content/40 text-xs">
+      </span>
+      <span class="text-base-content">Default</span>
+    </button>
+
+    <div class="h-px bg-base-content/10 my-2" data-fabric-preview-target="defaultDivider"></div>
+
+    <%# Fabric presets %>
+    <% fabric_presets.each do |fabric| %>
+      <button type="button"
+              data-action="click->fabric-preview#selectFabric click->dropdown#close"
+        data-fabric-hex="<%= fabric[:hex] %>"
+        data-fabric-lightness="<%= fabric[:oklch_l] %>"
+        data-fabric-preview-target="presetOption"
+        class="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+        <span class="w-5 h-5 rounded-full ring-1 ring-inset ring-base-content/20"
+              style="background-color: <%= fabric[:hex] %>;"></span>
+        <span class="text-base-content"><%= fabric[:name] %></span>
+      </button>
+    <% end %>
+
+    <div class="h-px bg-base-content/10 my-2"></div>
+
+    <%# Custom color picker %>
+    <label class="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-base-200 transition-colors cursor-pointer">
+      <span class="w-5 h-5 rounded-full bg-linear-to-br from-red-400 via-yellow-400 to-blue-400"></span>
+      <span class="text-base-content">Custom color...</span>
+      <input type="color" 
+             class="sr-only"
+             data-action="input->fabric-preview#applyCustomColor change->dropdown#close">
+    </label>
+  </div>
+</div>
