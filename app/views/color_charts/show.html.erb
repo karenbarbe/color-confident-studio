@@ -1,20 +1,33 @@
 <% content_for :title, "#{@brand.name} Color chart" %>
 
-<div class="mx-auto w-full space-y-4" data-controller="scroll-spy"
-data-scroll-spy-active-classes-value="bg-base-content text-base-100 hover:bg-base-content/20 hover:text-base-content"
-data-scroll-spy-inactive-classes-value="bg-base-200 text-base-content/70 hover:bg-base-content/20 hover:text-base-content">
-  <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
+<% content_for :full_width_after do %>
+  <div class="w-full" 
+       data-controller="scroll-spy fabric-preview"
+       data-scroll-spy-active-classes-value="bg-base-content text-base-100"
+       data-scroll-spy-inactive-classes-value="bg-base-200 text-base-content/70">
 
-  <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
+    <%# Header %>
+    <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-4">
+      <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
+      <%= render "shared/fabric_picker" %>
+    </div>
 
-  <div class="space-y-2">
-    <% @colors_by_family.each do |family, colors| %>
-      <section id="<%= family.parameterize %>"
-     class="scroll-mt-10 space-y-2" data-scroll-spy-target="section">
-        <%= render "shared/color_divider", family_name: family %>
-        <%= render "shared/color_grid", product_colors: colors %>
-      </section>
-    <% end %>
+    <%# Navigation %>
+    <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
+
+    <%# Color grid %>
+    <div class="bg-base-200 transition-colors duration-500 space-y-2" data-fabric-preview-target="background">
+      <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2">
+        <% @colors_by_family.each do |family, colors| %>
+          <section id="<%= family.parameterize %>"
+                   class="scroll-mt-10 space-y-2" 
+                   data-scroll-spy-target="section">
+            <%= render "shared/color_divider", family_name: family %>
+            <%= render "shared/color_grid", product_colors: colors %>
+          </section>
+        <% end %>
+      </div>
+    </div>
+
   </div>
-
-</div>
+<% end %>
