@@ -37,15 +37,15 @@ const STYLES = {
   dividerText: {
     base: "text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors duration-300",
     default: "text-base-content/70",
-    light: "text-gray-600",
-    dark: "text-white/70"
+    light: "text-gray-700",
+    dark: "text-white/90"
   },
 
   dividerLine: {
     base: "h-px flex-1 transition-colors duration-300",
     default: "bg-base-content/20",
-    light: "bg-gray-300",
-    dark: "bg-white/20"
+    light: "bg-gray-500",
+    dark: "bg-white/50"
   }
 }
 
