@@ -1,7 +1,8 @@
 <% content_for :title, "#{@brand.name} Color chart" %>
 
 <% content_for :full_width_after do %>
-  <div class="w-full" 
+
+  <div class="w-full mt-9 <%= authenticated? ? 'md:mt-8' : 'md:mt-16' %>" 
        data-controller="scroll-spy fabric-preview"
        data-scroll-spy-active-classes-value="bg-base-content text-base-100"
        data-scroll-spy-inactive-classes-value="bg-base-200 text-base-content/70">
