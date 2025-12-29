@@ -232,7 +232,7 @@ export default class extends Controller {
     if (label) {
       if (isActive) {
         const preset = this.constructor.presets.find(p => p.hex === this.fabricColorValue)
-        label.textContent = preset ? `On ${preset.name}` : "Custom fabric"
+        label.textContent = preset ? `On ${preset.name}` : "On Custom fabric"
       } else {
         label.textContent = "Preview on fabric"
       }
