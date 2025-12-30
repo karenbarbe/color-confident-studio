@@ -57,6 +57,9 @@ export default class extends Controller {
   }
 
   openValueChanged() {
+    // Guard against being called before targets are connected
+    if (!this.hasDropdownTarget) return
+    
     if (this.openValue) {
       this.showDropdown()
     } else {
@@ -70,17 +73,27 @@ export default class extends Controller {
     this.updateHeader()
     
     // Load root content with current state
-    const url = this.buildRootUrl()
-    this.contentTarget.src = url
+    if (this.hasContentTarget) {
+      const url = this.buildRootUrl()
+      this.contentTarget.src = url
+    }
     
     // Show dropdown
-    this.dropdownTarget.classList.remove("hidden")
-    this.chevronTarget.classList.add("rotate-180")
+    if (this.hasDropdownTarget) {
+      this.dropdownTarget.classList.remove("hidden")
+    }
+    if (this.hasChevronTarget) {
+      this.chevronTarget.classList.add("rotate-180")
+    }
   }
 
   hideDropdown() {
-    this.dropdownTarget.classList.add("hidden")
-    this.chevronTarget.classList.remove("rotate-180")
+    if (this.hasDropdownTarget) {
+      this.dropdownTarget.classList.add("hidden")
+    }
+    if (this.hasChevronTarget) {
+      this.chevronTarget.classList.remove("rotate-180")
+    }
   }
 
   handleOutsideClick(event) {
@@ -108,22 +121,28 @@ export default class extends Controller {
     if (this.history.length <= 1) {
       // Go to root
       this.history = []
-      this.contentTarget.src = this.buildRootUrl()
+      if (this.hasContentTarget) {
+        this.contentTarget.src = this.buildRootUrl()
+      }
     } else {
       // Go to previous panel
       this.history.pop()
       const previous = this.history[this.history.length - 1]
-      this.contentTarget.src = previous?.url || this.buildRootUrl()
+      if (this.hasContentTarget) {
+        this.contentTarget.src = previous?.url || this.buildRootUrl()
+      }
     }
     
     this.updateHeader()
   }
 
   updateHeader() {
+    if (!this.hasHeaderTarget) return
+    
     const showHeader = this.history.length > 0
     this.headerTarget.classList.toggle("hidden", !showHeader)
     
-    if (showHeader && this.history.length > 0) {
+    if (showHeader && this.history.length > 0 && this.hasHeaderTitleTarget) {
       const current = this.history[this.history.length - 1]
       this.headerTitleTarget.textContent = current.title
     }
@@ -272,15 +291,15 @@ export default class extends Controller {
       },
       bubbles: true,
       prefix: "fabric-picker"
-  })
+    })
   
-  // Also dispatch on window for elements outside this controller's DOM tree
-  window.dispatchEvent(new CustomEvent("fabric-picker:styleChanged", {
-    detail: {
-      hex: this.hexValue,
-      lightness: this.lightnessValue,
-      mode: this.mode,
-      isActive: this.isActive
+    // Also dispatch on window for elements outside this controller's DOM tree
+    window.dispatchEvent(new CustomEvent("fabric-picker:styleChanged", {
+      detail: {
+        hex: this.hexValue,
+        lightness: this.lightnessValue,
+        mode: this.mode,
+        isActive: this.isActive
       }
     }))
   }
