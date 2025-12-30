@@ -1,0 +1,24 @@
+<turbo-frame id="fabric_picker_content">
+  <div class="py-2 h-80 overflow-y-auto" data-panel="stash-colors">
+    
+    <% if @colors_by_brand.empty? %>
+      <div class="px-4 py-8 text-center text-sm text-base-content/50">
+        No colors in this family
+      </div>
+    <% else %>
+      <% @colors_by_brand.each do |brand, colors| %>
+        <div class="mb-2">
+          <div class="px-4 py-1.5">
+            <span class="text-xs font-medium text-base-content/50 uppercase tracking-wider">
+              <%= brand.name %>
+            </span>
+          </div>
+          <% colors.each do |color| %>
+            <%= render "fabric_picker/color_button", color: color %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+  </div>
+</turbo-frame>

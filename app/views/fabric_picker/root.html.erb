@@ -1,0 +1,60 @@
+<turbo-frame id="fabric_picker_content">
+  <div class="py-2" data-panel="root">
+    
+    <%# Recently used section %>
+    <% if @recent_colors.any? %>
+      <div class="px-4 py-1.5">
+        <span class="text-xs font-medium text-base-content/50 uppercase tracking-wider">Recently used</span>
+      </div>
+      <% @recent_colors.each do |color| %>
+        <%= render "fabric_picker/color_button", color: color %>
+      <% end %>
+      <div class="h-px bg-base-content/10 my-2"></div>
+    <% end %>
+
+    <%# Reset option - only shown when a fabric is selected %>
+    <% if @show_reset %>
+      <button type="button"
+              data-action="click->fabric-picker#reset"
+              class="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+        <span class="w-5 h-5 rounded-full border-2 border-dashed border-base-content/50"></span>
+        <span class="text-base-content">Reset</span>
+      </button>
+      <div class="h-px bg-base-content/10 my-2"></div>
+    <% end %>
+
+    <%# Custom color picker %>
+    <label class="w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm hover:bg-base-200 transition-colors cursor-pointer">
+      <span class="w-5 h-5 rounded-full bg-linear-to-br from-red-400 via-yellow-400 to-blue-400"></span>
+      <span class="text-base-content">Custom color...</span>
+      <input type="color" 
+             class="sr-only"
+             data-action="input->fabric-picker#selectCustomColor">
+    </label>
+
+    <div class="h-px bg-base-content/10 my-2"></div>
+
+    <%# Navigation options %>
+    <%= link_to fabric_picker_presets_path, 
+                class: "w-full flex items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors",
+                data: { turbo_frame: "fabric_picker_content", action: "click->fabric-picker#navigate", title: "Fabric presets" } do %>
+      <span class="text-base-content">Fabric presets</span>
+      <%= icon(:chevron_right_outline, css_class: "size-4 text-base-content/50") %>
+    <% end %>
+
+    <%= link_to fabric_picker_brands_path,
+                class: "w-full flex items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors",
+                data: { turbo_frame: "fabric_picker_content", action: "click->fabric-picker#navigate", title: "Color charts" } do %>
+      <span class="text-base-content">Choose from color charts</span>
+      <%= icon(:chevron_right_outline, css_class: "size-4 text-base-content/50") %>
+    <% end %>
+
+    <%= link_to fabric_picker_stash_families_path,
+                class: "w-full flex items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors",
+                data: { turbo_frame: "fabric_picker_content", action: "click->fabric-picker#navigate", title: "Your stash" } do %>
+      <span class="text-base-content">Choose from your stash</span>
+      <%= icon(:chevron_right_outline, css_class: "size-4 text-base-content/50") %>
+    <% end %>
+
+  </div>
+</turbo-frame>

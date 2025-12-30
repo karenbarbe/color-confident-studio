@@ -7,10 +7,10 @@
                    false
                  end %>
 
-<li id="<%= dom_id(color, :swatch) %>">
+<li id="<%= dom_id(color, :swatch) %>" data-fabric-contrast-target="swatch">
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
-    <div class="w-full aspect-square rounded-lg sm:rounded-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
+    <div class="w-full aspect-5/4 rounded-t-lg sm:rounded-t-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
       <% if view_context == 'chart' %>
         <%= render "shared/swatch_stash_indicator", product_color: color, is_in_stash: is_in_stash %>
       <% end %>
@@ -18,10 +18,15 @@
   <% end %>
 
   <%# Color info %>
-  <div class="mt-1 sm:mt-1.5 px-0.5 flex justify-between items-start">
-    <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" }, class: "min-w-0 flex-1" do %>
-      <p class="text-sm font-semibold text-base-content truncate"><%= color.vendor_code %></p>
-      <p class="text-xs sm:text-sm text-base-content/70 truncate leading-tight"><%= color.name %></p>
+  <div class="px-2 pt-1.5 pb-4 rounded-b-lg transition-all duration-300"
+       data-fabric-contrast-label>
+    <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), 
+                data: { turbo: "true", turbo_frame: "color_detail" }, 
+                class: "block min-w-0" do %>
+      <p class="text-md font-semibold text-base-content truncate transition-colors duration-300"
+         data-vendor-code><%= color.vendor_code %></p>
+      <p class="text-sm text-base-content/70 truncate leading-tight transition-colors duration-300"
+         data-color-name><%= color.name %></p>
     <% end %>
     <%# render "shared/more_options_dropdown", is_in_stash: is_in_stash, color: color, stash_item: stash_item %>
   </div>

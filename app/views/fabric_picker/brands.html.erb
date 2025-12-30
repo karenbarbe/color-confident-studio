@@ -1,0 +1,20 @@
+<turbo-frame id="fabric_picker_content">
+  <div class="py-2 h-80 overflow-y-auto" data-panel="brands">
+    
+    <% if @brands.empty? %>
+      <div class="px-4 py-8 text-center text-sm text-base-content/50">
+        No fabric brands available
+      </div>
+    <% else %>
+      <% @brands.each do |brand| %>
+        <%= link_to fabric_picker_families_path(brand_id: brand.id),
+                    class: "w-full flex items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors",
+                    data: { turbo_frame: "fabric_picker_content", action: "click->fabric-picker#navigate", title: brand.name } do %>
+          <span class="text-base-content"><%= brand.name %></span>
+          <%= icon(:chevron_right_outline, css_class: "size-4 text-base-content/50") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  </div>
+</turbo-frame>

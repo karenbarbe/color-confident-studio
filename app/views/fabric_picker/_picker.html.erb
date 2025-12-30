@@ -1,0 +1,38 @@
+<div data-controller="fabric-picker"
+     data-fabric-picker-root-url-value="<%= fabric_picker_root_path %>"
+     class="inline-block relative py-2">
+  
+  <%# Trigger button %>
+  <button type="button"
+          data-action="click->fabric-picker#toggle"
+          data-fabric-picker-target="button"
+          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer bg-base-100 text-base-content ring-1 ring-base-content/20 hover:ring-base-content/40">
+    <span data-fabric-picker-target="indicator"
+          class="w-4 h-4 rounded-full border-2 border-dashed border-base-content/50 transition-all">
+    </span>
+    <span data-fabric-picker-target="label">Preview on fabric</span>
+    <%= icon(:chevron_down_outline, css_class: "size-4 text-base-content/70 transition-transform", data: { fabric_picker_target: "chevron" }) %>
+  </button>
+
+  <%# Dropdown panel %>
+  <div data-fabric-picker-target="dropdown"
+       class="hidden absolute top-full left-0 w-72 bg-base-100 rounded-xl shadow-xl ring-1 ring-base-content/10 z-50 overflow-hidden">
+    
+    <%# Back button header - shown when not on root %>
+    <div data-fabric-picker-target="header" class="hidden py-2 border-b border-base-content/10">
+      <button type="button"
+              data-action="click->fabric-picker#goBack"
+              class="w-full flex items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors ">
+        <%= icon(:arrow_left_outline, css_class: "size-4 text-base-content/70") %>
+        <span data-fabric-picker-target="headerTitle" class="text-base-content font-medium">Back</span>
+      </button>
+    </div>
+
+    <%# Content area - Turbo Frame swaps content here %>
+    <turbo-frame id="fabric_picker_content" 
+                 data-fabric-picker-target="content"
+                 data-action="turbo:frame-load->fabric-picker#onFrameLoad">
+      <%# Initial content loaded via Turbo Frame %>
+    </turbo-frame>
+  </div>
+</div>
