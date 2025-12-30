@@ -7,7 +7,7 @@
                    false
                  end %>
 
-<li id="<%= dom_id(color, :swatch) %>" data-fabric-preview-target="swatch">
+<li id="<%= dom_id(color, :swatch) %>" data-fabric-contrast-target="swatch">
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
     <div class="w-full aspect-5/4 rounded-t-lg sm:rounded-t-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
@@ -19,7 +19,7 @@
 
   <%# Color info %>
   <div class="px-2 pt-1.5 pb-4 rounded-b-lg transition-all duration-300"
-       data-fabric-preview-label>
+       data-fabric-contrast-label>
     <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), 
                 data: { turbo: "true", turbo_frame: "color_detail" }, 
                 class: "block min-w-0" do %>
