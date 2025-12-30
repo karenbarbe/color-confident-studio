@@ -1,0 +1,27 @@
+<turbo-frame id="fabric_picker_content">
+  <div class="py-2 max-h-80 overflow-y-auto" data-panel="stash-families">
+    
+    <% if @empty %>
+      <div class="px-4 py-8 text-center text-sm text-base-content/50">
+        You haven't added any fabric colors to your stash yet.
+      </div>
+    <% elsif @families.empty? %>
+      <div class="px-4 py-8 text-center text-sm text-base-content/50">
+        No color families in your stash
+      </div>
+    <% else %>
+      <% @families.each do |family| %>
+        <%= link_to fabric_picker_stash_colors_path(family: family[:name]),
+                    class: "w-full flex items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors",
+                    data: { turbo_frame: "fabric_picker_content", action: "click->fabric-picker#navigate", title: family[:name] } do %>
+          <span class="text-base-content">
+            <%= family[:name] %>
+            <span class="text-base-content/50 text-xs">(<%= family[:count] %>)</span>
+          </span>
+          <%= icon(:chevron_right_outline, css_class: "size-4 text-base-content/50") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  </div>
+</turbo-frame>

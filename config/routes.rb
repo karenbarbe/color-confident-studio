@@ -9,17 +9,15 @@ Rails.application.routes.draw do
   get "/color-charts/:category/:brand_slug" => "color_charts#show", as: :color_chart
   get "/color-charts/:category/:brand_slug/:color_id" => "product_colors#show", as: :color_chart_color
 
-  # Fabric picker API routes
-  namespace :api do
-    namespace :fabric_picker do
-      get "brands" => "brands#index"
-      get "brands/:brand_id/families" => "families#index"
-      get "brands/:brand_id/families/:family/colors" => "colors#index"
-
-      # Stash routes
-      get "stash/families" => "stash#families"
-      get "stash/families/:family/colors" => "stash#colors"
-    end
+  # Fabric picker routes
+  scope :fabric_picker, controller: :fabric_picker do
+    get "/" => :root, as: :fabric_picker_root
+    get "/presets" => :presets, as: :fabric_picker_presets
+    get "/brands" => :brands, as: :fabric_picker_brands
+    get "/brands/:brand_id/families" => :families, as: :fabric_picker_families
+    get "/brands/:brand_id/families/:family/colors" => :colors, as: :fabric_picker_colors
+    get "/stash/families" => :stash_families, as: :fabric_picker_stash_families
+    get "/stash/families/:family/colors" => :stash_colors, as: :fabric_picker_stash_colors
   end
 
   # Custom sign in and sign out routes
