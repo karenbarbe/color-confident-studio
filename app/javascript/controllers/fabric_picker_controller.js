@@ -201,7 +201,7 @@ export default class extends Controller {
     
     this.hexValue = hex
     this.lightnessValue = this.approximateLightness(hex)
-    this.nameValue = "Custom"
+    this.nameValue = "Custom color"
     this.colorIdValue = ""
 
     this.applyPreviewStyles()
