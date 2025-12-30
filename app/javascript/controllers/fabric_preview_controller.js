@@ -77,13 +77,13 @@ export default class extends Controller {
     "swatch",
     "divider",
     "defaultOption",
-    "defaultDivider",
     "presetOption"
   ]
 
   static values = {
     fabricColor: { type: String, default: "" },
-    fabricLightness: { type: Number, default: 0.96 }
+    fabricLightness: { type: Number, default: 0.96 },
+    fabricName: { type: String, default: "" }
   }
 
   // Fabric presets (used for label display)
@@ -146,17 +146,38 @@ export default class extends Controller {
   }
 
   applyCustomColor(event) {
-    const hex = event.currentTarget.value
-    this.fabricColorValue = hex
-    this.fabricLightnessValue = this.approximateLightness(hex)
+  const hex = event.currentTarget.value
+  this.fabricColorValue = hex
+  this.fabricLightnessValue = this.approximateLightness(hex)
+  this.fabricNameValue = "" // Clear name for custom colors
 
-    this.applyAllStyles()
-    this.savePreference()
+  this.applyAllStyles()
+  this.savePreference()
+}
+
+  handleColorSelected(event) {
+  const { hex, lightness, vendorCode, name } = event.detail
+  
+  this.fabricColorValue = hex || ""
+  this.fabricLightnessValue = lightness || 0.5
+  
+  // Build display name from vendor code and/or name
+  if (vendorCode && name) {
+    this.fabricNameValue = `${vendorCode} ${name}`
+  } else if (name) {
+    this.fabricNameValue = name
+  } else {
+    this.fabricNameValue = ""
   }
+
+  this.applyAllStyles()
+  this.savePreference()
+}
 
   reset() {
     this.fabricColorValue = ""
     this.fabricLightnessValue = 0.96
+    this.fabricNameValue = ""
 
     this.applyAllStyles()
     this.savePreference()
@@ -230,7 +251,13 @@ export default class extends Controller {
     if (label) {
       if (isActive) {
         const preset = this.constructor.presets.find(p => p.hex === this.fabricColorValue)
-        label.textContent = preset ? `On ${preset.name}` : "On Custom fabric"
+        if (preset) {
+          label.textContent = `On ${preset.name}`
+        } else if (this.fabricNameValue) {
+          label.textContent = `On ${this.fabricNameValue}`
+        } else {
+          label.textContent = "On Custom fabric"
+        }
       } else {
         label.textContent = "Preview on fabric"
       }
@@ -241,14 +268,9 @@ export default class extends Controller {
     const isDefault = !this.fabricColorValue
     const currentHex = this.fabricColorValue
 
-    // Show/hide default option (hidden when no fabric is selected)
+      // Show/hide default option wrapper (contains button + divider)
     if (this.hasDefaultOptionTarget) {
       this.defaultOptionTarget.classList.toggle("hidden", isDefault)
-    }
-
-    // Show/hide divider after default option
-    if (this.hasDefaultDividerTarget) {
-      this.defaultDividerTarget.classList.toggle("hidden", isDefault)
     }
 
     // Show/hide preset options based on current selection
@@ -271,19 +293,21 @@ export default class extends Controller {
   }
 
   savePreference() {
-    localStorage.setItem("fabricPreview", JSON.stringify({
-      hex: this.fabricColorValue,
-      lightness: this.fabricLightnessValue
-    }))
-  }
+  localStorage.setItem("fabricPreview", JSON.stringify({
+    hex: this.fabricColorValue,
+    lightness: this.fabricLightnessValue,
+    name: this.fabricNameValue
+  }))
+}
 
   loadSavedPreference() {
     try {
       const saved = localStorage.getItem("fabricPreview")
       if (saved) {
-        const { hex, lightness } = JSON.parse(saved)
+        const { hex, lightness, name } = JSON.parse(saved)
         this.fabricColorValue = hex || ""
         this.fabricLightnessValue = lightness || 0.96
+        this.fabricNameValue = name || ""
         this.applyAllStyles()
       }
     } catch (e) {
