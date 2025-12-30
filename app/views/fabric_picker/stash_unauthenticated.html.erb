@@ -1,0 +1,21 @@
+<turbo-frame id="fabric_picker_content">
+  <div class="py-2" data-panel="stash-unauthenticated">
+
+    <div class="px-4 py-6 text-center space-y-3">
+      <div class="w-12 h-12 mx-auto rounded-full bg-base-200 flex items-center justify-center">
+        <%= icon(:log_in_outline, css_class: "size-6 text-base-content/50") %>
+      </div>
+
+      <div class="space-y-1">
+        <p class="text-sm font-medium text-base-content">Log in to access your stash</p>
+        <p class="text-xs text-base-content/50">Save your favorite fabric colors and access them here</p>
+      </div>
+
+      <%= link_to login_path, class: "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors", data: { turbo_frame: "_top" } do %>
+        Log in
+        <%= icon(:arrow_right_outline, css_class: "size-4") %>
+      <% end %>
+    </div>
+
+  </div>
+</turbo-frame>

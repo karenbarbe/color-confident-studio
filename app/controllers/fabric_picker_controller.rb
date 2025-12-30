@@ -1,6 +1,5 @@
 class FabricPickerController < ApplicationController
-  allow_unauthenticated_access only: %i[root presets brands families colors]
-  before_action :require_authentication, only: %i[stash_families stash_colors]
+  allow_unauthenticated_access
 
   layout false # All actions render partials only
 
@@ -36,6 +35,11 @@ class FabricPickerController < ApplicationController
 
   # GET /fabric_picker/stash/families
   def stash_families
+    unless authenticated?
+      render "fabric_picker/stash_unauthenticated"
+      return
+    end
+
     stash_colors = current_user_fabric_stash_colors
     @families = color_families_for(stash_colors)
     @empty = stash_colors.empty?
@@ -43,6 +47,11 @@ class FabricPickerController < ApplicationController
 
   # GET /fabric_picker/stash/families/:family/colors
   def stash_colors
+    unless authenticated?
+      render "fabric_picker/stash_unauthenticated"
+      return
+    end
+
     @family = params[:family]
     stash_colors = current_user_fabric_stash_colors.where(color_family: @family)
 
