@@ -265,11 +265,11 @@ export default class extends Controller {
     // Update button styling
     if (this.hasButtonTarget) {
       if (this.isActive) {
-        this.buttonTarget.classList.add("ring-base-content/30", "bg-base-200")
-        this.buttonTarget.classList.remove("ring-base-content/20")
+        this.buttonTarget.classList.add("ring-base-content/50", "bg-base-200", "hover:bg-base-300")
+        this.buttonTarget.classList.remove("ring-base-content/30")
       } else {
-        this.buttonTarget.classList.remove("ring-base-content/30", "bg-base-200")
-        this.buttonTarget.classList.add("ring-base-content/20")
+        this.buttonTarget.classList.remove("ring-base-content/50", "bg-base-200", "hover:bg-base-300")
+        this.buttonTarget.classList.add("ring-base-content/30")
       }
     }
   }
