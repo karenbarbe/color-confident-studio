@@ -1,18 +1,90 @@
-<% content_for :title, "Stash items" %>
+<% content_for :title, "Your Stash" %>
 
 <% content_for :full_width_after do %>
 
-  <div class="w-full mt-9">
-    <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-4">
+  <div class="w-full mt-9"
+       data-controller="stash-filter"
+       data-stash-filter-active-class="stash-filter-active"
+       data-stash-filter-inactive-class="stash-filter-inactive">
+
+    <%# Header %>
+    <header class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-4">
       <div>
         <h1 class="font-bold text-3xl text-base-content">Your stash</h1>
-        <p class="text-base-content/70 mt-1">The colors you love in one place</p>
+        <p class="text-base-content/70 mt-1">Track what you own and what's on your wish list.</p>
       </div>
 
-    </div>
-    <div class="bg-base-200 pt-3 pb-20 transition-colors duration-500 space-y-2">
-      <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2">
-        <%= render "shared/color_grid", product_colors: @product_colors, view_context: "stash" %>
+      <%# Filters + Fabric picker %>
+      <div class="flex flex-wrap items-center gap-3">
+
+        <%# Fabric picker %>
+        <%= render "fabric_picker/picker" %>
+
+        <%# Ownership filter %>
+        <div class="inline-flex rounded-full bg-base-200 p-1 text-sm font-medium">
+          <button type="button"
+                  data-stash-filter-target="filterButton"
+                  data-filter="all"
+                  data-action="click->stash-filter#filter"
+            class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+            All
+            <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="all"><%= @stash_items.count %></span>
+          </button>
+          <button type="button"
+                  data-stash-filter-target="filterButton"
+                  data-filter="owned"
+                  data-action="click->stash-filter#filter"
+            class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+            Owned
+            <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="owned"><%= @stash_items.owned.count %></span>
+          </button>
+          <button type="button"
+                  data-stash-filter-target="filterButton"
+                  data-filter="wish_list"
+                  data-action="click->stash-filter#filter"
+            class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+            Wishlist
+            <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="wish_list"><%= @stash_items.wish_list.count %></span>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <%# Color grid %>
+    <div class="bg-base-200 pt-6 pb-20 mt-4 transition-colors duration-500"
+         data-controller="fabric-background fabric-contrast"
+         data-fabric-background-default-value="var(--color-base-200)"
+         data-action="fabric-picker:styleChanged@window->fabric-background#update">
+      <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+
+        <% if @stash_items.any? %>
+          <ul class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6">
+            <% @stash_items.each do |stash_item| %>
+              <% product_color = stash_item.product_color %>
+              <%= render "shared/color_swatch_stash", 
+                         color: product_color, 
+                         stash_item: stash_item %>
+            <% end %>
+          </ul>
+
+          <%# Empty state for filtered results %>
+          <div class="hidden text-center py-12" data-stash-filter-target="emptyState">
+            <p class="text-base-content/70">No colors match this filter.</p>
+          </div>
+        <% else %>
+          <%# Empty stash state %>
+          <div class="text-center py-12">
+            <div class="inline-flex items-center justify-center size-16 rounded-full bg-base-100 mb-4">
+              <%= icon(:heart_outline, css_class: "size-8 text-base-content/40") %>
+            </div>
+            <h2 class="text-lg font-semibold text-base-content mb-1">Your stash is empty</h2>
+            <p class="text-base-content/70 mb-4">Start adding colors from the color charts to build your collection.</p>
+            <%= link_to "Browse color charts", color_charts_path, 
+                        class: "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-content font-medium hover:bg-primary/90 transition-colors" %>
+          </div>
+        <% end %>
+
       </div>
     </div>
 
