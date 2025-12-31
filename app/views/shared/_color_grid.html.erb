@@ -3,16 +3,12 @@
 <ul class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6">
   <% product_colors.each do |product_color| %>
 
-    <% stash_item = @stash_items_by_color_id&.dig(product_color.id) %>
-    <% ownership_status = (view_context == "stash") ? stash_item&.ownership_status : nil %>
-
-    <% if view_context == "stash" && defined?(@stash_items) %>
-      <% stash_item = @stash_items.find { |si| si.product_color_id == product_color.id } %>
-      <% ownership_status = stash_item&.ownership_status %>
+    <% if view_context == "stash" %>
+      <% stash_item = @stash_items&.find { |si| si.product_color_id == product_color.id } %>
+      <%= render "shared/color_swatch_stash", color: product_color, stash_item: stash_item %>
+    <% else %>
+      <%= render "shared/color_swatch_chart", color: product_color %>
     <% end %>
 
-    <%= render "shared/color_swatch", color: product_color, view_context: view_context, ownership_status: ownership_status, stash_item: stash_item %>
-
   <% end %>
-
 </ul>

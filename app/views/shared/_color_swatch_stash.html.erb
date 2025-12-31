@@ -1,0 +1,26 @@
+<%# Expects: color, stash_item %>
+<% ownership_status = stash_item&.ownership_status %>
+
+<li id="<%= dom_id(color, :swatch) %>" data-fabric-contrast-target="swatch">
+
+  <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
+    <div class="w-full aspect-5/4 rounded-t-lg sm:rounded-t-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
+      <%= render "shared/swatch_ownership_indicator", ownership_status: ownership_status %>
+    </div>
+  <% end %>
+
+  <div class="px-2 pt-1.5 pb-4 rounded-b-lg bg-base-100 transition-all duration-300"
+       data-fabric-contrast-label>
+    <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id),
+                data: { turbo: "true", turbo_frame: "color_detail" },
+                class: "block min-w-0" do %>
+      <p class="text-md font-semibold text-base-content truncate transition-colors duration-300"
+         data-vendor-code><%= color.vendor_code %></p>
+      <p class="text-xs text-base-content/60 truncate leading-tight transition-colors duration-300"
+         data-brand-name><%= color.brand.name %></p>
+      <p class="text-sm text-base-content/70 truncate leading-tight transition-colors duration-300"
+         data-color-name><%= color.name %></p>
+    <% end %>
+  </div>
+
+</li>
