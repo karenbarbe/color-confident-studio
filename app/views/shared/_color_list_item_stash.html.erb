@@ -1,0 +1,47 @@
+<%# Expects: color, stash_item %>
+
+<% ownership_status = stash_item&.ownership_status %>
+
+<li id="<%= dom_id(color, :list_item) %>" 
+    data-stash-filter-target="item"
+    data-ownership-status="<%= ownership_status %>"
+    class="group">
+
+  <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), 
+              data: { turbo: "true", turbo_frame: "color_detail" },
+              class: "flex items-center gap-4 py-3 px-2 -mx-2 rounded-lg hover:bg-base-100/60 transition-colors" do %>
+
+    <%# Color swatch %>
+    <div class="shrink-0">
+      <div class="size-10 rounded-lg shadow-sm <%= 'ring-1 ring-base-content/10' if color.oklch_l >= 0.95 %>" 
+           style="background-color: #<%= color.hex_color %>;">
+      </div>
+    </div>
+
+    <%# Color info %>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-semibold text-base-content truncate"><%= color.vendor_code %></span>
+        <span class="text-sm text-base-content/60 truncate"><%= color.brand.name %></span>
+      </div>
+      <p class="text-sm text-base-content/70 truncate"><%= color.name %></p>
+    </div>
+
+    <%# Ownership indicator %>
+    <div class="shrink-0 flex items-center">
+      <% if ownership_status == "owned" %>
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/10 text-success">
+          <%= icon(:check_outline, css_class: "size-4") %>
+          <span class="text-xs font-medium">Owned</span>
+        </div>
+      <% else %>
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-base-content/5 text-base-content/40">
+          <%= icon(:heart_outline, css_class: "size-4") %>
+          <span class="text-xs font-medium">Wishlist</span>
+        </div>
+      <% end %>
+    </div>
+
+  <% end %>
+
+</li>

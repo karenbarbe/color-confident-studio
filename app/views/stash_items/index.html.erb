@@ -3,9 +3,10 @@
 <% content_for :full_width_after do %>
 
   <div class="w-full mt-9"
-       data-controller="stash-filter"
+       data-controller="stash-filter stash-view-toggle"
        data-stash-filter-active-class="stash-filter-active"
-       data-stash-filter-inactive-class="stash-filter-inactive">
+       data-stash-filter-inactive-class="stash-filter-inactive"
+       data-stash-view-toggle-view-value="grid">
 
     <%# Header %>
     <header class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-4">
@@ -17,35 +18,59 @@
       <%# Filters + Fabric picker %>
       <div class="flex flex-wrap items-center gap-3">
 
-        <%# Fabric picker %>
-        <%= render "fabric_picker/picker" %>
+        <%# Fabric picker with view-aware wrapper %>
+        <div data-stash-view-toggle-target="fabricPickerWrapper"
+             class="transition-opacity duration-300">
+          <%= render "fabric_picker/picker" %>
+        </div>
 
-        <%# Ownership filter %>
-        <div class="inline-flex rounded-full bg-base-200 p-1 text-sm font-medium">
-          <button type="button"
-                  data-stash-filter-target="filterButton"
-                  data-filter="all"
-                  data-action="click->stash-filter#filter"
-            class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-            All
-            <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="all"><%= @stash_items.count %></span>
-          </button>
-          <button type="button"
-                  data-stash-filter-target="filterButton"
-                  data-filter="owned"
-                  data-action="click->stash-filter#filter"
-            class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-            Owned
-            <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="owned"><%= @stash_items.owned.count %></span>
-          </button>
-          <button type="button"
-                  data-stash-filter-target="filterButton"
-                  data-filter="wish_list"
-                  data-action="click->stash-filter#filter"
-            class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-            Wishlist
-            <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="wish_list"><%= @stash_items.wish_list.count %></span>
-          </button>
+        <div class="flex items-center gap-3 md:ml-auto">
+          <%# Ownership filter %>
+          <div class="inline-flex rounded-full bg-base-300 p-1 text-sm font-medium">
+            <button type="button"
+                    data-stash-filter-target="filterButton"
+                    data-filter="all"
+                    data-action="click->stash-filter#filter"
+              class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+              All
+              <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="all"><%= @stash_items.count %></span>
+            </button>
+            <button type="button"
+                    data-stash-filter-target="filterButton"
+                    data-filter="owned"
+                    data-action="click->stash-filter#filter"
+              class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+              Owned
+              <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="owned"><%= @stash_items.owned.count %></span>
+            </button>
+            <button type="button"
+                    data-stash-filter-target="filterButton"
+                    data-filter="wish_list"
+                    data-action="click->stash-filter#filter"
+              class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+              Wishlist
+              <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="wish_list"><%= @stash_items.wish_list.count %></span>
+            </button>
+          </div>
+          <%# View toggle %>
+          <div class="inline-flex rounded-full bg-base-300 p-1">
+            <button type="button"
+                    data-stash-view-toggle-target="viewButton"
+                    data-view="grid"
+                    data-action="click->stash-view-toggle#switchView"
+              class="p-1.5 rounded-full transition-all cursor-pointer"
+              title="Grid view">
+              <%= icon(:grid_outline, css_class: "size-5") %>
+            </button>
+            <button type="button"
+                    data-stash-view-toggle-target="viewButton"
+                    data-view="list"
+                    data-action="click->stash-view-toggle#switchView"
+              class="p-1.5 rounded-full transition-all cursor-pointer"
+              title="List view">
+              <%= icon(:list_outline, css_class: "size-5") %>
+            </button>
+          </div>
         </div>
 
       </div>
@@ -59,10 +84,23 @@
       <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
 
         <% if @stash_items.any? %>
-          <ul class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6">
+          <%# Grid view %>
+          <ul class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6"
+              data-stash-view-toggle-target="gridView">
             <% @stash_items.each do |stash_item| %>
               <% product_color = stash_item.product_color %>
               <%= render "shared/color_swatch_stash", 
+                         color: product_color, 
+                         stash_item: stash_item %>
+            <% end %>
+          </ul>
+
+          <%# List view %>
+          <ul class="hidden divide-y divide-base-content/10"
+              data-stash-view-toggle-target="listView">
+            <% @stash_items.each do |stash_item| %>
+              <% product_color = stash_item.product_color %>
+              <%= render "shared/color_list_item_stash", 
                          color: product_color, 
                          stash_item: stash_item %>
             <% end %>
