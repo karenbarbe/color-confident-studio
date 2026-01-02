@@ -23,8 +23,8 @@
         <div class="dock-card"
              data-dock-card-target="card">
 
-          <%# Full header - visible when not docked %>
-          <div class="dock-card-header mx-auto md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+          <%# Full header  %>
+          <div class="dock-card-header">
             <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
             <div class="mt-4">
               <%= render "fabric_picker/picker" %>
@@ -32,13 +32,13 @@
           </div>
 
           <%# Navigation bar with mini header %>
-          <div class="dock-card-nav mx-auto md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
-            <%# Mini header - shown only when docked %>
+          <div class="dock-card-nav">
+            <%# Mini header %>
             <div class="dock-card-mini-header">
               <span class="dock-card-mini-title"><%= @brand.name %></span>
             </div>
 
-            <%# Color family pills - always visible %>
+            <%# Color family pills %>
             <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
           </div>
         </div>
