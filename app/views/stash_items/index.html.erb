@@ -14,41 +14,38 @@
          data-fabric-background-default-value="var(--color-base-200)"
          data-action="fabric-picker:styleChanged@window->fabric-background#update">
 
-      <%# Sticky wrapper %>
-      <div class="sticky top-0 z-40"
-           data-controller="dock-card"
-           data-dock-card-threshold-value="80"
-           data-dock-card-docked-class="docked">
-
-        <%# Floating card %>
-        <div class="dock-card"
-             data-dock-card-target="card">
-
-          <%# Full header - visible when not docked %>
-          <div class="dock-card-header">
-            <div class="space-y-4">
-              <div>
-                <h1 class="font-bold text-2xl sm:text-3xl text-base-content">Your stash</h1>
-                <p class="text-base-content/70 mt-1">Track what you own and what's on your wish list.</p>
-              </div>
-
-              <%# Fabric picker %>
-              <div data-stash-view-toggle-target="fabricPickerWrapper"
-                   class="transition-opacity duration-300">
-                <%= render "fabric_picker/picker" %>
-              </div>
-            </div>
+      <%# Header card %>
+      <div class="header-card">
+        <div class="space-y-4">
+          <div>
+            <h1 class="font-bold text-2xl sm:text-3xl text-base-content">Your stash</h1>
+            <p class="text-base-content/70 mt-1">Track what you own and what's on your wish list.</p>
           </div>
 
-          <%# Navigation bar with mini header %>
-          <div class="dock-card-nav">
-            <%# Mini header - shown only when docked %>
-            <div class="dock-card-mini-header">
-              <span class="dock-card-mini-title">Your stash</span>
+          <%# Fabric picker %>
+          <div data-stash-view-toggle-target="fabricPickerWrapper"
+               class="transition-opacity duration-300">
+            <%= render "fabric_picker/picker" %>
+          </div>
+        </div>
+      </div>
+
+      <%# Sticky nav wrapper %>
+      <div class="sticky-nav-wrapper"
+           data-controller="sticky-nav"
+           data-sticky-nav-stuck-class="is-stuck">
+
+        <%# Nav card %>
+        <div class="sticky-nav" data-sticky-nav-target="nav">
+          <%# Inner wrapper for content alignment when stuck %>
+          <div class="sticky-nav-inner">
+            <%# Mini header %>
+            <div class="sticky-nav-mini-header">
+              <span class="sticky-nav-mini-title">Your stash</span>
             </div>
 
             <%# Filters and view toggle %>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center justify-between gap-3">
               <%# Ownership filter %>
               <div class="inline-flex rounded-full bg-base-200 p-1 text-sm font-medium">
                 <button type="button"
@@ -99,7 +96,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <%# Color grid %>
@@ -146,6 +142,9 @@
         <% end %>
 
       </div>
+
+      <%# Floating pill %>
+      <%= render "shared/back_to_top" %>
 
     </div>
 
