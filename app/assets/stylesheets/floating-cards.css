@@ -1,0 +1,250 @@
+.header-card {
+  background: var(--color-base-100);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  width: calc(100% - 2rem);
+  max-width: calc(100% - 2rem);
+  margin: .5rem auto;
+}
+
+@media (min-width: 768px) {
+  .header-card {
+    max-width: min(calc(56rem - 2rem), calc(100% - 2rem));
+    padding: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-card {
+    max-width: min(calc(64rem - 2rem), calc(100% - 2rem));
+  }
+}
+
+@media (min-width: 1280px) {
+  .header-card {
+    max-width: min(calc(72rem - 2rem), calc(100% - 2rem));
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .header-card {
+    width: calc(100% - 1.5rem);
+    max-width: calc(100% - 1.5rem);
+    margin: 0.75rem auto;
+    border-radius: 0.875rem;
+    padding: 1rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Sticky Nav - Sticks to top on scroll
+   -------------------------------------------------------------------------- */
+.sticky-nav-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.sticky-nav {
+  background: var(--color-base-100);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 0.75rem 1.25rem;
+  width: calc(100% - 2rem);
+  max-width: calc(100% - 2rem);
+  margin: 0 auto;
+
+  /* Smooth transitions - base duration for mobile */
+  transition: 
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  .sticky-nav {
+    padding: 0.875rem 1.5rem;
+    max-width: min(calc(56rem - 2rem), calc(100% - 2rem));
+    
+    /* Slightly longer for tablet */
+    transition-duration: 0.35s;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sticky-nav {
+    max-width: min(calc(64rem - 2rem), calc(100% - 2rem));
+    
+    /* Longer for desktop */
+    transition-duration: 0.4s;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sticky-nav {
+    max-width: min(calc(72rem - 2rem), calc(100% - 2rem));
+    
+    /* Longest for large desktop */
+    transition-duration: 0.45s;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .sticky-nav {
+    width: calc(100% - 1.5rem);
+    max-width: calc(100% - 1.5rem);
+    border-radius: 0.875rem;
+    padding: 0.625rem 1rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Sticky Nav Inner - Controls content alignment when stuck
+   -------------------------------------------------------------------------- */
+.sticky-nav-inner {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  
+  /* Match parent transition timing */
+  transition: 
+    max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+    padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  .sticky-nav-inner {
+    transition-duration: 0.35s;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sticky-nav-inner {
+    transition-duration: 0.4s;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sticky-nav-inner {
+    transition-duration: 0.45s;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mini Header - Animated reveal instead of display toggle
+   -------------------------------------------------------------------------- */
+.sticky-nav-mini-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  /* Hidden state */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+  
+  /* Smooth reveal - slightly faster than nav transition */
+  transition: 
+    max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-bottom 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  .sticky-nav-mini-header {
+    transition-duration: 0.3s;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sticky-nav-mini-header {
+    transition-duration: 0.35s;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sticky-nav-mini-header {
+    transition-duration: 0.4s;
+  }
+}
+
+.sticky-nav-mini-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-base-content);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 767px) {
+  .sticky-nav-mini-title {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Reveal mini header when stuck */
+.sticky-nav-wrapper.is-stuck .sticky-nav-mini-header {
+  max-height: 2rem;
+  opacity: 1;
+  margin-bottom: 0.625rem;
+}
+
+/* --------------------------------------------------------------------------
+   Stuck State - Full width nav, inner content aligned with grid
+   -------------------------------------------------------------------------- */
+.sticky-nav-wrapper.is-stuck .sticky-nav {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Inner wrapper matches grid container max-widths */
+@media (min-width: 768px) {
+  .sticky-nav-wrapper.is-stuck .sticky-nav {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .sticky-nav-wrapper.is-stuck .sticky-nav-inner {
+    max-width: 56rem; /* md:max-w-4xl */
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sticky-nav-wrapper.is-stuck .sticky-nav-inner {
+    max-width: 64rem; /* lg:max-w-5xl */
+  }
+}
+
+@media (min-width: 1280px) {
+  .sticky-nav-wrapper.is-stuck .sticky-nav-inner {
+    max-width: 72rem; /* xl:max-w-6xl */
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Pills container - ensure horizontal scroll works within nav
+   -------------------------------------------------------------------------- */
+.sticky-nav .pills-container {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.sticky-nav .pills-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}

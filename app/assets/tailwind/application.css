@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* Import custom stylesheets */
+@import "../stylesheets/floating-cards.css";
+@import "../stylesheets/color-detail-panel.css";
+
 /* ============================================
    NAVBAR SCROLL BEHAVIOR
    ============================================ */
