@@ -5,7 +5,8 @@
 <li id="<%= dom_id(color, :swatch) %>" 
     data-fabric-contrast-target="swatch"
     data-stash-filter-target="item"
-    data-ownership-status="<%= ownership_status %>">
+    data-ownership-status="<%= ownership_status %>"
+    data-category="<%= color.brand.category %>">
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
     <div class="w-full aspect-5/4 rounded-t-lg sm:rounded-t-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">

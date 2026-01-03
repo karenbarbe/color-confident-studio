@@ -5,6 +5,7 @@
 <li id="<%= dom_id(color, :list_item) %>" 
     data-stash-filter-target="item"
     data-ownership-status="<%= ownership_status %>"
+    data-category="<%= color.brand.category %>"
     class="group">
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), 

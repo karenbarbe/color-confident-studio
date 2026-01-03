@@ -1,10 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["filterButton", "item", "emptyState", "count"]
+  static targets = ["filterButton", "categoryButton", "item", "emptyState", "count"]
   
   static values = {
-    filter: { type: String, default: "all" } // "all" | "owned" | "wish_list"
+    filter: { type: String, default: "all" }, // "all" | "owned" | "wish_list"
+    category: { type: String, default: "thread" } // category: "thread" | "fabric"
   }
 
   static classes = ["active", "inactive"]
@@ -12,6 +13,7 @@ export default class extends Controller {
   connect() {
     this.updateCounts()
     this.updateFilterButtons()
+    this.updateCategoryButtons() 
     this.applyFilter()
   }
 
@@ -21,9 +23,21 @@ export default class extends Controller {
     this.filterValue = newFilter
   }
 
+  // Called when a category button is clicked
+  filterByCategory(event) {
+    const newCategory = event.currentTarget.dataset.category
+    this.categoryValue = newCategory
+  }
+
   // Stimulus callback when filterValue changes
   filterValueChanged() {
     this.updateFilterButtons()
+    this.applyFilter()
+  }
+
+  // Stimulus callback when categoryValue changes
+  categoryValueChanged() {
+    this.updateCategoryButtons()
     this.applyFilter()
   }
 
@@ -44,12 +58,35 @@ export default class extends Controller {
     })
   }
 
+  updateCategoryButtons() {
+    this.categoryButtonTargets.forEach(button => {
+      const isActive = button.dataset.category === this.categoryValue
+      
+      const activeClasses = this.activeClass?.split(" ") || []
+      const inactiveClasses = this.inactiveClass?.split(" ") || []
+      
+      if (isActive) {
+        button.classList.remove(...inactiveClasses)
+        button.classList.add(...activeClasses)
+      } else {
+        button.classList.remove(...activeClasses)
+        button.classList.add(...inactiveClasses)
+      }
+    })
+  }
+
   applyFilter() {
     let visibleCount = 0
 
     this.itemTargets.forEach(item => {
       const status = item.dataset.ownershipStatus
-      const shouldShow = this.filterValue === "all" || status === this.filterValue
+      const category = item.dataset.category
+      
+      // Item must match BOTH filters
+      const matchesOwnership = this.filterValue === "all" || status === this.filterValue
+      const matchesCategory = this.categoryValue === "all" || category === this.categoryValue
+      
+      const shouldShow = matchesOwnership && matchesCategory
       
       item.classList.toggle("hidden", !shouldShow)
       if (shouldShow) visibleCount++
