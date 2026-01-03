@@ -15,7 +15,7 @@ const MODE_STYLES = {
   brandName: {
     default: "text-base-content/60",
     light: "text-gray-900/60",
-    dark: "text-white/60"
+    dark: "text-white/80"
   },
   colorName: {
     default: "text-base-content/80",
