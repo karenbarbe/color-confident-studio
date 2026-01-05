@@ -4,7 +4,7 @@ class ColorSlotPolicy < ApplicationPolicy
   end
 
   def destroy?
-    palette_owner? && record.palette.draft?
+    palette_owner?
   end
 
   private

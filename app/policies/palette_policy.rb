@@ -12,7 +12,7 @@ class PalettePolicy < ApplicationPolicy
   end
 
   def update?
-    owner? && record.draft?
+    owner?
   end
 
   def destroy?
@@ -20,15 +20,15 @@ class PalettePolicy < ApplicationPolicy
   end
 
   def studio?
-    owner? && record.draft?
+    owner?
   end
 
   def pick_color?
-    owner? && record.draft?
+    owner?
   end
 
   def publish?
-    owner? && record.draft?
+    owner?
   end
 
   class Scope < ApplicationPolicy::Scope
