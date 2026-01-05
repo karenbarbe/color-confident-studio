@@ -62,14 +62,16 @@ namespace :db do
       # 3. Create users
       puts "Creating sample users..."
       users_data = [
-        { username: "alice_artist", email: "alice@example.com", first_name: "Alice", last_name: "Anderson" },
-        { username: "carmen_crafter", email: "carmen@example.com", first_name: "Carmen", last_name: "Barista" }
+        { username: "alice_artist", email: "alice@example.com", first_name: "Alice", last_name: "Anderson", admin: false },
+        { username: "carmen_crafter", email: "carmen@example.com", first_name: "Carmen", last_name: "Barista", admin: false },
+        { username: "admin", email: "admin@example.com", first_name: "Carmen", last_name: "Admin", admin: true }
       ]
       users_data.each do |user_data|
         User.find_or_create_by!(username: user_data[:username]) do |user|
           user.email_address = user_data[:email]
           user.first_name = user_data[:first_name]
           user.last_name = user_data[:last_name]
+          user.admin = user_data[:admin]
           user.password = "appdev"
         end
       end
