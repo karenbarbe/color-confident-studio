@@ -1,8 +1,11 @@
 <%= render @stash_item %>
 
 <div>
-  <%= link_to "Edit this stash item", edit_stash_item_path(@stash_item) %> |
-  <%= link_to "Back to stash items", stash_items_path %>
-
+  <% if policy(@stash_item).update? %>
+    <%= link_to "Edit this stash item", edit_stash_item_path(@stash_item) %> |
+  <% end %>
+  <% if policy(@stash_item).destroy? %>
+    <%= link_to "Back to stash items", stash_items_path %>
+  <% end %>
   <%= button_to "Destroy this stash item", @stash_item, method: :delete %>
 </div>

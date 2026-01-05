@@ -118,7 +118,7 @@
   </div>
 
   <%# Delete draft %>
-  <% if @palette.draft? %>
+  <% if policy(@palette).destroy? %>
     <div class="text-center">
       <%= button_to "Delete draft",
           palette_path(@palette),
