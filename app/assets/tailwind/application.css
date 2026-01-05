@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* Import custom stylesheets */
+@import "../stylesheets/floating-cards.css";
+@import "../stylesheets/color-detail-panel.css";
+
 /* ============================================
    NAVBAR SCROLL BEHAVIOR
    ============================================ */
@@ -153,4 +157,16 @@
   width: 2.5rem;
   height: 2.5rem;
   flex: 0 0 2.5rem;
+}
+
+/* ============================================
+   STASH FILTER BUTTONS
+   ============================================ */
+
+.stash-filter-active {
+  @apply bg-base-100 text-base-content shadow-sm;
+}
+
+.stash-filter-inactive {
+  @apply text-base-content/70 hover:text-base-content;
 }

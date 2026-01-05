@@ -12,6 +12,11 @@ const MODE_STYLES = {
     light: "text-gray-900",
     dark: "text-white"
   },
+  brandName: {
+    default: "text-base-content/60",
+    light: "text-gray-900/60",
+    dark: "text-white/80"
+  },
   colorName: {
     default: "text-base-content/80",
     light: "text-gray-800",
@@ -68,9 +73,11 @@ export default class extends Controller {
       this.applyStyle(label, "swatchLabel", mode)
       
       const vendorCode = label.querySelector("[data-vendor-code]")
+      const brandName = label.querySelector("[data-brand-name]")
       const colorName = label.querySelector("[data-color-name]")
       
       if (vendorCode) this.applyStyle(vendorCode, "vendorCode", mode)
+      if (brandName) this.applyStyle(brandName, "brandName", mode)
       if (colorName) this.applyStyle(colorName, "colorName", mode)
     })
   }

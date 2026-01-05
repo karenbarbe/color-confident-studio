@@ -2,39 +2,61 @@
 
 <% content_for :full_width_after do %>
 
-  <div class="w-full mt-9 <%= authenticated? ? 'md:mt-8' : 'md:mt-16' %>" 
+  <div class="w-full -mt-16 md:-mt-8 -mb-16"
        data-controller="scroll-spy"
        data-scroll-spy-active-classes-value="bg-base-content text-base-100"
        data-scroll-spy-inactive-classes-value="bg-base-200 text-base-content/70">
 
-    <%# Header %>
-    <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-4">
-      <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
-      <%= render "fabric_picker/picker" %>
-    </div>
-
-    <%# Navigation %>
-    <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
-
-    <%# Color grid %>
-    <div class="bg-base-200 pt-3 pb-20 transition-colors duration-500 space-y-2"
+    <%# Fabric background %>
+    <div class="bg-base-200 min-h-screen pt-16 md:pt-8 pb-20 transition-colors duration-500"
          data-controller="fabric-background fabric-contrast"
          data-fabric-background-default-value="var(--color-base-200)"
          data-action="fabric-picker:styleChanged@window->fabric-background#update">
-      <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2">
+
+      <%# Header card %>
+      <div class="header-card">
+        <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
+        <div class="mt-4">
+          <%= render "fabric_picker/picker" %>
+        </div>
+      </div>
+
+      <%# Sticky nav wrapper %>
+      <div class="sticky-nav-wrapper"
+     data-controller="sticky-nav"
+     data-sticky-nav-stuck-class="is-stuck">
+
+        <%# Nav card %>
+        <div class="sticky-nav" data-sticky-nav-target="nav">
+          <%# Inner wrapper for content alignment when stuck %>
+          <div class="sticky-nav-inner">
+            <%# Mini header %>
+            <div class="sticky-nav-mini-header">
+              <span class="sticky-nav-mini-title"><%= @brand.name %></span>
+            </div>
+
+            <%# Color family pills %>
+            <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
+          </div>
+        </div>
+      </div>
+
+      <%# Color grid %>
+      <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2 pt-3">
         <% @colors_by_family.each do |family, colors| %>
           <section id="<%= family.parameterize %>"
-                   class="scroll-mt-10 space-y-2" 
+                   class="scroll-mt-28 space-y-2"
                    data-scroll-spy-target="section">
             <%= render "shared/color_divider", family_name: family %>
             <%= render "shared/color_grid", product_colors: colors %>
           </section>
         <% end %>
       </div>
-    </div>
 
-    <%# Floating pill %>
-    <%= render "shared/back_to_top" %>
+      <%# Floating pill %>
+      <%= render "shared/back_to_top" %>
+
+    </div>
 
   </div>
 <% end %>
