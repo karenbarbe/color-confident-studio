@@ -161,7 +161,7 @@ class PalettesController < ApplicationController
   def find_empty_draft
     Current.user.palettes
            .draft
-           .where(name: [nil, ""])
+           .where(name: [ nil, "" ])
            .left_joins(:color_slots)
            .group("palettes.id")
            .having("COUNT(color_slots.id) = 0")
