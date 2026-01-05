@@ -1,16 +1,16 @@
 class PalettesController < ApplicationController
   before_action :set_palette, only: %i[show edit update destroy studio pick_color publish]
-  before_action :ensure_current_user_is_creator, only: %i[show edit update destroy studio pick_color publish]
-
 
   # GET /palettes
   def index
-    @palettes = Current.user.palettes.published.includes(color_slots: :product_color).order(created_at: :desc)
-    @draft_palettes = Current.user.palettes.draft.with_content.includes(color_slots: :product_color).order(updated_at: :desc)
+    authorize Palette
+    @palettes = policy_scope(Palette).published.includes(color_slots: :product_color).order(created_at: :desc)
+    @draft_palettes = policy_scope(Palette).draft.with_content.includes(color_slots: :product_color).order(updated_at: :desc)
   end
 
   # GET /palettes/1
   def show
+    authorize @palette
   end
 
   # GET /palettes/new
@@ -22,25 +22,28 @@ class PalettesController < ApplicationController
   def edit
   end
 
-  # POST /palettes
-  def create
-    existing_empty_draft = find_empty_draft
+# POST /palettes
+def create
+  existing_empty_draft = find_empty_draft
 
-    if existing_empty_draft
-      redirect_to studio_palette_path(existing_empty_draft)
+  if existing_empty_draft
+    authorize existing_empty_draft
+    redirect_to studio_palette_path(existing_empty_draft)
+  else
+    @palette = Palette.new(creator: Current.user, status: :draft)
+    authorize @palette
+
+    if @palette.save
+      redirect_to studio_palette_path(@palette)
     else
-      @palette = Palette.new(creator: Current.user, status: :draft)
-
-      if @palette.save
-        redirect_to studio_palette_path(@palette)
-      else
-        redirect_to palettes_path, alert: "Could not create palette."
-      end
+      redirect_to palettes_path, alert: "Could not create palette."
     end
   end
+end
 
   # PATCH/PUT /palettes/1
   def update
+    authorize @palette
     if @palette.update(palette_params)
       redirect_to studio_palette_path(@palette), notice: "Palette updated."
     else
@@ -50,12 +53,14 @@ class PalettesController < ApplicationController
 
   # DELETE /palettes/1
   def destroy
+    authorize @palette
     @palette.destroy!
     redirect_to palettes_path, status: :see_other, notice: "Palette was deleted."
   end
 
   # GET /palettes/1/studio
   def studio
+    authorize @palette
     @background_slots = @palette.section_slots("background")
     @main_slots = @palette.section_slots("main")
     @secondary_slots = @palette.section_slots("secondary")
@@ -64,6 +69,7 @@ class PalettesController < ApplicationController
 
   # GET /palettes/1/pick_color?section=main
   def pick_color
+    authorize @palette
     @section = params[:section]
 
     unless ColorSlot::SLOT_TYPES.include?(@section)
@@ -98,6 +104,7 @@ class PalettesController < ApplicationController
   # PATCH /palettes/1/publish
   # Validates and publishes the palette
   def publish
+    authorize @palette
     # Update name/description if provided
     @palette.assign_attributes(palette_params) if params[:palette].present?
 
@@ -128,16 +135,6 @@ class PalettesController < ApplicationController
     end
   end
 
-  def ensure_current_user_is_creator
-    unless Current.user == @palette.creator
-      redirect_back fallback_location: root_url, alert: "You're not authorized for that."
-    end
-  end
-
-  def palette_params
-    params.expect(palette: [ :name, :description ])
-  end
-
   def load_studio_slots
     @background_slots = @palette.section_slots("background")
     @main_slots = @palette.section_slots("main")
@@ -161,5 +158,9 @@ class PalettesController < ApplicationController
            .group("palettes.id")
            .having("COUNT(color_slots.id) = 0")
            .first
+  end
+
+  def skip_authorization?
+    action_name == "index"
   end
 end

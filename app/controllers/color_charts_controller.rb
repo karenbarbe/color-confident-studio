@@ -34,4 +34,8 @@ class ColorChartsController < ApplicationController
       [ family, colors ] if colors.present?
     end
   end
+
+  def skip_authorization?
+    true
+  end
 end

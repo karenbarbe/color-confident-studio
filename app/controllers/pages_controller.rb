@@ -9,4 +9,8 @@ class PagesController < ApplicationController
   end
   def dashboard
   end
+
+  def skip_authorization?
+    true
+  end
 end
