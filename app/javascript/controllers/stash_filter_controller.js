@@ -38,6 +38,7 @@ export default class extends Controller {
   // Stimulus callback when categoryValue changes
   categoryValueChanged() {
     this.updateCategoryButtons()
+    this.updateCounts() 
     this.applyFilter()
   }
 
@@ -101,14 +102,24 @@ export default class extends Controller {
   updateCounts() {
     const counts = { all: 0, owned: 0, wish_list: 0 }
     
-    this.itemTargets.forEach(item => {
+    // Only count items in the grid view to avoid double-counting
+    const gridItems = this.itemTargets.filter(item => 
+      item.closest('[data-stash-view-toggle-target="gridView"]')
+    )
+    
+    gridItems.forEach(item => {
       const status = item.dataset.ownershipStatus
-      counts.all++
-      if (status === "owned") counts.owned++
-      if (status === "wish_list") counts.wish_list++
+      const category = item.dataset.category
+      
+      const matchesCategory = this.categoryValue === "all" || category === this.categoryValue
+      
+      if (matchesCategory) {
+        counts.all++
+        if (status === "owned") counts.owned++
+        if (status === "wish_list") counts.wish_list++
+      }
     })
 
-    // Update count displays in filter buttons
     this.countTargets.forEach(countEl => {
       const filter = countEl.dataset.countFor
       if (filter && counts[filter] !== undefined) {
