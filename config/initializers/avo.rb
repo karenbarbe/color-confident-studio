@@ -24,10 +24,14 @@ Avo.configure do |config|
   end
 
   config.authenticate_with do
+    # Resume the session
+    Current.session ||= Session.find_by(id: cookies.signed[:session_id]) if cookies.signed[:session_id]
+
+    # Then check authentication and authorization
     if Current.user.blank?
-      redirect_to login_path, alert: "Please log in to continue."
+      redirect_to main_app.login_path, alert: "Please log in to continue."
     elsif !Current.user.admin?
-      redirect_to root_path, alert: "You don't have access to the admin panel."
+      redirect_to main_app.root_path, alert: "You don't have access to the admin panel."
     end
   end
 
