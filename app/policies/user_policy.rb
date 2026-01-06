@@ -3,12 +3,12 @@ class UserPolicy < ApplicationPolicy
     own_record? || admin?
   end
 
-  def update?
-    own_record?
+  def destroy?
+    user&.admin? && record != user
   end
 
-  def destroy?
-    own_record? || admin?
+  def update?
+    user&.admin?
   end
 
   private
