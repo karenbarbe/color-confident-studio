@@ -621,7 +621,6 @@ DEPENDENCIES
   csv
   debug
   dev_toolbar (~> 2.1.0)
-  devise
   dotenv
   draft_generators!
   faker
