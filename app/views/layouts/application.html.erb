@@ -35,7 +35,7 @@
           <%= render "shared/sidebar" %>
         <% end %>
 
-        <main class="pt-16 md:pt-8 pb-16 w-full transition-[padding] duration-200 <%= 'md:pl-16' if authenticated? %>">
+        <main class="pt-16 <%= authenticated? ? 'md:pt-8' : 'md:pt-18' %> pb-16 w-full transition-[padding] duration-200 <%= 'md:pl-16' if authenticated? %>">
 
           <%= yield :full_width_before %>
 
