@@ -18,4 +18,8 @@ class SessionsController < ApplicationController
     terminate_session
     redirect_to root_path
   end
+
+  def skip_authorization?
+    true
+  end
 end

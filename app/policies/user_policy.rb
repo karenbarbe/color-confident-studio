@@ -1,0 +1,19 @@
+class UserPolicy < ApplicationPolicy
+  def show?
+    own_record? || admin?
+  end
+
+  def update?
+    own_record?
+  end
+
+  def destroy?
+    own_record? || admin?
+  end
+
+  private
+
+  def own_record?
+    record == user
+  end
+end

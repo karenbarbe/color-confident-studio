@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                :bigint           not null, primary key
+#  admin             :boolean          default(FALSE), not null
 #  email_address     :string           not null
 #  first_name        :string
 #  last_name         :string
@@ -24,4 +25,8 @@ class User < ApplicationRecord
   has_many :palettes, foreign_key: "creator_id", dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  def admin?
+    admin == true
+  end
 end

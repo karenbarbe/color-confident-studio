@@ -94,4 +94,8 @@ class FabricPickerController < ApplicationController
     colors = ProductColor.where(id: ids).index_by(&:id)
     ids.filter_map { |id| colors[id] }
   end
+
+  def skip_authorization?
+    true
+  end
 end

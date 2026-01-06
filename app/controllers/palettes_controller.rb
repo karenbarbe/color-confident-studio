@@ -1,25 +1,27 @@
 class PalettesController < ApplicationController
   before_action :set_palette, only: %i[show edit update destroy studio pick_color publish]
-  before_action :ensure_current_user_is_creator, only: %i[show edit update destroy studio pick_color publish]
-
 
   # GET /palettes
   def index
-    @palettes = Current.user.palettes.published.includes(color_slots: :product_color).order(created_at: :desc)
-    @draft_palettes = Current.user.palettes.draft.with_content.includes(color_slots: :product_color).order(updated_at: :desc)
+    authorize Palette
+    @palettes = policy_scope(Palette).published.includes(color_slots: :product_color).order(created_at: :desc)
+    @draft_palettes = policy_scope(Palette).draft.with_content.includes(color_slots: :product_color).order(updated_at: :desc)
   end
 
   # GET /palettes/1
   def show
+    authorize @palette
   end
 
   # GET /palettes/new
   def new
     @palette = Palette.new
+    authorize @palette
   end
 
   # GET /palettes/1/edit
   def edit
+    authorize @palette
   end
 
   # POST /palettes
@@ -27,9 +29,11 @@ class PalettesController < ApplicationController
     existing_empty_draft = find_empty_draft
 
     if existing_empty_draft
+      authorize existing_empty_draft
       redirect_to studio_palette_path(existing_empty_draft)
     else
       @palette = Palette.new(creator: Current.user, status: :draft)
+      authorize @palette
 
       if @palette.save
         redirect_to studio_palette_path(@palette)
@@ -41,6 +45,7 @@ class PalettesController < ApplicationController
 
   # PATCH/PUT /palettes/1
   def update
+    authorize @palette
     if @palette.update(palette_params)
       redirect_to studio_palette_path(@palette), notice: "Palette updated."
     else
@@ -50,20 +55,20 @@ class PalettesController < ApplicationController
 
   # DELETE /palettes/1
   def destroy
+    authorize @palette
     @palette.destroy!
     redirect_to palettes_path, status: :see_other, notice: "Palette was deleted."
   end
 
   # GET /palettes/1/studio
   def studio
-    @background_slots = @palette.section_slots("background")
-    @main_slots = @palette.section_slots("main")
-    @secondary_slots = @palette.section_slots("secondary")
-    @accent_slots = @palette.section_slots("accent")
+    authorize @palette
+    load_studio_slots
   end
 
   # GET /palettes/1/pick_color?section=main
   def pick_color
+    authorize @palette
     @section = params[:section]
 
     unless ColorSlot::SLOT_TYPES.include?(@section)
@@ -96,14 +101,26 @@ class PalettesController < ApplicationController
   end
 
   # PATCH /palettes/1/publish
-  # Validates and publishes the palette
+  # Validates and saves the palette (publishes if draft, updates if already published)
   def publish
-    # Update name/description if provided
+    authorize @palette
     @palette.assign_attributes(palette_params) if params[:palette].present?
 
+    # If already published, just save the updates
+    if @palette.published?
+      if @palette.save
+        redirect_to @palette, notice: "Palette updated successfully!"
+      else
+        flash.now[:alert] = @palette.errors.full_messages.join(", ")
+        load_studio_slots
+        render :studio, status: :unprocessable_entity
+      end
+      return
+    end
+
+    # Draft palette: validate requirements before publishing
     if @palette.can_publish?
       if @palette.publish!
-        # Add any non-stash colors to user's stash
         add_palette_colors_to_stash
         redirect_to @palette, notice: "Palette saved successfully!"
       else
@@ -128,16 +145,6 @@ class PalettesController < ApplicationController
     end
   end
 
-  def ensure_current_user_is_creator
-    unless Current.user == @palette.creator
-      redirect_back fallback_location: root_url, alert: "You're not authorized for that."
-    end
-  end
-
-  def palette_params
-    params.expect(palette: [ :name, :description ])
-  end
-
   def load_studio_slots
     @background_slots = @palette.section_slots("background")
     @main_slots = @palette.section_slots("main")
@@ -147,12 +154,10 @@ class PalettesController < ApplicationController
 
   def add_palette_colors_to_stash
     @palette.product_colors.each do |product_color|
-      # Find or create stash item for this user/color combination
       Current.user.stash_items.find_or_create_by(product_color: product_color)
     end
   end
 
-  # Find an empty draft: no name and no color slots
   def find_empty_draft
     Current.user.palettes
            .draft
@@ -161,5 +166,9 @@ class PalettesController < ApplicationController
            .group("palettes.id")
            .having("COUNT(color_slots.id) = 0")
            .first
+  end
+
+  def palette_params
+    params.require(:palette).permit(:name, :description)
   end
 end

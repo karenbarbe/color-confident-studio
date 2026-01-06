@@ -5,7 +5,9 @@
   
   <ul class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-2" id="product_colors">
     <% @product_colors.each do |product_color| %>
-        <%= render "color_chip", color: product_color %>
+        <li class="flex flex-col items-center">
+          <div class="w-12 h-12 rounded-md mb-2" style="background-color: #<%= product_color.hex_color %>;"></div>
+          <span class="text-sm text-center"><%= product_color.vendor_code %></span>
     <% end %>
   </ul>
 </div>

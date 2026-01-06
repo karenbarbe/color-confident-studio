@@ -3,7 +3,8 @@ class StashItemsController < ApplicationController
 
   # GET /stash_items or /stash_items.json
   def index
-    @stash_items = StashItem.where(owner: Current.user)
+    authorize StashItem
+    @stash_items = policy_scope(StashItem)
     .joins(product_color: :brand)
     .includes(product_color: :brand)
     .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
@@ -13,6 +14,7 @@ class StashItemsController < ApplicationController
 
   # GET /stash_items/1 or /stash_items/1.json
   def show
+    authorize @stash_item
   end
 
   # GET /stash_items/new
@@ -27,6 +29,7 @@ class StashItemsController < ApplicationController
   # POST /stash_items or /stash_items.json
   def create
     @stash_item = Current.user.stash_items.build(stash_item_params)
+    authorize @stash_item
     @product_color = @stash_item.product_color
     @brand = @product_color.brand
 
@@ -42,6 +45,7 @@ class StashItemsController < ApplicationController
     end
   end
   def update_ownership_status
+    authorize @stash_item
     if @stash_item.update(ownership_status: params[:ownership_status])
       respond_to do |format|
         format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item ownership status updated." }
@@ -57,6 +61,7 @@ class StashItemsController < ApplicationController
 
   # PATCH/PUT /stash_items/1 or /stash_items/1.json
   def update
+    authorize @stash_item
     @product_color = @stash_item.product_color
     @brand = @product_color.brand
     respond_to do |format|
@@ -73,6 +78,7 @@ class StashItemsController < ApplicationController
 
   # DELETE /stash_items/1 or /stash_items/1.json
   def destroy
+    authorize @stash_item
     @product_color = @stash_item.product_color
     @brand = @product_color.brand
     @stash_item.destroy!
@@ -85,13 +91,17 @@ class StashItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_stash_item
-      @stash_item = Current.user.stash_items.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_stash_item
+    @stash_item = StashItem.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def stash_item_params
-      params.require(:stash_item).permit(:product_color_id, :ownership_status)
-    end
+  # Only allow a list of trusted parameters through.
+  def stash_item_params
+    params.require(:stash_item).permit(:product_color_id, :ownership_status)
+  end
+
+  def skip_authorization?
+    action_name == "index"
+  end
 end

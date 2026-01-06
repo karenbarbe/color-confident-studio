@@ -39,4 +39,8 @@ class ColorSlotsController < ApplicationController
   def color_slot_params
     params.expect(color_slot: [ :product_color_id, :slot_type ])
   end
+
+  def skip_authorization?
+    true
+  end
 end

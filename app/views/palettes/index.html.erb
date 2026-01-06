@@ -8,7 +8,9 @@
       <h1 class="font-bold text-3xl text-base-content">Your palettes</h1>
       <p class="text-base-content/70 mt-1">Waiting for your next project</p>
     </div>
-    <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-primary" %>
+    <% if policy(Palette).create? %>
+      <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-primary" %>
+    <% end %>
   </div>
 
   <div class="tabs tabs-border">
@@ -28,7 +30,9 @@
             <div class="text-center py-16">
               <h3 class="text-lg font-medium text-base-content">No palettes yet</h3>
               <p class="text-base-content/50 mt-1">Create your first color palette to get started</p>
-              <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-outline mt-4" %>
+              <% if policy(Palette).create? %>
+                <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-outline mt-4" %>
+              <% end %>
             </div>
           <% end %>
         <% end %>
