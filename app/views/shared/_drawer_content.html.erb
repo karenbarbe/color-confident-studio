@@ -49,6 +49,18 @@
         <% end %>
       </li>
 
+      <%# Stash %>
+      <li>
+        <%= link_to stash_items_path, 
+            class: sidebar_nav_classes(:stash), 
+            title: "Stash" do %>
+          <span class="sidebar-icon">
+            <%= icon(:heart_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Stash</span>
+        <% end %>
+      </li>
+
       <%# Create %>
       <li>
         <% if policy(Palette).create? %>
@@ -63,18 +75,6 @@
             </span>
             <span class="sidebar-label">Create</span>
           <% end %>
-        <% end %>
-      </li>
-
-      <%# Stash %>
-      <li>
-        <%= link_to stash_items_path, 
-            class: sidebar_nav_classes(:stash), 
-            title: "Stash" do %>
-          <span class="sidebar-icon">
-            <%= icon(:heart_outline, css_class: "size-6") %>
-          </span>
-          <span class="sidebar-label">Stash</span>
         <% end %>
       </li>
 
