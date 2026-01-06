@@ -61,10 +61,10 @@ gem "active_link_to"
 gem "ai-chat"
 gem "appdev_support"
 gem "awesome_print"
-gem "devise"
 gem "dotenv"
 gem "carrierwave"
 gem "cloudinary"
+gem "csv"
 gem "faker"
 gem "htmlbeautifier"
 gem "http"
@@ -75,6 +75,7 @@ gem "ransack"
 gem "rollbar"
 gem "simple_form"
 gem "strip_attributes"
+gem "tailwindcss-rails", "~> 4.4"
 gem "validate_url"
 
 group :development do
@@ -104,6 +105,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver", "~> 4.11.0"
 end
-
-gem "tailwindcss-rails", "~> 4.4"
-gem "csv"
