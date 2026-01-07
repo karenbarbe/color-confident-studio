@@ -5,12 +5,14 @@
 
 ## Table of contents
 
-- [Technical stack](#technical-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+- [Color Confident Studio](#color-confident-studio)
+  - [Table of contents](#table-of-contents)
+  - [Technical stack](#technical-stack)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Contact](#contact)
 
 ## Technical stack
 
@@ -19,6 +21,7 @@
 - **Frontend:** Hotwire (Turbo + Stimulus)
 - **Styling:** Tailwind CSS with daisyUI
 - **Authentication:** Rails built-in authentication
+- **Admin panel**: Avo
 
 ## Installation
 
@@ -42,9 +45,9 @@
    rails db:setup
    ```
 
-5. Start the Rails server:
+5. Load the initial data (thread colors, brands, etc.):
    ```
-   bin/dev
+   bin/rails db:seed:all
    ```
 
 ## Usage
@@ -52,6 +55,12 @@
 1. Start the Rails server:
    ```
    bin/dev
+   ```
+   This command runs both the Rails web server and the Tailwind CSS watcher simultaneously using Foreman.
+   Alternatively, you can run them separately in two terminal windows:
+   ```
+   bin/rails server
+   bin/rails tailwindcss:watch
    ```
 
 2. Open your browser and navigate to http://localhost:3000
