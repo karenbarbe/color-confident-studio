@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount_avo
   root "pages#home"
 
   get "/dashboard" => "pages#dashboard", as: :dashboard

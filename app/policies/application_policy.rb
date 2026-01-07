@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -9,15 +7,15 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    user&.admin?
   end
 
   def show?
-    false
+    user&.admin?
   end
 
   def create?
-    false
+    user&.admin?
   end
 
   def new?
@@ -25,7 +23,7 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    user&.admin?
   end
 
   def edit?
@@ -33,7 +31,20 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    user&.admin?
+  end
+
+  # Avo-specific methods
+  def act_on?
+    user&.admin?
+  end
+
+  def reorder?
+    user&.admin?
+  end
+
+  def search?
+    user&.admin?
   end
 
   class Scope
@@ -43,17 +54,15 @@ class ApplicationPolicy
     end
 
     def resolve
-      raise NoMethodError, "You must define #resolve in #{self.class}"
+      if user&.admin?
+        scope.all
+      else
+        scope.none
+      end
     end
 
     private
 
     attr_reader :user, :scope
-  end
-
-  private
-
-  def admin?
-    user&.admin?
   end
 end

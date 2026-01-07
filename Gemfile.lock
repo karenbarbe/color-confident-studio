@@ -99,6 +99,23 @@ GEM
     appdev_support (0.2.1)
       tabulo
     ast (2.4.2)
+    avo (3.28.0)
+      actionview (>= 6.1)
+      active_link_to
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
+      addressable
+      avo-icons (>= 0.1.1)
+      docile
+      meta-tags
+      pagy (>= 7.0.0, < 43)
+      prop_initializer (>= 0.2.0)
+      turbo-rails (>= 2.0.0)
+      turbo_power (>= 0.6.0)
+      view_component (>= 3.7.0)
+      zeitwerk (>= 2.6.12)
+    avo-icons (0.1.1)
+      inline_svg
     awesome_print (1.9.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
@@ -166,6 +183,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.6.0)
+    docile (1.4.1)
     domain_name (0.6.20240107)
     dotenv (3.1.7)
     drb (2.2.1)
@@ -232,6 +250,9 @@ GEM
       railties (>= 6.0.0)
     indefinite_article (0.2.5)
       activesupport
+    inline_svg (1.10.0)
+      activesupport (>= 3.0)
+      nokogiri (>= 1.6)
     io-console (0.8.0)
     irb (1.15.1)
       pp (>= 0.6.0)
@@ -280,6 +301,8 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
+    meta-tags (2.22.2)
+      actionpack (>= 6.0.0, < 8.2)
     method_source (1.1.0)
     mini_magick (5.2.0)
       benchmark
@@ -338,6 +361,8 @@ GEM
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
+    prop_initializer (0.2.0)
+      zeitwerk (>= 2.6.18)
     propshaft (1.1.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -559,6 +584,8 @@ GEM
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
+    turbo_power (0.7.0)
+      turbo-rails (>= 1.3.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -570,6 +597,10 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
+    view_component (4.1.1)
+      actionview (>= 7.1.0, < 8.2)
+      activesupport (>= 7.1.0, < 8.2)
+      concurrent-ruby (~> 1)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -608,6 +639,7 @@ DEPENDENCIES
   ai-chat
   annotaterb
   appdev_support
+  avo (>= 3.2.1)
   awesome_print
   bcrypt (~> 3.1.7)
   better_errors

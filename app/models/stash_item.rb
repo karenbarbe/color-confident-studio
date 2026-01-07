@@ -11,6 +11,7 @@
 #
 # Indexes
 #
+#  index_stash_items_on_created_at        (created_at)
 #  index_stash_items_on_ownership_status  (ownership_status)
 #  index_stash_items_on_product_color_id  (product_color_id)
 #

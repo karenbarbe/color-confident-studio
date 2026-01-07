@@ -19,6 +19,7 @@
 #
 #  index_product_colors_on_brand_id      (brand_id)
 #  index_product_colors_on_color_family  (color_family)
+#  index_product_colors_on_created_at    (created_at)
 #  index_product_colors_on_oklch_c       (oklch_c)
 #  index_product_colors_on_oklch_h       (oklch_h)
 #  index_product_colors_on_oklch_l       (oklch_l)

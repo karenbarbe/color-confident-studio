@@ -60,6 +60,7 @@ end
 gem "active_link_to"
 gem "ai-chat"
 gem "appdev_support"
+gem "avo", ">= 3.2.1"
 gem "awesome_print"
 gem "dotenv"
 gem "carrierwave"

@@ -12,7 +12,8 @@
 #
 # Indexes
 #
-#  index_palettes_on_status  (status)
+#  index_palettes_on_created_at  (created_at)
+#  index_palettes_on_status      (status)
 #
 # Foreign Keys
 #

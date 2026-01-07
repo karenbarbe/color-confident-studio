@@ -13,6 +13,10 @@ services:
           name: color-confident-studio-db
           property: connectionString
       - key: WEB_CONCURRENCY
+        value: 0
+      - key: RAILS_MAX_THREADS
+        value: 5
+      - key: MALLOC_ARENA_MAX
         value: 2
 
 databases:
