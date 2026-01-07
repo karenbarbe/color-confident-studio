@@ -30,6 +30,11 @@
         maxlength: 72,
         class: "input input-bordered w-full" %>
 
+      <div class="mt-4 flex items-center gap-1">
+        <%= check_box_tag :remember_me, "1", false %>
+        <%= label_tag :remember_me, "Remember me" %>
+      </div>
+
       <%# Submit %>
 
       <%= form.submit "Log in", class: "btn btn-neutral mt-4 w-full" %>

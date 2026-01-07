@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(registration_params)
     if @user.save
-      start_new_session_for @user
+      start_new_session_for @user, remember: true
       redirect_to dashboard_path
     else
       render :new, alert: "Unable to create account."
