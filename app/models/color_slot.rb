@@ -4,7 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  position         :integer          default(0), not null
-#  slot_type        :string           default("main"), not null
+#  slot_type        :string           default("thread"), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  palette_id       :bigint           not null
@@ -27,13 +27,11 @@ class ColorSlot < ApplicationRecord
   belongs_to :palette
   belongs_to :product_color
 
-  SLOT_TYPES = %w[background main secondary accent].freeze
+  SLOT_TYPES = %w[background thread].freeze
 
   SLOT_CATEGORIES = {
     "background" => "fabric",
-    "main" => "thread",
-    "secondary" => "thread",
-    "accent" => "thread"
+    "thread" => "thread"
   }.freeze
 
   validates :slot_type, inclusion: { in: SLOT_TYPES }
@@ -44,9 +42,7 @@ class ColorSlot < ApplicationRecord
 
   scope :by_type, ->(type) { where(slot_type: type).order(:position) }
   scope :background, -> { by_type("background") }
-  scope :main, -> { by_type("main") }
-  scope :secondary, -> { by_type("secondary") }
-  scope :accent, -> { by_type("accent") }
+  scope :thread, -> { by_type("thread") }
 
   before_create :set_position
 
@@ -60,13 +56,14 @@ class ColorSlot < ApplicationRecord
   def slot_type_limit_not_exceeded
     return unless palette && slot_type
 
-    max = Palette::SLOT_LIMITS[slot_type][:max]
-    # Count only persisted slots to avoid counting unsaved duplicates
-    # This could also be achieved with `where(slot_type: slot_type).count` but we want to avoid an extra DB query
-    current_count = palette.section_slots(slot_type).select(&:persisted?).length
+    max = Palette::SLOT_LIMITS.dig(slot_type, :max)
+    return unless max
+
+    current_count = palette.color_slots.where(slot_type: slot_type).count
 
     if current_count >= max
-      errors.add(:base, "##{slot_type.capitalize} section is full (maximum #{max})")
+      label = slot_type == "background" ? "Background" : "Thread colors"
+      errors.add(:base, "#{label} section is full (maximum #{max})")
     end
   end
 

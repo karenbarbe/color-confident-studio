@@ -1,10 +1,97 @@
-<% content_for :title, "Editing palette" %>
+<% content_for :title, @palette.name.presence || "Edit palette" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing palette</h1>
+<div class="mx-auto w-full mt-8 pb-8 space-y-6">
 
-  <%= render "form", palette: @palette %>
+  <%# Header %>
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-2xl text-base-content">
+        <%= @palette.name.presence || "Edit palette" %>
+      </h1>
+    </div>
+    <%= link_to "Cancel", palettes_path, class: "btn btn-ghost" %>
+  </div>
 
-  <%= link_to "Show this palette", @palette, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to palettes", palettes_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%# Flash messages %>
+  <% if alert %>
+    <div class="bg-red-50 text-red-700 px-4 py-3 rounded-lg">
+      <%= alert %>
+    </div>
+  <% end %>
+
+  <% if notice %>
+    <div class="bg-green-50 text-green-700 px-4 py-3 rounded-lg">
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <%# Palette name and description form %>
+  <%= form_with(model: @palette, url: palette_path(@palette), method: :patch, class: "space-y-4") do |form| %>
+    <div class="bg-base-100 rounded-xl shadow-sm p-5 space-y-4">
+      <div>
+        <%= form.label :name, "Palette name", class: "block text-sm font-medium text-base-content/70 mb-1" %>
+        <%= form.text_field :name,
+            placeholder: "Give your palette a name",
+            class: "input input-bordered w-full" %>
+      </div>
+
+      <div>
+        <%= form.label :description, "Description (optional)", class: "block text-sm font-medium text-base-content/70 mb-1" %>
+        <%= form.text_area :description,
+            placeholder: "What's this palette for?",
+            rows: 2,
+            class: "textarea textarea-bordered w-full" %>
+      </div>
+
+      <div class="flex justify-end">
+        <%= form.submit "Update", class: "btn btn-ghost" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%# Color sections %>
+  <div class="space-y-4">
+
+    <%# Background section %>
+    <%= render "palette_section",
+        palette: @palette,
+        section: "background",
+        title: "Background",
+        subtitle: "Choose 1 fabric color as your base",
+        slots: @background_slots,
+        max: 1 %>
+
+    <%# Thread colors section %>
+    <%= render "palette_section",
+        palette: @palette,
+        section: "thread",
+        title: "Thread colors",
+        subtitle: "Add up to 12 thread colors",
+        slots: @thread_slots,
+        max: 12 %>
+
+  </div>
+
+  <%# Save / View button %>
+  <div class="bg-base-100 rounded-xl shadow-sm p-5">
+    <% if @palette.complete? %>
+      <%= link_to "Save palette", @palette, class: "btn btn-primary w-full" %>
+    <% else %>
+      <div class="space-y-3">
+        <button class="btn btn-primary w-full" disabled>Save palette</button>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Delete palette %>
+  <% if policy(@palette).destroy? %>
+    <div class="text-center">
+      <%= button_to "Delete palette",
+          palette_path(@palette),
+          method: :delete,
+          class: "btn btn-ghost text-red-600",
+          data: { turbo_confirm: "Are you sure you want to delete this palette?" } %>
+    </div>
+  <% end %>
+
 </div>

@@ -19,15 +19,11 @@ class PalettePolicy < ApplicationPolicy
     owner?
   end
 
-  def studio?
+  def edit?
     owner?
   end
 
   def pick_color?
-    owner?
-  end
-
-  def publish?
     owner?
   end
 

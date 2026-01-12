@@ -1,6 +1,6 @@
 class ColorSlotPolicy < ApplicationPolicy
   def create?
-    palette_owner? && record.palette.draft?
+    palette_owner?
   end
 
   def destroy?

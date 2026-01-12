@@ -1,23 +1,21 @@
 class ColorSlotsController < ApplicationController
   before_action :set_palette
   before_action :ensure_current_user_is_creator
-  before_action :set_color_slot, only: %i[ destroy ]
+  before_action :set_color_slot, only: %i[destroy]
 
   def create
     @color_slot = @palette.color_slots.new(color_slot_params)
 
     if @color_slot.save
-      redirect_to studio_palette_path(@palette), notice: "Color added to #{@color_slot.slot_type} section."
+      redirect_to edit_palette_path(@palette), notice: "Color added."
     else
-      redirect_to studio_palette_path(@palette), alert: @color_slot.errors.full_messages.join(", ")
+      redirect_to edit_palette_path(@palette), alert: @color_slot.errors.full_messages.join(", ")
     end
   end
 
   def destroy
-    slot_type = @color_slot.slot_type
     @color_slot.destroy!
-
-    redirect_to studio_palette_path(@palette), notice: "Color removed from #{slot_type} section."
+    redirect_to edit_palette_path(@palette), notice: "Color removed."
   end
 
   private

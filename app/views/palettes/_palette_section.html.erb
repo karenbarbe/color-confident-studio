@@ -1,4 +1,4 @@
-<%# locals: (palette:, section:, title:, subtitle:, slots:, min:, max:) %>
+<%# locals: (palette:, section:, title:, subtitle:, slots:, max:) %>
 
 <% is_full = palette.slot_full?(section) %>
 <% current_count = slots.length %>
@@ -31,21 +31,12 @@
         <% end %>
       <% end %>
     <% end %>
-
-    <%# Empty state placeholders to show minimum requirement %>
-    <% if current_count == 0 && min > 0 %>
-      <% (min - 1).times do %>
-        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg border-2 border-dashed border-base-content/20 flex items-center justify-center">
-          <span class="text-xs text-gray-300">+</span>
-        </div>
-      <% end %>
-    <% end %>
   </div>
 
-  <%# Minimum requirement hint %>
-  <% if current_count < min %>
+  <%# Empty state hint %>
+  <% if current_count == 0 %>
     <p class="text-xs text-amber-600">
-      Add at least <%= min %> color<%= min > 1 ? 's' : '' %> to this section
+      Add at least 1 color to this section
     </p>
   <% end %>
 </div>

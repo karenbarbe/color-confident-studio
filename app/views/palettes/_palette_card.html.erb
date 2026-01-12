@@ -1,33 +1,25 @@
-<%# locals: (palette:, is_draft: false) %>
+<%# locals: (palette:) %>
 
 <div class="bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-200">
   <%# Color preview strip %>
   <div class="h-16 flex">
-    <% background = palette.section_slots("background") %>
-    <% if background.present? %>
-    <% color = background.first.product_color %>
-      <div class="w-4/10 h-full" style="background-color: #<%= color.hex_color %>;"></div>
+    <%# Background color (40% width) %>
+    <% if palette.background_slots.any? %>
+      <% color = palette.background_slots.first.product_color %>
+      <div class="w-2/5 h-full" style="background-color: #<%= color.hex_color %>;"></div>
     <% else %>
-      <div class="w-4/10 h-full bg-gray-100 flex items-center justify-center">
+      <div class="w-2/5 h-full bg-gray-100 flex items-center justify-center">
         <span class="text-xs text-gray-400">BG</span>
       </div>
     <% end %>
 
-    <div class="w-3/10 flex">
-      <% palette.section_slots("main").each do |slot| %>
+    <%# Thread colors (60% width) %>
+    <div class="w-3/5 flex">
+      <% palette.thread_slots.each do |slot| %>
         <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
-    </div>
-
-    <div class="w-2/10 flex">
-      <% palette.section_slots("secondary").each do |slot| %>
-        <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
-      <% end %>
-    </div>
-
-    <div class="w-1/10 flex">
-      <% palette.section_slots("accent").each do |slot| %>
-        <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+      <% if palette.thread_slots.empty? %>
+        <div class="flex-1 h-full bg-gray-50"></div>
       <% end %>
     </div>
   </div>
@@ -41,19 +33,16 @@
         </h3>
         <p class="text-sm text-gray-500">
           <%= palette.color_slots.length %> colors
-          <% if is_draft %>
-            <span class="text-amber-600">• Draft</span>
-          <% end %>
         </p>
       </div>
 
-      <% if is_draft %>
-        <%= link_to studio_palette_path(palette), class: "btn btn-sm btn-ghost" do %>
-          Continue
-        <% end %>
-      <% else %>
+      <% if palette.complete? %>
         <%= link_to palette, class: "btn btn-sm btn-ghost" do %>
           View
+        <% end %>
+      <% else %>
+        <%= link_to edit_palette_path(palette), class: "btn btn-sm btn-ghost" do %>
+          Continue
         <% end %>
       <% end %>
     </div>

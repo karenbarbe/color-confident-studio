@@ -32,11 +32,9 @@ Rails.application.routes.draw do
 
   resources :palettes do
     member do
-      get :studio
       get :pick_color
-      patch :publish
     end
-    resources :color_slots, only: [ :create, :destroy  ]
+    resources :color_slots, only: [ :create, :destroy ]
   end
 
   resources :product_colors, only: [ :index, :show ]

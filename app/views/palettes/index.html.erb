@@ -13,53 +13,21 @@
     <% end %>
   </div>
 
-  <div class="tabs tabs-border">
-    <input type="radio" name="palettes_tab" class="tab" aria-label="Saved palettes" checked>
-    <div class="tab-content border-base-content/20 bg-base-100 px-4 py-8">
-      <%# Saved palettes tab %>
-      <section class="space-y-4">
-        <% if @palettes.any? %>
-          <h2 class="text-lg font-semibold text-base-content/70">Saved palettes</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <% @palettes.each do |palette| %>
-              <%= render "palette_card", palette: palette, is_draft: false %>
-            <% end %>
-          </div>
-        <% else %>
-          <% unless @draft_palettes.any? %>
-            <div class="text-center py-16">
-              <h3 class="text-lg font-medium text-base-content">No palettes yet</h3>
-              <p class="text-base-content/50 mt-1">Create your first color palette to get started</p>
-              <% if policy(Palette).create? %>
-                <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-outline mt-4" %>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-      </section>
-
-    </div>
-    <%#  Draft palettes tab %>
-    <input type="radio" name="palettes_tab" class="tab" aria-label="Draft palettes">
-    <div class="tab-content border-base-content/20 bg-base-100 px-4 py-8">
-      <% if @draft_palettes.any? %>
-        <section class="space-y-4">
-          <h2 class="text-lg font-semibold text-base-content/70">Drafts</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <% @draft_palettes.each do |palette| %>
-              <%= render "palette_card", palette: palette, is_draft: true %>
-            <% end %>
-          </div>
-        </section>
-      <% else %>
-        <div class="text-center py-16">
-          <h3 class="text-lg font-medium text-base-content">No palettes yet</h3>
-          <p class="text-base-content/50 mt-1">Create your first color palette to get started</p>
-          <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-outline mt-4" %>
-        </div>
+  <%# Palettes grid %>
+  <% if @palettes.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% @palettes.each do |palette| %>
+        <%= render "palette_card", palette: palette %>
       <% end %>
-
     </div>
-  </div>
+  <% else %>
+    <div class="text-center py-16">
+      <h3 class="text-lg font-medium text-base-content">No palettes yet</h3>
+      <p class="text-base-content/50 mt-1">Create your first color palette to get started</p>
+      <% if policy(Palette).create? %>
+        <%= button_to "Create a palette", palettes_path, method: :post, class: "btn btn-outline mt-4" %>
+      <% end %>
+    </div>
+  <% end %>
 
 </div>
