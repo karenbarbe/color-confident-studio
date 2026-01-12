@@ -8,13 +8,15 @@
 #  name                 :string
 #  product_colors_count :integer          default(0), not null
 #  slug                 :string
+#  subheading           :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #
 # Indexes
 #
-#  index_brands_on_category  (category)
-#  index_brands_on_slug      (slug) UNIQUE
+#  index_brands_on_category    (category)
+#  index_brands_on_created_at  (created_at)
+#  index_brands_on_slug        (slug) UNIQUE
 #
 class Brand < ApplicationRecord
   has_many :product_colors, dependent: :destroy
