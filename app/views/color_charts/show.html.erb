@@ -14,20 +14,17 @@
          data-action="fabric-picker:styleChanged@window->fabric-background#update">
 
       <%# Header card %>
-      <div class="header-card">
+      <div class="header-card bg-base-100/90">
         <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
-        <div class="mt-4">
-          <%= render "fabric_picker/picker" %>
-        </div>
       </div>
 
       <%# Sticky nav wrapper %>
       <div class="sticky-nav-wrapper"
-     data-controller="sticky-nav"
+     data-controller="sticky-nav header-card"
      data-sticky-nav-stuck-class="is-stuck">
 
         <%# Nav card %>
-        <div class="sticky-nav" data-sticky-nav-target="nav">
+        <div class="sticky-nav bg-base-100/90" data-sticky-nav-target="nav">
           <%# Inner wrapper for content alignment when stuck %>
           <div class="sticky-nav-inner">
             <%# Mini header %>
@@ -45,9 +42,8 @@
       <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2 pt-3">
         <% @colors_by_family.each do |family, colors| %>
           <section id="<%= family.parameterize %>"
-                   class="scroll-mt-28 space-y-2"
+                   class="scroll-mt-28 space-y-2 pt-12"
                    data-scroll-spy-target="section">
-            <%= render "shared/color_divider", family_name: family %>
             <%= render "shared/color_grid", product_colors: colors %>
           </section>
         <% end %>

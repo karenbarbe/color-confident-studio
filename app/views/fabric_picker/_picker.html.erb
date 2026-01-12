@@ -1,14 +1,14 @@
 <div data-controller="fabric-picker"
      data-fabric-picker-root-url-value="<%= fabric_picker_root_path %>"
-     class="inline-block relative py-2">
+     class="inline-block relative">
   
   <%# Trigger button %>
   <button type="button"
           data-action="click->fabric-picker#toggle"
           data-fabric-picker-target="button"
-          class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer bg-base-100 text-base-content ring-1 ring-base-content/30 hover:ring-base-content/50">
+          class="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer bg-base-100 text-base-content ring-1 ring-base-content/30 hover:ring-base-content/50">
     <span data-fabric-picker-target="indicator"
-          class="w-4 h-4 rounded-full border-2 border-dashed border-base-content/50 transition-all">
+          class="shrink-0 w-4 h-4 rounded-full border-2 border-dashed border-base-content/50 transition-all">
     </span>
     <span data-fabric-picker-target="label">Preview on fabric</span>
     <%= icon(:chevron_down_outline, css_class: "size-4 text-base-content/70 transition-transform", data: { fabric_picker_target: "chevron" }) %>
@@ -16,7 +16,7 @@
 
   <%# Dropdown panel %>
   <div data-fabric-picker-target="dropdown"
-       class="hidden absolute top-full left-0 w-72 bg-base-100 rounded-xl shadow-xl ring-1 ring-base-content/10 z-50 overflow-hidden">
+       class="hidden absolute top-full left-0 xl:left-auto xl:right-0 w-72 bg-base-100 rounded-lg shadow-xl ring-1 ring-base-content/10 z-50 overflow-hidden">
     
     <%# Back button header - shown when not on root %>
     <div data-fabric-picker-target="header" class="hidden py-2 border-b border-base-content/10">

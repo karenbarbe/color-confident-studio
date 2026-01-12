@@ -15,16 +15,34 @@
          data-action="fabric-picker:styleChanged@window->fabric-background#update">
 
       <%# Header card %>
-      <div class="header-card">
-        <div class="space-y-4">
+      <div class="header-card bg-base-100/90">
+        <div class="grid grid-cols-1 gap-10 md:grid-cols-[2fr_3fr] xl:grid-cols-[1.75fr_3fr_2fr] xl:gap-x-14 xl:gap-y-8">
+          <div class="space-y-3 ">
+            <h1 class="inline-block font-bold text-3xl lg:text-4xl text-base-content border-t-4 border-base-content pt-3">Your stash</h1>
+          <%# Stats row %>
+            <div class="flex flex-wrap items-center gap-3 sm:gap-4 sm:gap-y-2 text-sm text-base-content">
+              <span class="flex items-center gap-1 sm:gap-1.5">
+                <%= icon (:grid_outline) %>
+                <span><%= @stash_items.count %> colors</span>
+              </span>
+              <span class="flex items-center gap-1 sm:gap-1.5">
+                <%= icon (:check_circle_outline) %>
+                <span><%= @stash_items.owned.count %> owned</span>
+              </span>
+              <span class="flex items-center gap-1 sm:gap-1.5">
+                <%= icon (:shopping_bag_outline) %>
+                <span><%= @stash_items.wish_list.count %> in your wishlist</span>
+              </span>
+            </div>
+
+          </div>
           <div>
-            <h1 class="font-bold text-2xl sm:text-3xl text-base-content">Your stash</h1>
-            <p class="text-base-content/70 mt-1">Track what you own and what's on your wish list.</p>
+            <p class="text-base-content">Track what you own and what's on your wish list.</p>
           </div>
 
           <%# Fabric picker %>
           <div data-stash-view-toggle-target="fabricPickerWrapper"
-               class="transition-opacity duration-300">
+               class="transition-opacity duration-300 xl:justify-self-end">
             <%= render "fabric_picker/picker" %>
           </div>
         </div>
@@ -36,7 +54,7 @@
            data-sticky-nav-stuck-class="is-stuck">
 
         <%# Nav card %>
-        <div class="sticky-nav" data-sticky-nav-target="nav">
+        <div class="sticky-nav bg-base-100/90" data-sticky-nav-target="nav">
           <%# Inner wrapper for content alignment when stuck %>
           <div class="sticky-nav-inner">
             <%# Mini header %>
@@ -46,52 +64,48 @@
 
             <%# Filters and view toggle %>
             <div class="flex flex-wrap items-center gap-2">
-                <%# Ownership filter %>
-                <div class="inline-flex rounded-full bg-base-300 p-1 text-xs md:text-sm font-medium">
-                  <button type="button"
+              <%# Ownership filter %>
+              <div class="inline-flex rounded-full bg-base-300 p-1 text-xs md:text-sm font-medium">
+                <button type="button"
                           data-stash-filter-target="filterButton"
                           data-filter="all"
                           data-action="click->stash-filter#filter"
-                    class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                    All
-                    <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="all"><%= @stash_items.count %></span>
-                  </button>
-                  <button type="button"
+                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+                  All
+                </button>
+                <button type="button"
                           data-stash-filter-target="filterButton"
                           data-filter="owned"
                           data-action="click->stash-filter#filter"
-                    class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                    Owned
-                    <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="owned"><%= @stash_items.owned.count %></span>
-                  </button>
-                  <button type="button"
+                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+                  Owned         
+                </button>
+                <button type="button"
                           data-stash-filter-target="filterButton"
                           data-filter="wish_list"
                           data-action="click->stash-filter#filter"
-                    class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                    Wishlist
-                    <span class="text-base-content/50 ml-0.5" data-stash-filter-target="count" data-count-for="wish_list"><%= @stash_items.wish_list.count %></span>
-                  </button>
-                </div>
+                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+                  Wishlist
+                </button>
+              </div>
 
-                <%# Category filter %>
-                <div class="inline-flex rounded-full bg-base-300 p-1 text-xs md:text-sm font-medium">
-                  <button type="button"
+              <%# Category filter %>
+              <div class="inline-flex rounded-full bg-base-300 p-1 text-xs md:text-sm font-medium">
+                <button type="button"
                           data-stash-filter-target="categoryButton"
                           data-category="thread"
                           data-action="click->stash-filter#filterByCategory"
-                    class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                    Thread
-                  </button>
-                  <button type="button"
+                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+                  Thread
+                </button>
+                <button type="button"
                           data-stash-filter-target="categoryButton"
                           data-category="fabric"
                           data-action="click->stash-filter#filterByCategory"
-                    class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                    Fabric
-                  </button>
-                </div>
-            
+                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
+                  Fabric
+                </button>
+              </div>
 
               <%# View toggle %>
               <div class="inline-flex ml-auto rounded-full bg-base-300 p-1">
@@ -122,7 +136,7 @@
 
         <% if @stash_items.any? %>
           <%# Grid view %>
-          <ul class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6"
+          <ul class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 sm:gap-6 pt-12"
               data-stash-view-toggle-target="gridView">
             <% @stash_items.each do |stash_item| %>
               <% product_color = stash_item.product_color %>
