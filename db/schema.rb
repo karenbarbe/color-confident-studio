@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_05_152224) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_06_183458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_152224) do
     t.string "category", default: "general"
     t.text "description"
     t.index ["category"], name: "index_brands_on_category"
+    t.index ["created_at"], name: "index_brands_on_created_at"
     t.index ["slug"], name: "index_brands_on_slug", unique: true
   end
 
@@ -33,6 +34,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_152224) do
     t.datetime "updated_at", null: false
     t.string "slot_type", default: "main", null: false
     t.integer "position", default: 0, null: false
+    t.index ["created_at"], name: "index_color_slots_on_created_at"
     t.index ["palette_id", "product_color_id"], name: "index_color_slots_on_palette_id_and_product_color_id", unique: true
     t.index ["palette_id", "slot_type", "position"], name: "index_color_slots_on_palette_id_and_slot_type_and_position"
     t.index ["palette_id"], name: "index_color_slots_on_palette_id"
@@ -46,6 +48,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_152224) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status", default: "draft", null: false
+    t.index ["created_at"], name: "index_palettes_on_created_at"
     t.index ["status"], name: "index_palettes_on_status"
   end
 
@@ -63,6 +66,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_152224) do
     t.string "color_family"
     t.index ["brand_id"], name: "index_product_colors_on_brand_id"
     t.index ["color_family"], name: "index_product_colors_on_color_family"
+    t.index ["created_at"], name: "index_product_colors_on_created_at"
     t.index ["oklch_c"], name: "index_product_colors_on_oklch_c"
     t.index ["oklch_h"], name: "index_product_colors_on_oklch_h"
     t.index ["oklch_l"], name: "index_product_colors_on_oklch_l"
@@ -225,6 +229,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_152224) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "ownership_status"
+    t.index ["created_at"], name: "index_stash_items_on_created_at"
     t.index ["ownership_status"], name: "index_stash_items_on_ownership_status"
     t.index ["product_color_id"], name: "index_stash_items_on_product_color_id"
   end
