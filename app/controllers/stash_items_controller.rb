@@ -5,9 +5,22 @@ class StashItemsController < ApplicationController
   def index
     authorize StashItem
     @stash_items = policy_scope(StashItem)
-    .joins(product_color: :brand)
-    .includes(product_color: :brand)
-    .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
+      .joins(product_color: :brand)
+      .includes(product_color: :brand)
+      .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
+
+    # Base query for counts
+    counts_base = policy_scope(StashItem).joins(product_color: :brand)
+
+    # Counts by category (all items)
+    @counts_by_category = counts_base.group("brands.category").count
+
+    # Counts by category for owned items
+    @owned_by_category = counts_base.owned.group("brands.category").count
+
+    # Counts by category for wish_list items
+    @wish_list_by_category = counts_base.wish_list.group("brands.category").count
+
     @product_colors = @stash_items.map(&:product_color)
     @stashed_color_ids = @product_colors.map(&:id).to_set
   end
