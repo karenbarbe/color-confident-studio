@@ -26,6 +26,9 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
+  validates :username, uniqueness: true
+  validates :email_address, uniqueness: true
+
   def admin?
     admin == true
   end

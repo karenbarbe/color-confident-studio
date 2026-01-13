@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   get "/signup" => "users#new", as: :signup
 
-  resources :users, only: [ :new, :create, :show ]
+  resources :users, only: [ :new, :create, :show, :edit, :update ]
   resource :session, only: [ :new, :create, :destroy ]
   resources :passwords, param: :token
 
