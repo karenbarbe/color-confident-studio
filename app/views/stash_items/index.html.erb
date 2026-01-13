@@ -17,21 +17,30 @@
       <%# Header card %>
       <div class="header-card bg-base-100/90">
         <div class="grid grid-cols-1 gap-10 md:grid-cols-[2fr_3fr] xl:grid-cols-[1.75fr_3fr_2fr] xl:gap-x-14 xl:gap-y-8">
-          <div class="space-y-3 ">
-            <h1 class="inline-block font-bold text-3xl lg:text-4xl text-base-content border-t-4 border-base-content pt-3">Your stash</h1>
-          <%# Stats row %>
+          <div class="space-y-3 border-t-4 border-base-content pt-3">
+            <h1 class="inline-block font-bold text-3xl lg:text-4xl text-base-content">Your stash</h1>
+            <%# Stats row %>
             <div class="flex flex-wrap items-center gap-3 sm:gap-4 sm:gap-y-2 text-sm text-base-content">
               <span class="flex items-center gap-1 sm:gap-1.5">
-                <%= icon (:grid_outline) %>
-                <span><%= @stash_items.count %> colors</span>
+                <%= icon(:grid_outline) %>
+                <span>
+                  <%= @stash_items.count %> colors:
+                  <%= @counts_by_category.map { |category, count| "#{count} #{category}" }.join(" · ") %>
+                </span>
               </span>
               <span class="flex items-center gap-1 sm:gap-1.5">
-                <%= icon (:check_circle_outline) %>
-                <span><%= @stash_items.owned.count %> owned</span>
+                <%= icon(:check_circle_outline) %>
+                <span>
+                  <%= @stash_items.owned.count %> owned:
+                  <%= @owned_by_category.map { |category, count| "#{count} #{category}" }.join(" · ") %>
+                </span>
               </span>
               <span class="flex items-center gap-1 sm:gap-1.5">
-                <%= icon (:shopping_bag_outline) %>
-                <span><%= @stash_items.wish_list.count %> in your wishlist</span>
+                <%= icon(:shopping_bag_outline) %>
+                <span>
+                  <%= @stash_items.wish_list.count %> in wishlist:
+                  <%= @wish_list_by_category.map { |category, count| "#{count} #{category}" }.join(" · ") %>
+                </span>
               </span>
             </div>
 
@@ -65,7 +74,7 @@
             <%# Filters and view toggle %>
             <div class="flex flex-wrap items-center gap-2">
               <%# Ownership filter %>
-              <div class="inline-flex rounded-full bg-base-300 p-1 text-xs md:text-sm font-medium">
+              <div class="inline-flex rounded-full bg-base-content/10 p-1 text-xs md:text-sm font-medium">
                 <button type="button"
                           data-stash-filter-target="filterButton"
                           data-filter="all"
@@ -90,7 +99,7 @@
               </div>
 
               <%# Category filter %>
-              <div class="inline-flex rounded-full bg-base-300 p-1 text-xs md:text-sm font-medium">
+              <div class="inline-flex rounded-full bg-base-content/10 p-1 text-xs md:text-sm font-medium">
                 <button type="button"
                           data-stash-filter-target="categoryButton"
                           data-category="thread"
@@ -108,14 +117,14 @@
               </div>
 
               <%# View toggle %>
-              <div class="inline-flex ml-auto rounded-full bg-base-300 p-1">
+              <div class="inline-flex ml-auto rounded-full bg-base-content/10 p-1">
                 <button type="button"
                         data-stash-view-toggle-target="viewButton"
                         data-view="grid"
                         data-action="click->stash-view-toggle#switchView"
                   class="p-1.5 rounded-full transition-all cursor-pointer"
                   title="Grid view">
-                  <%= icon(:grid_outline, css_class: "size-5") %>
+                  <%= icon(:grid_outline, css_class: "size-4.5") %>
                 </button>
                 <button type="button"
                         data-stash-view-toggle-target="viewButton"
@@ -123,7 +132,7 @@
                         data-action="click->stash-view-toggle#switchView"
                   class="p-1.5 rounded-full transition-all cursor-pointer"
                   title="List view">
-                  <%= icon(:list_outline, css_class: "size-5") %>
+                  <%= icon(:list_outline, css_class: "size-4.5") %>
                 </button>
               </div>
             </div>
@@ -159,18 +168,15 @@
 
           <%# Empty state for filtered results %>
           <div class="hidden text-center py-12" data-stash-filter-target="emptyState">
-            <p class="text-base-content/70">No colors match this filter.</p>
+            <p class="text-base-content/70" data-fabric-contrast-target="emptyState">No colors match this filter.</p>
           </div>
         <% else %>
           <%# Empty stash state %>
-          <div class="text-center py-12">
-            <div class="inline-flex items-center justify-center size-16 rounded-full bg-base-100 mb-4">
-              <%= icon(:heart_outline, css_class: "size-8 text-base-content/40") %>
-            </div>
-            <h2 class="text-lg font-semibold text-base-content mb-1">Your stash is empty</h2>
-            <p class="text-base-content/70 mb-4">Start adding colors from the color charts to build your collection.</p>
+          <div class="text-center py-12" >
+            <h2 class="text-lg font-semibold text-base-content mb-1" data-fabric-contrast-target="emptyState">Your stash is empty</h2>
+            <p class="text-base-content/70 mb-4" data-fabric-contrast-target="emptyState">Start adding colors from the color charts to build your collection.</p>
             <%= link_to "Browse color charts", color_charts_path,
-                        class: "inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-content font-medium hover:bg-primary/90 transition-colors" %>
+                        class: "btn btn-neutral" %>
           </div>
         <% end %>
 
