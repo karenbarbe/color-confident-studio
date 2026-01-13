@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["filterButton", "categoryButton", "item"]
+  static targets = ["filterButton", "categoryButton", "item", "emptyState"]
   
   static values = {
     filter: { type: String, default: "all" }, // "all" | "owned" | "wish_list"
