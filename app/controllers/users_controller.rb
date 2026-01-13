@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   allow_unauthenticated_access only: [ :new, :create ]
-  before_action :set_user, only: [ :show, :destroy ]
+  before_action :set_user, only: [ :show, :edit, :update, :destroy ]
+
   def new
     @user = User.new
   end
@@ -19,6 +20,19 @@ class UsersController < ApplicationController
     authorize @user
   end
 
+  def edit
+    authorize @user
+  end
+
+  def update
+    authorize @user
+    if @user.update(update_params)
+      redirect_to user_path(@user), notice: "Profile updated successfully."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     authorize @user
     @user.destroy
@@ -29,6 +43,10 @@ class UsersController < ApplicationController
 
   def registration_params
     params.require(:user).permit(:first_name, :last_name, :username, :email_address, :password, :password_confirmation)
+  end
+
+  def update_params
+    params.require(:user).permit(:first_name, :last_name, :username)
   end
 
   def set_user
