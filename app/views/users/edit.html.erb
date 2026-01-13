@@ -1,2 +1,72 @@
-<h1>Users#edit</h1>
-<p>Find me in app/views/users/edit.html.erb</p>
+<div class="mx-auto mt-8 max-w-sm space-y-6">
+  <h1 class="text-3xl font-bold">Edit profile</h1>
+
+  <fieldset class="fieldset bg-base-200 rounded-box p-4">
+    <%= form_with model: @user, class: "space-y-4" do |form| %>
+
+      <% if @user.errors.any? %>
+        <div class="alert alert-error alert-soft">
+          <ul>
+            <% @user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%# First name %>
+      <div>
+        <%= form.label :first_name, class: "label" do %>
+          <span class="label-text">First name</span>
+        <% end %>
+        <%= form.text_field :first_name,
+            required: true,
+            autofocus: true,
+            placeholder: "Enter your first name",
+            class: "input input-bordered w-full" %>
+      </div>
+
+      <%# Last name %>
+      <div>
+        <%= form.label :last_name, class: "label" do %>
+          <span class="label-text">Last name</span>
+        <% end %>
+        <%= form.text_field :last_name,
+            required: true,
+            placeholder: "Enter your last name",
+            class: "input input-bordered w-full" %>
+      </div>
+
+      <%# Username %>
+      <div>
+        <%= form.label :username, class: "label" do %>
+          <span class="label-text">Username</span>
+        <% end %>
+        <%= form.text_field :username,
+            required: true,
+            placeholder: "Enter your username",
+            class: "input input-bordered w-full" %>
+      </div>
+
+      <%# Submit %>
+      <div class="flex justify-end gap-2 pt-2">
+        <%= link_to "Cancel", user_path(@user), class: "btn btn-ghost" %>
+        <%= form.submit "Save changes", class: "btn btn-neutral" %>
+      </div>
+
+    <% end %>
+  </fieldset>
+
+  <%# Delete account %>
+  <div class="pt-4 mt-20 border-t border-base-300">
+    <h2 class="text-md font-semibold text-base-content/80 mb-2">Thinking of leaving?</h2>
+    <p class="text-xs text-base-content/70 mb-4">
+      If you delete your account, all your palettes and stash items will be permanently removed.
+    </p>
+    <%= button_to "Delete account", user_path(@user), 
+      method: :delete, 
+      class: "btn btn-error btn-outline btn-sm",
+      data: { turbo_confirm: "Are you sure? This will permanently delete your account and all your data." } %>
+  </div>
+
+</div>
