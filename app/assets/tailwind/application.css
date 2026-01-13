@@ -168,5 +168,5 @@
 }
 
 .stash-filter-inactive {
-  @apply text-base-content/70 hover:text-base-content;
+  @apply text-base-content/80 hover:text-base-content;
 }
