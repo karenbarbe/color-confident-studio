@@ -31,6 +31,11 @@ const MODE_STYLES = {
     default: "bg-base-content/20",
     light: "bg-gray-500",
     dark: "bg-white/50"
+  },
+  emptyState: {
+    default: "text-base-content/70",
+    light: "text-gray-900",
+    dark: "text-white/90"
   }
 }
 
@@ -43,7 +48,7 @@ const ALL_VARIANTS = Object.fromEntries(
 )
 
 export default class extends Controller {
-  static targets = ["swatch", "divider"]
+  static targets = ["swatch", "divider", "emptyState"]
 
   connect() {
     // Listen for fabric picker changes (window event for cross-DOM communication)
@@ -63,6 +68,7 @@ export default class extends Controller {
   applyMode(mode) {
     this.updateSwatches(mode)
     this.updateDividers(mode)
+    this.updateEmptyState(mode)
   }
 
   updateSwatches(mode) {
@@ -89,6 +95,12 @@ export default class extends Controller {
 
       if (text) this.applyStyle(text, "dividerText", mode)
       lines.forEach(line => this.applyStyle(line, "dividerLine", mode))
+    })
+  }
+
+  updateEmptyState(mode) {
+    this.emptyStateTargets.forEach(element => {
+      this.applyStyle(element, "emptyState", mode)
     })
   }
 
