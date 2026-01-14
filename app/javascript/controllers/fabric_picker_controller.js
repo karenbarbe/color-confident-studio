@@ -68,28 +68,35 @@ export default class extends Controller {
   }
 
   showDropdown() {
-    // Reset navigation to root
-    this.history = []
-    this.updateHeader()
-    
-    // Load root content with current state
-    if (this.hasContentTarget) {
-      const url = this.buildRootUrl()
-      this.contentTarget.src = url
-    }
-    
-    // Show dropdown
-    if (this.hasDropdownTarget) {
-      this.dropdownTarget.classList.remove("hidden")
-    }
-    if (this.hasChevronTarget) {
-      this.chevronTarget.classList.add("rotate-180")
-    }
+  // Reset navigation to root
+  this.history = []
+  this.updateHeader()
+  
+  // Load root content with current state
+  if (this.hasContentTarget) {
+    const url = this.buildRootUrl()
+    this.contentTarget.src = url
   }
+  
+  // Show dropdown with fade-in
+  if (this.hasDropdownTarget) {
+    this.dropdownTarget.classList.remove("hidden")
+    // Force a reflow to ensure the transition happens
+    this.dropdownTarget.offsetHeight
+    this.dropdownTarget.classList.remove("opacity-0")
+  }
+  if (this.hasChevronTarget) {
+    this.chevronTarget.classList.add("rotate-180")
+  }
+}
 
   hideDropdown() {
     if (this.hasDropdownTarget) {
-      this.dropdownTarget.classList.add("hidden")
+      this.dropdownTarget.classList.add("opacity-0")
+      // Wait for transition to complete before hiding
+      setTimeout(() => {
+        this.dropdownTarget.classList.add("hidden")
+      }, 200) // Match the duration-200
     }
     if (this.hasChevronTarget) {
       this.chevronTarget.classList.remove("rotate-180")
@@ -230,7 +237,9 @@ export default class extends Controller {
 
   get mode() {
     if (!this.hexValue) return "default"
-    return this.lightnessValue <= 0.5 ? "dark" : "light"
+    if (this.lightnessValue <= 0.35) return "dark"
+    if (this.lightnessValue >= 0.65) return "light"
+    return "mid"
   }
 
   applyPreviewStyles() {
