@@ -314,12 +314,24 @@ export default class extends Controller {
   }
 
   // ===========================================================================
+  // User-scoped storage helpers
+  // ===========================================================================
+
+  getUserId() {
+    return document.querySelector('meta[name="current-user-id"]')?.content || 'guest'
+  }
+
+  storageKey(base) {
+    return `${base}_user_${this.getUserId()}`
+  }
+
+  // ===========================================================================
   // Recently used (localStorage)
   // ===========================================================================
 
   getRecentIds() {
     try {
-      const stored = localStorage.getItem("fabricPickerRecent")
+      const stored = localStorage.getItem(this.storageKey("fabricPickerRecent"))
       const recent = stored ? JSON.parse(stored) : []
       return recent.map(item => item.id).filter(Boolean)
     } catch {
@@ -330,7 +342,7 @@ export default class extends Controller {
   saveToRecent(colorData) {
     try {
       let recent = []
-      const stored = localStorage.getItem("fabricPickerRecent")
+      const stored = localStorage.getItem(this.storageKey("fabricPickerRecent"))
       if (stored) recent = JSON.parse(stored)
 
       // Remove if already exists
@@ -340,7 +352,7 @@ export default class extends Controller {
       recent.unshift(colorData)
       recent = recent.slice(0, 3)
 
-      localStorage.setItem("fabricPickerRecent", JSON.stringify(recent))
+      localStorage.setItem(this.storageKey("fabricPickerRecent"), JSON.stringify(recent))
     } catch (e) {
       console.warn("Could not save recent fabric colors:", e)
     }
@@ -352,7 +364,7 @@ export default class extends Controller {
 
   savePreference() {
     try {
-      localStorage.setItem("fabricPreview", JSON.stringify({
+      localStorage.setItem(this.storageKey("fabricPreview"), JSON.stringify({
         hex: this.hexValue,
         lightness: this.lightnessValue,
         name: this.nameValue,
@@ -365,7 +377,7 @@ export default class extends Controller {
 
   loadSavedPreference() {
     try {
-      const saved = localStorage.getItem("fabricPreview")
+      const saved = localStorage.getItem(this.storageKey("fabricPreview"))
       if (saved) {
         const { hex, lightness, name, colorId } = JSON.parse(saved)
         this.hexValue = hex || ""
