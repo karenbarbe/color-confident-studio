@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.navTop = this.navTarget.getBoundingClientRect().top + window.scrollY
+    this.isStuck = false
     this.boundOnScroll = this.onScroll.bind(this)
     window.addEventListener("scroll", this.boundOnScroll, { passive: true })
     this.onScroll() // Check initial state
@@ -17,7 +18,19 @@ export default class extends Controller {
 
   onScroll() {
     const isStuck = window.scrollY >= this.navTop
-    this.element.classList.toggle(this.stuckClass, isStuck)
+    
+    // Only dispatch if state changed
+    if (isStuck !== this.isStuck) {
+      this.isStuck = isStuck
+      this.element.classList.toggle(this.stuckClass, isStuck)
+      this.dispatchStuckChange(isStuck)
+    }
+  }
+
+  dispatchStuckChange(isStuck) {
+    window.dispatchEvent(new CustomEvent("sticky-nav:stuckChanged", {
+      detail: { isStuck }
+    }))
   }
 
   get stuckClass() {

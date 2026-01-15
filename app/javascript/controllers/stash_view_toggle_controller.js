@@ -7,6 +7,8 @@ export default class extends Controller {
     view: { type: String, default: "grid" } // "grid" | "list"
   }
 
+  static classes = ["active", "inactive"]
+
   connect() {
     this.updateViewButtons()
     this.applyView()
@@ -27,15 +29,18 @@ export default class extends Controller {
   }
 
   updateViewButtons() {
+    const activeClasses = this.activeClass?.split(" ") || []
+    const inactiveClasses = this.inactiveClass?.split(" ") || []
+
     this.viewButtonTargets.forEach(button => {
       const isActive = button.dataset.view === this.viewValue
       
       if (isActive) {
-        button.classList.add("bg-base-100", "text-base-content", "shadow-sm")
-        button.classList.remove("text-base-content/60")
+        button.classList.remove(...inactiveClasses)
+        button.classList.add(...activeClasses)
       } else {
-        button.classList.remove("bg-base-100", "text-base-content", "shadow-sm")
-        button.classList.add("text-base-content/60")
+        button.classList.remove(...activeClasses)
+        button.classList.add(...inactiveClasses)
       }
     })
   }
@@ -59,7 +64,6 @@ export default class extends Controller {
     const button = wrapper.querySelector("button")
     
     if (this.viewValue === "list") {
-      // Disable and visually de-emphasize in list view
       wrapper.classList.add("opacity-40", "pointer-events-none")
       if (button) {
         button.disabled = true
@@ -67,7 +71,6 @@ export default class extends Controller {
         button.title = "Fabric preview is only available in grid view"
       }
     } else {
-      // Enable in grid view
       wrapper.classList.remove("opacity-40", "pointer-events-none")
       if (button) {
         button.disabled = false
@@ -77,7 +80,6 @@ export default class extends Controller {
     }
   }
 
-  // Dispatch event so other controllers can respond to view changes
   dispatchViewChanged() {
     const event = new CustomEvent("stash-view:changed", {
       detail: { view: this.viewValue },

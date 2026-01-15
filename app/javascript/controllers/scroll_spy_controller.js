@@ -78,6 +78,18 @@ export default class extends Controller {
     if (scroll) {
       this.scrollPillToLeft(activePill)
     }
+
+    // Dispatch event for other controllers (e.g., fabric-contrast) to react
+    this.dispatchActiveChanged(activePill)
+  }
+
+  dispatchActiveChanged(activePill) {
+    window.dispatchEvent(new CustomEvent("scroll-spy:activeChanged", {
+      detail: { 
+        activePill,
+        sectionId: activePill?.getAttribute("href")?.replace("#", "")
+      }
+    }))
   }
 
   scrollPillToLeft(pill) {
