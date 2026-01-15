@@ -14,7 +14,7 @@
 
     <%# Color swatch %>
     <div class="shrink-0">
-      <div class="size-10 rounded-lg shadow-sm <%= 'ring-1 ring-base-content/10' if color.oklch_l >= 0.95 %>" 
+      <div class="size-10 rounded-lg <%= 'ring-1 ring-base-content/10' if color.oklch_l >= 0.95 %>" 
            style="background-color: #<%= color.hex_color %>;">
       </div>
     </div>
@@ -37,8 +37,8 @@
         </div>
       <% else %>
         <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-base-content/5 text-base-content/40">
-          <%= icon(:heart_outline, css_class: "size-4") %>
-          <span class="text-xs font-medium">Wishlist</span>
+          <%= icon(:shopping_bag_outline, css_class: "size-4") %>
+          <span class="text-xs font-medium">Wish list</span>
         </div>
       <% end %>
     </div>

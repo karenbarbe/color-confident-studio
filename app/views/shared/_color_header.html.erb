@@ -1,24 +1,36 @@
-<header>
 
-  <div class="mt-4 space-y-4">
-    <%# Brand %>
-    <h1 class="text-2xl sm:text-3xl font-bold text-base-content text-balance"><%= brand.name %></h1>
-    <p class="md:w-2xl text-base-content/70 md:text-pretty mt-1"><%= brand.description %></p>
-
-    <%# Stats row %>
-    <div class="flex items-center gap-3 sm:gap-4 text-sm text-base-content/70">
-      <span class="flex items-center gap-1 sm:gap-1.5">
-        <%= icon (:grid_outline) %>
-        <span><%= color_count %> colors</span>
-      </span>
-
-      <% if stash_count && stash_count > 0 %>
+  <header class="grid grid-cols-1 gap-10 md:grid-cols-[2fr_3fr] xl:grid-cols-[1.75fr_3fr_2fr] xl:gap-x-14 xl:gap-y-8">
+    <div class="space-y-3">
+      <%# Brand %>
+      <div class="h-1 flex-1 bg-base-content/20 transition-colors duration-300" data-card-line></div>
+      <h1 class="text-3xl lg:text-4xl font-bold text-base-content text-balance" data-card-text><%= brand.name %></h1>
+      <%# Stats row %>
+      <div class="flex flex-wrap items-center gap-3 sm:gap-4 sm:gap-y-2 text-sm text-base-content" data-card-text>
         <span class="flex items-center gap-1 sm:gap-1.5">
-          <%= icon (:heart_solid) %>
-          <span><%= stash_count %> in your stash</span>
+          <%= icon (:grid_outline) %>
+          <span><%= color_count %> colors</span>
         </span>
-      <% end %>
+        <% if stash_count && stash_count > 0 %>
+          <span class="flex items-center gap-1 sm:gap-1.5">
+            <%= icon (:heart_solid) %>
+            <span><%= stash_count %> in your stash</span>
+          </span>
+        <% end %>
+      </div>
     </div>
-  </div>
 
-</header>
+    <%# Subheading and description %>
+    <div class="space-y-5 text-base-content" data-card-text>
+      <div class="flex items-center gap-4">
+        <%= render "shared/avatar", public_id: "avatar1_hmskyt" %>
+        <p class="text-lg font-black text-balance"><%= brand.subheading %></p>
+      </div>
+      <p><%= brand.description %></p>
+    </div>
+
+    <%# Fabric picker %>
+    <div class="mt-4 xl:mt-0 xl:justify-self-end">
+      <%= render "fabric_picker/picker" %>
+    </div>
+
+  </header>

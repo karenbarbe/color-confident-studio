@@ -12,6 +12,7 @@
 #
 # Indexes
 #
+#  index_color_slots_on_created_at                             (created_at)
 #  index_color_slots_on_palette_id                             (palette_id)
 #  index_color_slots_on_palette_id_and_product_color_id        (palette_id,product_color_id) UNIQUE
 #  index_color_slots_on_palette_id_and_slot_type_and_position  (palette_id,slot_type,position)

@@ -4,12 +4,38 @@ class StashItemsController < ApplicationController
   # GET /stash_items or /stash_items.json
   def index
     authorize StashItem
+
     @stash_items = policy_scope(StashItem)
-    .joins(product_color: :brand)
-    .includes(product_color: :brand)
-    .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
-    @product_colors = @stash_items.map(&:product_color)
-    @stashed_color_ids = @product_colors.map(&:id).to_set
+      .joins(product_color: :brand)
+      .includes(product_color: :brand)
+      .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
+      .to_a  # Load into memory once
+
+    # Default hash with all categories set to 0
+    default_counts = Brand.categories.keys.index_with { 0 }
+
+    # Calculate all stats from the loaded data, merging with defaults
+    @counts_by_category = default_counts.merge(
+      @stash_items.group_by { |si| si.product_color.brand.category }
+                  .transform_values(&:count)
+    )
+
+    @owned_by_category = default_counts.merge(
+      @stash_items.select(&:owned?)
+                  .group_by { |si| si.product_color.brand.category }
+                  .transform_values(&:count)
+    )
+
+    @wish_list_by_category = default_counts.merge(
+      @stash_items.select(&:wish_list?)
+                  .group_by { |si| si.product_color.brand.category }
+                  .transform_values(&:count)
+    )
+
+    # Totals for the view
+    @total_count = @stash_items.size
+    @owned_count = @owned_by_category.values.sum
+    @wish_list_count = @wish_list_by_category.values.sum
   end
 
   # GET /stash_items/1 or /stash_items/1.json

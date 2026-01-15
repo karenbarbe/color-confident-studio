@@ -45,6 +45,22 @@ export default class extends Controller {
     }
   }
 
+  // ===========================================================================
+  // User-scoped storage helpers
+  // ===========================================================================
+
+  getUserId() {
+    return document.querySelector('meta[name="current-user-id"]')?.content || 'guest'
+  }
+
+  storageKey(base) {
+    return `${base}_user_${this.getUserId()}`
+  }
+
+  // ===========================================================================
+  // Load saved style
+  // ===========================================================================
+
   loadSavedStyle() {
     // Don't load saved style if in list view
     if (this.isListView()) {
@@ -53,7 +69,7 @@ export default class extends Controller {
     }
     
     try {
-      const saved = localStorage.getItem("fabricPreview")
+      const saved = localStorage.getItem(this.storageKey("fabricPreview"))
       if (saved) {
         const { hex } = JSON.parse(saved)
         this.element.style.backgroundColor = hex || this.defaultValue

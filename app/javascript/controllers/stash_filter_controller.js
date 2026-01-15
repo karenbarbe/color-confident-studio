@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["filterButton", "categoryButton", "item", "emptyState", "count"]
+  static targets = ["filterButton", "categoryButton", "item", "emptyState"]
   
   static values = {
     filter: { type: String, default: "all" }, // "all" | "owned" | "wish_list"
@@ -11,7 +11,6 @@ export default class extends Controller {
   static classes = ["active", "inactive"]
 
   connect() {
-    this.updateCounts()
     this.updateFilterButtons()
     this.updateCategoryButtons() 
     this.applyFilter()
@@ -37,8 +36,7 @@ export default class extends Controller {
 
   // Stimulus callback when categoryValue changes
   categoryValueChanged() {
-    this.updateCategoryButtons()
-    this.updateCounts() 
+    this.updateCategoryButtons() 
     this.applyFilter()
   }
 
@@ -99,32 +97,4 @@ export default class extends Controller {
     }
   }
 
-  updateCounts() {
-    const counts = { all: 0, owned: 0, wish_list: 0 }
-    
-    // Only count items in the grid view to avoid double-counting
-    const gridItems = this.itemTargets.filter(item => 
-      item.closest('[data-stash-view-toggle-target="gridView"]')
-    )
-    
-    gridItems.forEach(item => {
-      const status = item.dataset.ownershipStatus
-      const category = item.dataset.category
-      
-      const matchesCategory = this.categoryValue === "all" || category === this.categoryValue
-      
-      if (matchesCategory) {
-        counts.all++
-        if (status === "owned") counts.owned++
-        if (status === "wish_list") counts.wish_list++
-      }
-    })
-
-    this.countTargets.forEach(countEl => {
-      const filter = countEl.dataset.countFor
-      if (filter && counts[filter] !== undefined) {
-        countEl.textContent = `(${counts[filter]})`
-      }
-    })
-  }
 }

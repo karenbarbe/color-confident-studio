@@ -164,9 +164,9 @@
    ============================================ */
 
 .stash-filter-active {
-  @apply bg-base-100 text-base-content shadow-sm;
+  @apply text-base-content bg-base-100 shadow-sm;
 }
 
 .stash-filter-inactive {
-  @apply text-base-content/70 hover:text-base-content;
+  @apply hover:bg-base-content/15;
 }

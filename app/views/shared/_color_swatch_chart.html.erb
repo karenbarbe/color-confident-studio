@@ -4,12 +4,12 @@
 <li id="<%= dom_id(color, :swatch) %>" data-fabric-contrast-target="swatch">
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
-    <div class="w-full aspect-5/4 rounded-t-lg sm:rounded-t-xl relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
+    <div class="w-full aspect-5/4 rounded-t-md relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
       <%= render "shared/swatch_stash_indicator", product_color: color, is_in_stash: is_in_stash %>
     </div>
   <% end %>
 
-  <div class="px-2 pt-1.5 pb-4 rounded-b-lg transition-all duration-300"
+  <div class="px-2 pt-1.5 pb-4 rounded-b-md transition-all duration-300"
        data-fabric-contrast-label>
     <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id),
                 data: { turbo: "true", turbo_frame: "color_detail" },
