@@ -3,10 +3,12 @@
 <% content_for :full_width_after do %>
 
   <div class="w-full -mt-16 md:-mt-8 -mb-16"
-       data-controller="stash-filter stash-view-toggle"
-       data-stash-filter-active-class="stash-filter-active"
-       data-stash-filter-inactive-class="stash-filter-inactive"
-       data-stash-view-toggle-view-value="grid">
+     data-controller="stash-filter stash-view-toggle"
+     data-stash-filter-active-class="stash-filter-active"
+     data-stash-filter-inactive-class="stash-filter-inactive"
+     data-stash-view-toggle-active-class="stash-filter-active"
+     data-stash-view-toggle-inactive-class="stash-filter-inactive"
+     data-stash-view-toggle-view-value="grid">
 
     <%# Fabric background %>
     <div class="bg-base-200 min-h-screen pt-16 md:pt-8 pb-20 transition-colors duration-500"
@@ -15,46 +17,51 @@
          data-action="fabric-picker:styleChanged@window->fabric-background#update">
 
       <%# Header card %>
-      <div class="header-card bg-base-100/90">
-        <div class="grid grid-cols-1 gap-10 md:grid-cols-[2fr_3fr] xl:grid-cols-[1.75fr_3fr_2fr] xl:gap-x-14 xl:gap-y-8">
-          <div class="space-y-3 border-t-4 border-base-content pt-3">
-            <h1 class="inline-block font-bold text-3xl lg:text-4xl text-base-content">Your stash</h1>
-            <%# Stats row %>
-            <div class="flex flex-wrap items-center gap-3 sm:gap-4 sm:gap-y-2 text-sm text-base-content">
-              <span class="flex items-center gap-1 sm:gap-1.5">
-                <%= icon(:grid_outline) %>
-                <span>
-                  <%= @stash_items.count %> colors:
-                  <%= @counts_by_category.map { |category, count| "#{count} #{category}" }.join(" · ") %>
-                </span>
-              </span>
-              <span class="flex items-center gap-1 sm:gap-1.5">
-                <%= icon(:check_circle_outline) %>
-                <span>
-                  <%= @stash_items.owned.count %> owned:
-                  <%= @owned_by_category.map { |category, count| "#{count} #{category}" }.join(" · ") %>
-                </span>
-              </span>
-              <span class="flex items-center gap-1 sm:gap-1.5">
-                <%= icon(:shopping_bag_outline) %>
-                <span>
-                  <%= @stash_items.wish_list.count %> in wishlist:
-                  <%= @wish_list_by_category.map { |category, count| "#{count} #{category}" }.join(" · ") %>
-                </span>
-              </span>
-            </div>
+      <div class="header-card bg-base-100/90" data-fabric-contrast-target="card" data-card-background>
+        <div class="grid grid-cols-1 gap-10 md:gap-x-24 xl:gap-x-14 xl:gap-y-8 md:grid-cols-[2fr_3fr] xl:grid-cols-[1.75fr_3fr_2fr] ">
+
+          <%# Column 1 %>
+          <div class="space-y-3">
+
+            <div class="h-1 flex-1 bg-base-content/20 transition-colors duration-300" data-card-line></div>
+            <h1 class="inline-block font-bold text-3xl lg:text-4xl text-base-content" data-card-text>❤️ Your stash</h1>
+            <p class="text-base-content text-pretty" data-card-text>Track what you own and what's on your wish list.</p>
 
           </div>
+
+          <%# Column 2 %>
           <div>
-            <p class="text-base-content">Track what you own and what's on your wish list.</p>
+            <%# Stats%>
+            <ul class="flex flex-col lg:flex-row gap-x-12 gap-y-8 text-sm text-base-content md:pt-6 lg:pt-6.5 xl:pt-7" data-card-text>             
+              <%= render "stash_stat_item", 
+                  icon_name: :grid_outline, 
+                  total_count: @total_count, 
+                  stat_label_singular: "Color",
+                  stat_label_plural: "Colors",
+                  counts_by_category: @counts_by_category %>
+
+              <%= render "stash_stat_item", 
+                  icon_name: :check_outline, 
+                  total_count: @owned_count, 
+                  stat_label: "Owned",
+                  counts_by_category: @owned_by_category %>
+
+              <%= render "stash_stat_item", 
+                  icon_name: :shopping_bag_outline, 
+                  total_count: @wish_list_count, 
+                  stat_label: "Wish list",
+                  counts_by_category: @wish_list_by_category %>     
+            </ul>
           </div>
 
+          <%# Column 3 %>
           <%# Fabric picker %>
           <div data-stash-view-toggle-target="fabricPickerWrapper"
-               class="transition-opacity duration-300 xl:justify-self-end">
+                 class="transition-opacity duration-300 mt-4 xl:mt-0 xl:justify-self-end">
             <%= render "fabric_picker/picker" %>
           </div>
         </div>
+
       </div>
 
       <%# Sticky nav wrapper %>
@@ -63,22 +70,141 @@
            data-sticky-nav-stuck-class="is-stuck">
 
         <%# Nav card %>
-        <div class="sticky-nav bg-base-100/90" data-sticky-nav-target="nav">
+        <div class="sticky-nav bg-base-100/90" data-sticky-nav-target="nav" data-fabric-contrast-target="card" data-card-background>
           <%# Inner wrapper for content alignment when stuck %>
           <div class="sticky-nav-inner">
             <%# Mini header %>
             <div class="sticky-nav-mini-header">
-              <span class="sticky-nav-mini-title">Your stash</span>
+              <span class="text-md lg:text-xl font-bold">Your stash</span>
             </div>
 
             <%# Filters and view toggle %>
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center justify-end gap-2" >
+
+              <%# MOBILE: Combined filter dropdown (hidden on md+) %>
+              <div class="md:hidden inline-block relative mr-auto p-1" 
+                   data-controller="stash-filter-dropdown">
+                <%# Trigger button %>
+                <button type="button"
+                        data-action="click->stash-filter-dropdown#toggle"
+                  data-stash-filter-dropdown-target="button"
+                  class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer bg-base-content/10"
+                  data-fabric-contrast-target="card"
+                  data-card-text>
+                  <span class="truncate" data-stash-filter-dropdown-target="label">Thread - All</span>
+                  <%= icon(:chevron_down_outline, css_class: "size-4 text-base-content transition-transform", data: { stash_filter_dropdown_target: "chevron" }) %>
+                </button>
+
+                <%# Dropdown panel %>
+                <div data-stash-filter-dropdown-target="dropdown"
+                     class="hidden absolute top-full left-0 mt-2 w-56 bg-base-100 rounded-lg shadow-xl ring-1 ring-base-content/10 z-50 overflow-hidden opacity-0 transition-opacity duration-150">
+
+                  <%# Thread section %>
+                  <div class="py-2 border-b border-base-content/10">
+                    <div class="px-4 py-1 text-xs font-semibold text-base-content/60 uppercase">Thread</div>
+                    <button type="button"
+                            data-action="click->stash-filter-dropdown#selectFilter"
+                      data-category="thread"
+                      data-ownership="all"
+                      data-label="Thread - All"
+                      class="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+                      <span class="text-base-content">All</span>
+                      <span data-filter-indicator class="invisible text-base-content">
+                        <%= icon(:check_outline, css_class: "size-4") %>
+                      </span>
+                    </button>
+                    <button type="button"
+                            data-action="click->stash-filter-dropdown#selectFilter"
+                      data-category="thread"
+                      data-ownership="owned"
+                      data-label="Thread - Owned"
+                      class="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+                      <span class="text-base-content">Owned</span>
+                      <span data-filter-indicator class="invisible text-base-content">
+                        <%= icon(:check_outline, css_class: "size-4") %>
+                      </span>
+                    </button>
+                    <button type="button"
+                            data-action="click->stash-filter-dropdown#selectFilter"
+                      data-category="thread"
+                      data-ownership="wish_list"
+                      data-label="Thread - Wish list"
+                      class="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+                      <span class="text-base-content">Wish list</span>
+                      <span data-filter-indicator class="invisible text-base-content">
+                        <%= icon(:check_outline, css_class: "size-4") %>
+                      </span>
+                    </button>
+                  </div>
+
+                  <%# Fabric section %>
+                  <div class="py-2">
+                    <div class="px-4 py-1 text-xs font-semibold text-base-content/60 uppercase">Fabric</div>
+                    <button type="button"
+                            data-action="click->stash-filter-dropdown#selectFilter"
+                      data-category="fabric"
+                      data-ownership="all"
+                      data-label="Fabric - All"
+                      class="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+                      <span class="text-base-content">All</span>
+                      <span data-filter-indicator class="invisible text-base-content">
+                        <%= icon(:check_outline, css_class: "size-4") %>
+                      </span>
+                    </button>
+                    <button type="button"
+                            data-action="click->stash-filter-dropdown#selectFilter"
+                      data-category="fabric"
+                      data-ownership="owned"
+                      data-label="Fabric - Owned"
+                      class="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+                      <span class="text-base-content">Owned</span>
+                      <span data-filter-indicator class="invisible text-base-content">
+                        <%= icon(:check_outline, css_class: "size-4") %>
+                      </span>
+                    </button>
+                    <button type="button"
+                            data-action="click->stash-filter-dropdown#selectFilter"
+                      data-category="fabric"
+                      data-ownership="wish_list"
+                      data-label="Fabric - Wish list"
+                      class="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-base-200 cursor-pointer transition-colors">
+                      <span class="text-base-content">Wish list</span>
+                      <span data-filter-indicator class="invisible text-base-content">
+                        <%= icon(:check_outline, css_class: "size-4") %>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <%# DESKTOP: Separate filter buttons (hidden on mobile) %>
+              <%# Category filter %>
+              <div class="hidden md:inline-flex mr-auto rounded-full bg-base-content/10 p-1 text-sm font-medium" data-fabric-contrast-target="card">
+                <button type="button"
+                          data-stash-filter-target="categoryButton"
+                          data-category="thread"
+                          data-action="click->stash-filter#filterByCategory"
+                  data-card-text
+                  class="px-4 py-2 rounded-full transition-all cursor-pointer">
+                  Thread
+                </button>
+                <button type="button"
+                          data-stash-filter-target="categoryButton"
+                          data-category="fabric"
+                          data-action="click->stash-filter#filterByCategory"
+                  data-card-text
+                  class="px-4 py-2 rounded-full transition-all cursor-pointer">
+                  Fabric
+                </button>
+              </div>
+
               <%# Ownership filter %>
-              <div class="inline-flex rounded-full bg-base-content/10 p-1 text-xs md:text-sm font-medium">
+              <div class="hidden md:inline-flex rounded-full bg-base-content/10 p-1 text-xs md:text-sm font-medium" data-fabric-contrast-target="card">
                 <button type="button"
                           data-stash-filter-target="filterButton"
                           data-filter="all"
                           data-action="click->stash-filter#filter"
+                  data-card-text
                   class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
                   All
                 </button>
@@ -86,6 +212,7 @@
                           data-stash-filter-target="filterButton"
                           data-filter="owned"
                           data-action="click->stash-filter#filter"
+                  data-card-text
                   class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
                   Owned         
                 </button>
@@ -93,35 +220,19 @@
                           data-stash-filter-target="filterButton"
                           data-filter="wish_list"
                           data-action="click->stash-filter#filter"
+                  data-card-text
                   class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                  Wishlist
+                  Wish list
                 </button>
               </div>
 
-              <%# Category filter %>
-              <div class="inline-flex rounded-full bg-base-content/10 p-1 text-xs md:text-sm font-medium">
-                <button type="button"
-                          data-stash-filter-target="categoryButton"
-                          data-category="thread"
-                          data-action="click->stash-filter#filterByCategory"
-                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                  Thread
-                </button>
-                <button type="button"
-                          data-stash-filter-target="categoryButton"
-                          data-category="fabric"
-                          data-action="click->stash-filter#filterByCategory"
-                  class="px-4 py-1.5 rounded-full transition-all cursor-pointer">
-                  Fabric
-                </button>
-              </div>
-
-              <%# View toggle %>
-              <div class="inline-flex ml-auto rounded-full bg-base-content/10 p-1">
+              <%# View toggle (visible on all screen sizes) %>
+              <div class="inline-flex rounded-full bg-base-content/10 p-1">
                 <button type="button"
                         data-stash-view-toggle-target="viewButton"
                         data-view="grid"
                         data-action="click->stash-view-toggle#switchView"
+                  data-card-text
                   class="p-1.5 rounded-full transition-all cursor-pointer"
                   title="Grid view">
                   <%= icon(:grid_outline, css_class: "size-4.5") %>
@@ -130,6 +241,7 @@
                         data-stash-view-toggle-target="viewButton"
                         data-view="list"
                         data-action="click->stash-view-toggle#switchView"
+                  data-card-text
                   class="p-1.5 rounded-full transition-all cursor-pointer"
                   title="List view">
                   <%= icon(:list_outline, css_class: "size-4.5") %>

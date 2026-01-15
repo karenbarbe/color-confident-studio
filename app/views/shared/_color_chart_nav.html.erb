@@ -1,11 +1,13 @@
-<%# Color family navigation pills - horizontal scrolling %>
-<ul class="flex gap-2 overflow-x-auto scrollbar-hide" data-scroll-spy-target="pillContainer">
+<ul class="flex gap-2 overflow-x-auto scrollbar-hide" 
+    data-scroll-spy-target="pillContainer"
+    data-fabric-contrast-target="pillContainer">
   <% colors_by_family.each do |family, _colors| %>
     <% tag_info = color_family_tags.find { |t| t[:name] == family } %>
     <li>
       <a href="#<%= family.parameterize %>"
-         class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors bg-base-300 text-base-content/80 hover:text-base-content data-[active=true]:bg-base-content data-[active=true]:hover:bg-base-content/70 data-[active=true]:text-base-100"
+         class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors border"
          data-scroll-spy-target="pill"
+         data-fabric-contrast-pill
          data-action="click->scroll-spy#scrollToSection">
         <span class="size-3 rounded-full <%= tag_info&.dig(:color) || 'bg-gray-400' %>"></span>
         <%= family %>
