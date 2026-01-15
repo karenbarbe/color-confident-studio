@@ -9,6 +9,10 @@
 #  updated_at  :datetime         not null
 #  creator_id  :bigint           not null
 #
+# Indexes
+#
+#  index_palettes_on_created_at  (created_at)
+#
 # Foreign Keys
 #
 #  fk_rails_...  (creator_id => users.id)

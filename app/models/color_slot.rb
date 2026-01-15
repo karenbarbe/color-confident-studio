@@ -4,7 +4,7 @@
 #
 #  id               :bigint           not null, primary key
 #  position         :integer          default(0), not null
-#  slot_type        :string           default("thread"), not null
+#  slot_type        :string           default("main"), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  palette_id       :bigint           not null
