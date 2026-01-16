@@ -5,10 +5,10 @@
   <%# Header %>
   <div class="flex justify-between items-center">
     <div>
-      <h1 class="font-bold text-2xl text-gray-900">
+      <h1 class="font-bold text-4xl text-base-content">
         Add <%= @section == "background" ? "background" : "thread" %> color
       </h1>
-      <p class="text-gray-500 mt-1">
+      <p class="text-base-content/70 mt-1">
         <% if @category == "fabric" %>
           Choose a fabric color for your background
         <% else %>
@@ -27,8 +27,8 @@
   <%# From Stash section %>
   <section class="space-y-4">
     <div class="flex justify-between items-center">
-      <h2 class="font-semibold text-lg text-gray-900">From your stash</h2>
-      <span class="text-sm text-gray-500"><%= @stash_product_colors.size %> colors</span>
+      <h2 class="font-semibold text-lg text-base-content">From your stash</h2>
+      <span class="text-sm text-base-content/70"><%= @stash_product_colors.size %> colors</span>
     </div>
 
     <% if @stash_product_colors.any? %>
@@ -38,13 +38,13 @@
         <% end %>
       </div>
     <% else %>
-      <div class="bg-gray-50 rounded-lg p-6 text-center">
-        <p class="text-gray-500">
+      <div class="bg-base-100/20 rounded-lg p-6 text-center">
+        <p class="text-base-content/70">
           No <%= @category %> colors in your stash yet.
         </p>
-        <p class="text-sm text-gray-400 mt-1">
+        <p class="text-sm text-base-content/70 mt-1">
           Browse the chart below to find colors, or
-          <%= link_to "add colors to your stash", color_chart_category_path(@category), class: "link link-primary" %>
+          <%= link_to "add colors to your stash", color_chart_category_path(@category), class: "link link-neutral" %>
           first.
         </p>
       </div>
@@ -53,21 +53,21 @@
 
   <%# Divider %>
   <div class="flex items-center gap-4">
-    <div class="flex-1 border-t border-gray-200"></div>
-    <span class="text-sm text-gray-400">or browse chart</span>
-    <div class="flex-1 border-t border-gray-200"></div>
+    <div class="flex-1 border-t border-base-content/50"></div>
+    <span class="text-sm text-base-content/70">or browse chart</span>
+    <div class="flex-1 border-t border-base-content/50"></div>
   </div>
 
   <%# Browse chart section %>
   <section class="space-y-4">
-    <h2 class="font-semibold text-lg text-gray-900">Browse <%= @category %> chart</h2>
+    <h2 class="font-semibold text-lg text-base-content">Browse <%= @category %> chart</h2>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
       <% @brands.each do |brand| %>
         <%= link_to pick_color_palette_path(@palette, section: @section, brand_id: brand.id),
-            class: "bg-base-100 rounded-lg p-4 shadow-sm border border-base-200 hover:border-primary hover:shadow-md transition-all" do %>
-          <h3 class="font-medium text-gray-900"><%= brand.name %></h3>
-          <p class="text-sm text-gray-500"><%= brand.product_colors_count %> colors</p>
+            class: "bg-base-100 rounded-lg p-4 border border-text-base-content transition-all" do %>
+          <h3 class="font-medium text-base-content"><%= brand.name %></h3>
+          <p class="text-sm text-base-content/70"><%= brand.product_colors_count %> colors</p>
         <% end %>
       <% end %>
     </div>
@@ -78,10 +78,10 @@
     <% @selected_brand = Brand.find(params[:brand_id]) %>
     <% @brand_colors = @selected_brand.product_colors.where.not(id: @palette_color_ids).order(:color_family, :name).to_a %>
 
-    <section class="space-y-4 pt-4 border-t border-gray-200">
+    <section class="space-y-4 pt-4 border-t border-base-content/50">
       <div class="flex justify-between items-center">
-        <h2 class="font-semibold text-lg text-gray-900"><%= @selected_brand.name %></h2>
-        <span class="text-sm text-gray-500"><%= @brand_colors.size %> available</span>
+        <h2 class="font-semibold text-lg text-base-content"><%= @selected_brand.name %></h2>
+        <span class="text-sm text-base-content/70"><%= @brand_colors.size %> available</span>
       </div>
 
       <% if @brand_colors.any? %>
@@ -91,7 +91,7 @@
           <% end %>
         </div>
       <% else %>
-        <p class="text-gray-500 text-center py-4">All colors from this brand are already in your palette.</p>
+        <p class="text-base-content/70 text-center py-4">All colors from this brand are already in your palette.</p>
       <% end %>
     </section>
   <% end %>

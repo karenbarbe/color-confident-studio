@@ -8,8 +8,8 @@
       <% color = palette.background_slots.first.product_color %>
       <div class="w-2/5 h-full" style="background-color: #<%= color.hex_color %>;"></div>
     <% else %>
-      <div class="w-2/5 h-full bg-gray-100 flex items-center justify-center">
-        <span class="text-xs text-gray-400">BG</span>
+      <div class="w-2/5 h-full bg-base-100/20 flex items-center justify-center">
+        <span class="text-xs text-base-content/50">No fabric yet</span>
       </div>
     <% end %>
 
@@ -19,7 +19,9 @@
         <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
       <% end %>
       <% if palette.thread_slots.empty? %>
-        <div class="flex-1 h-full bg-gray-50"></div>
+        <div class="flex-1 h-full bg-base-100/10 flex items-center justify-center">
+          <span class="text-xs text-base-content/50">No threads yet</span>
+        </div>
       <% end %>
     </div>
   </div>
@@ -28,10 +30,10 @@
   <div class="p-4">
     <div class="flex justify-between items-start">
       <div class="min-w-0 flex-1">
-        <h3 class="font-semibold text-gray-900 truncate">
+        <h3 class="font-semibold text-base-content truncate">
           <%= palette.name.presence || "Untitled palette" %>
         </h3>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-base-content/70">
           <%= palette.color_slots.length %> colors
         </p>
       </div>
