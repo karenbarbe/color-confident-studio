@@ -3,6 +3,8 @@ class PalettesController < ApplicationController
 
   # GET /palettes
   def index
+    cleanup_empty_palettes
+
     authorize Palette
     @palettes = policy_scope(Palette)
                   .includes(color_slots: :product_color)
@@ -343,6 +345,15 @@ class PalettesController < ApplicationController
     end
 
     scope
+  end
+
+  def cleanup_empty_palettes
+    Current.user.palettes
+      .includes(:color_slots)
+      .left_joins(:color_slots)
+      .where(color_slots: { id: nil })
+      .where(name: [ nil, "" ])
+      .destroy_all
   end
 
   def set_palette
