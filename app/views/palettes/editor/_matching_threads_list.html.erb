@@ -1,0 +1,51 @@
+<%# locals: (palette:, matching_threads:, total_count:, mode: "add", current_slot: nil) %>
+
+<div class="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 min-h-[140px]"
+     style="<%= "background-color: ##{palette.background_color&.hex_color};" if palette.background_color %>">
+
+  <% if matching_threads.any? %>
+    <% matching_threads.each do |color| %>
+      <button type="button"
+              class="shrink-0 group text-left"
+              data-action="click->palette-editor#selectThreadColor"
+        data-color-id="<%= color.id %>"
+        data-mode="<%= mode %>"
+        data-slot-id="<%= current_slot&.id %>">
+        <div class="w-[120px] rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+          <div class="h-[90px] relative"
+               style="background-color: #<%= color.hex_color %>;">
+            <div class="absolute top-1.5 right-1.5 size-6 bg-black/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <% if mode == "edit" %>
+                <%# Checkmark for edit/replace mode %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              <% else %>
+                <%# Plus for add mode %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+              <% end %>
+            </div>
+          </div>
+          <div class="p-2">
+            <p class="font-bold text-xs text-zinc-900"><%= color.vendor_code %></p>
+            <p class="text-xs text-zinc-600 truncate"><%= color.name %></p>
+          </div>
+        </div>
+      </button>
+    <% end %>
+
+    <% if total_count > matching_threads.size %>
+      <div class="shrink-0 w-[120px] h-[130px] rounded-lg border-2 border-dashed border-zinc-300 flex items-center justify-center">
+        <span class="text-xs text-zinc-500 text-center px-2">
+          +<%= total_count - matching_threads.size %> more
+        </span>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="flex-1 flex items-center justify-center text-zinc-500 text-sm">
+      <p>No matching threads found. Try adjusting filters.</p>
+    </div>
+  <% end %>
+</div>

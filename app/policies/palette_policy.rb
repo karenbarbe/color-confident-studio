@@ -27,6 +27,18 @@ class PalettePolicy < ApplicationPolicy
     owner?
   end
 
+  def panel_content?
+    edit?
+  end
+
+  def matching_threads?
+    edit?
+  end
+
+  def background_picker?
+    edit?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       scope.where(creator: user)

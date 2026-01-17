@@ -1,0 +1,36 @@
+<%# locals: (selected_family: nil) %>
+
+<%# Color families with their representative hex colors %>
+<% families = [
+  { name: "Red", hex: "dc2626" },
+  { name: "Red-orange", hex: "ea580c" },
+  { name: "Orange", hex: "f97316" },
+  { name: "Yellow-orange", hex: "fbbf24" },
+  { name: "Yellow", hex: "facc15" },
+  { name: "Yellow-green", hex: "a3e635" },
+  { name: "Green", hex: "22c55e" },
+  { name: "Blue-green", hex: "14b8a6" },
+  { name: "Blue", hex: "3b82f6" },
+  { name: "Blue-violet", hex: "8b5cf6" },
+  { name: "Violet", hex: "a855f7" },
+  { name: "Red-violet", hex: "ec4899" },
+  { name: "Warm neutral", hex: "a8a29e" },
+  { name: "Cool neutral", hex: "9ca3af" },
+  { name: "Gray", hex: "6b7280" }
+] %>
+
+<div class="flex flex-wrap gap-2" data-color-controls-target="familyPills">
+  <% families.each do |family| %>
+    <% is_selected = selected_family == family[:name] %>
+    <button type="button"
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all
+                   <%= is_selected ? 'bg-zinc-900 text-white' : 'bg-white border border-zinc-900 text-zinc-700 hover:bg-zinc-100' %>"
+            data-action="click->color-controls#selectFamily"
+      data-family="<%= family[:name] %>"
+      data-color-controls-target="familyPill"
+      data-selected="<%= is_selected %>">
+      <span class="size-3 rounded-full" style="background-color: #<%= family[:hex] %>;"></span>
+      <span><%= family[:name] %></span>
+    </button>
+  <% end %>
+</div>

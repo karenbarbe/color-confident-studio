@@ -1,0 +1,11 @@
+<div id="save-button">
+  <% if palette.complete? %>
+    <%= link_to "Save palette", palette_path(palette), class: "btn btn-neutral" %>
+  <% else %>
+    <button disabled 
+          class="btn btn-disabled"
+          title="Add at least one background and one thread color">
+      Save palette
+    </button>
+  <% end %>
+</div>

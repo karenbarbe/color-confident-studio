@@ -19,7 +19,7 @@
 #
 class Palette < ApplicationRecord
   belongs_to :creator, class_name: "User"
-  has_many :color_slots, dependent: :destroy
+  has_many :color_slots, -> { order(:position) }, dependent: :destroy
   has_many :product_colors, through: :color_slots
 
   SLOT_LIMITS = {
@@ -41,7 +41,7 @@ class Palette < ApplicationRecord
   end
 
   def thread_slots
-    color_slots.select { |slot| slot.slot_type == "thread" }
+    color_slots.select { |slot| slot.slot_type == "thread" }.sort_by(&:position)
   end
 
   def background_color

@@ -1,0 +1,32 @@
+<%# locals: (palette:, thread_slots:) %>
+
+<div class="mx-6 lg:mx-12 mt-6">
+  <div class="bg-white rounded-2xl shadow-sm p-6 space-y-5">
+
+    <%# Top row: Name + Buttons %>
+    <div class="flex items-center justify-between">
+      <%# Palette name (inline editable) %>
+      <div id="palette-name-display">
+        <%= render "palettes/editor/name_display", palette: palette %>
+      </div>
+
+      <%# Action buttons %>
+      <div class="flex items-center gap-2">
+        <%= link_to "Cancel", palettes_path,
+            class: "btn btn-outline" %>
+
+        <%= render "palettes/editor/save_button", palette: palette, thread_slots: thread_slots %>
+        
+      </div>
+    </div>
+
+    <%# Stats row %>
+    <%= render "palettes/editor/header_stats", palette: palette, thread_slots: thread_slots %>
+    
+    <%# Background selector row %>
+    <div class="flex items-center justify-between">
+      <%= render "palettes/editor/background_selector", palette: palette %>
+    </div>
+
+  </div>
+</div>

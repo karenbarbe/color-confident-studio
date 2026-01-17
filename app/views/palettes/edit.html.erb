@@ -1,98 +1,39 @@
-<% content_for :title, @palette.name.presence || "Edit palette" %>
+<% content_for :title, @palette.name.presence || "Untitled palette" %>
 
-<div class="mx-auto w-full mt-8 pb-8 space-y-6">
+<%# Dynamic background style container %>
+<div id="background-layer-style">
+  <style>
+    #background-layer {
+      background-color: <%= @palette.background_color ? "##{@palette.background_color.hex_color}" : 'transparent' %>;
+    }
+  </style>
+</div>
 
-  <%# Header %>
-  <div class="flex justify-between items-center">
-    <div>
-      <h1 class="font-bold text-4xl text-base-content">
-        <%= @palette.name.presence || "Edit palette" %>
-      </h1>
-    </div>
+<div class="min-h-screen" data-controller="palette-editor" data-palette-editor-palette-id-value="<%= @palette.id %>">
 
-    <div class="flex gap-3">
-      <%# Cancel button %>
-      <%= link_to "Cancel", palettes_path, class: "btn btn-outline" %>
-      
-      <%# Save / View button %>
-      <% if @palette.complete? %>
-        <%= link_to "Save palette", @palette, class: "btn btn-neutral" %>
-      <% else %>
-        <button class="btn btn-primary" disabled>Save palette</button>
-      <% end %>
+  <%# Flash messages container for Turbo Stream updates %>
+  <div id="flash-messages" class="fixed top-4 right-4 z-100 space-y-2">
+    <%= render "shared/flash", notice: notice, alert: alert %>
+  </div>
+
+  <%# Background layer - takes the background color %>
+  <div id="background-layer"
+       class="min-h-screen pb-32 transition-colors duration-300"
+       data-palette-editor-target="backgroundLayer">
+
+    <%# Header card %>
+    <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
+
+    <%# Color pills area %>
+    <div class="px-6 lg:px-12 mt-8">
+      <%= render "palettes/editor/color_pills_container",
+      palette: @palette,
+      thread_slots: @thread_slots %>
     </div>
 
   </div>
 
-  <%# Flash messages %>
-  <% if alert %>
-    <div class="bg-red-50 text-red-700 px-4 py-3 rounded-lg">
-      <%= alert %>
-    </div>
-  <% end %>
-
-  <% if notice %>
-    <div class="bg-green-50 text-green-700 px-4 py-3 rounded-lg">
-      <%= notice %>
-    </div>
-  <% end %>
-
-  <%# Palette name and description form %>
-  <%= form_with(model: @palette, url: palette_path(@palette), method: :patch, class: "space-y-4") do |form| %>
-    <div class="bg-base-100 rounded-xl shadow-sm p-5 space-y-4">
-      <div>
-        <%= form.label :name, "Palette name", class: "block text-sm font-medium text-base-content/70 mb-1" %>
-        <%= form.text_field :name,
-            placeholder: "Give your palette a name",
-            class: "input input-bordered w-full" %>
-      </div>
-
-      <div>
-        <%= form.label :description, "Description (optional)", class: "block text-sm font-medium text-base-content/70 mb-1" %>
-        <%= form.text_area :description,
-            placeholder: "What's this palette for?",
-            rows: 2,
-            class: "textarea textarea-bordered w-full" %>
-      </div>
-
-      <div class="flex justify-end">
-        <%= form.submit "Update", class: "btn btn-outline" %>
-      </div>
-    </div>
-  <% end %>
-
-  <%# Color sections %>
-  <div class="space-y-4">
-
-    <%# Background section %>
-    <%= render "palette_section",
-        palette: @palette,
-        section: "background",
-        title: "Background",
-        subtitle: "Choose 1 fabric color as your base",
-        slots: @background_slots,
-        max: 1 %>
-
-    <%# Thread colors section %>
-    <%= render "palette_section",
-        palette: @palette,
-        section: "thread",
-        title: "Thread colors",
-        subtitle: "Add up to 12 thread colors",
-        slots: @thread_slots,
-        max: 12 %>
-
-  </div>
-
-  <%# Delete palette %>
-  <% if policy(@palette).destroy? %>
-    <div class="text-center">
-      <%= button_to "Delete palette",
-          palette_path(@palette),
-          method: :delete,
-          class: "btn btn-outline text-red-600",
-          data: { turbo_confirm: "Are you sure you want to delete this palette?" } %>
-    </div>
-  <% end %>
+  <%# Control panel (slide-up drawer) %>
+  <%= render "palettes/editor/control_panel", palette: @palette %>
 
 </div>

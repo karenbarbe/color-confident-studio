@@ -1,0 +1,137 @@
+<%# locals: (palette:, current_background:, stash_fabrics:, fabric_brands:, selected_brand:, brand_fabrics:, selected_family: nil, lightness: nil) %>
+
+<turbo-frame id="panel-content">
+  <div class="space-y-6"
+       data-controller="background-picker"
+       data-background-picker-palette-id-value="<%= palette.id %>"
+       data-background-picker-brand-id-value="<%= selected_brand&.id %>">
+
+    <%# Current selection (if any) %>
+    <% if current_background %>
+      <section class="px-4 pt-4">
+        <div class="flex items-center justify-between p-3 bg-zinc-100 rounded-lg">
+          <div class="flex items-center gap-3">
+            <span class="size-10 rounded-full ring-1 ring-inset ring-black/10"
+                  style="background-color: #<%= current_background.hex_color %>;"></span>
+            <div>
+              <p class="font-medium text-zinc-900"><%= current_background.vendor_code %></p>
+              <p class="text-sm text-zinc-500"><%= current_background.name %></p>
+            </div>
+          </div>
+          <button type="button"
+                  class="text-sm text-red-600 hover:text-red-700 font-medium"
+                  data-action="click->palette-editor#removeBackgroundColor"
+            data-slot-id="<%= palette.background_slots.first&.id %>">
+            Remove
+          </button>
+        </div>
+      </section>
+    <% end %>
+
+    <%# From Stash section %>
+    <% if stash_fabrics.any? %>
+      <section class="px-4 pt-4">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-zinc-500 uppercase tracking-wide">From Your Stash</span>
+            <span class="px-2 py-0.5 text-xs bg-zinc-200 text-zinc-600 rounded">
+              <%= stash_fabrics.size %>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4">
+          <% stash_fabrics.first(10).each do |fabric| %>
+            <%= render "palettes/editor/fabric_swatch", 
+                palette: palette, 
+                fabric: fabric,
+                is_selected: current_background&.id == fabric.id %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <%# Browse by brand section %>
+    <section class="px-4">
+      <div class="flex items-center justify-between mb-3 pt-4 border-t border-zinc-200">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-medium text-zinc-500 uppercase tracking-wide">Browse Fabrics</span>
+        </div>
+
+        <%# Brand selector dropdown %>
+        <div class="relative" data-controller="dropdown">
+          <button type="button"
+                  class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-zinc-100 border border-zinc-900 rounded-full hover:bg-zinc-200 transition-colors"
+                  data-action="click->dropdown#toggle">
+            <span data-background-picker-target="brandName"><%= selected_brand&.name&.truncate(20) || "Select brand" %></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-4 transition-transform" data-dropdown-target="icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="absolute right-0 top-full mt-1 w-56 bg-white border border-zinc-200 rounded-lg shadow-lg z-10 hidden"
+               data-dropdown-target="menu">
+            <div class="py-1 max-h-60 overflow-y-auto">
+              <% fabric_brands.each do |brand| %>
+                <button type="button"
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 flex items-center justify-between <%= 'bg-zinc-50 font-medium' if brand.id == selected_brand&.id %>"
+                        data-action="click->background-picker#selectBrand"
+                  data-brand-id="<%= brand.id %>"
+                  data-brand-name="<%= brand.name %>">
+                  <span><%= brand.name %></span>
+                  <span class="text-xs text-zinc-400"><%= brand.product_colors_count %></span>
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Fabric swatches from selected brand %>
+      <turbo-frame id="brand-fabrics-list" data-background-picker-target="fabricsList">
+        <%= render "palettes/editor/brand_fabrics_list",
+            palette: palette,
+            brand_fabrics: brand_fabrics,
+            current_background: current_background %>
+      </turbo-frame>
+    </section>
+
+    <%# Lightness filter (fabrics are often filtered by light/dark) %>
+    <section class="px-4 pb-6">
+      <div class="flex items-center gap-2 mb-4 pt-4 border-t border-zinc-200">
+        <span class="text-sm font-medium text-zinc-500 uppercase tracking-wide">Filter by Lightness</span>
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex justify-between text-xs text-zinc-500">
+          <span>Dark</span>
+          <span>Light</span>
+        </div>
+        <div class="relative">
+          <div class="h-3 rounded-full lightness-gradient"></div>
+          <input type="range"
+                 min="0"
+                 max="100"
+                 value="<%= lightness || 50 %>"
+                 class="absolute inset-0 w-full h-3 opacity-0 cursor-pointer"
+                 data-background-picker-target="lightnessSlider"
+                 data-action="input->background-picker#updateLightness change->background-picker#applyFilters">
+          <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-white rounded-full shadow-md border-2 border-zinc-300 pointer-events-none transition-all"
+               data-background-picker-target="lightnessThumb"
+               style="left: <%= lightness || 50 %>%;">
+          </div>
+        </div>
+      </div>
+
+      <%# Reset button %>
+      <div class="mt-4 text-center">
+        <button type="button"
+                class="text-sm text-zinc-500 hover:text-zinc-700 underline"
+                data-action="click->background-picker#resetFilters">
+          Reset filters
+        </button>
+      </div>
+    </section>
+
+  </div>
+</turbo-frame>
