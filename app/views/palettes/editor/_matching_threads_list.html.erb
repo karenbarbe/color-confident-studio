@@ -9,6 +9,11 @@
               class="shrink-0 group text-left"
               data-action="click->palette-editor#selectThreadColor"
         data-color-id="<%= color.id %>"
+        data-hex="<%= color.hex_color %>"
+        data-vendor-code="<%= color.vendor_code %>"
+        data-name="<%= color.name %>"
+        data-brand-name="<%= color.brand.name %>"
+        data-oklch-l="<%= color.oklch_l %>"
         data-mode="<%= mode %>"
         data-slot-id="<%= current_slot&.id %>">
         <div class="w-[120px] rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">

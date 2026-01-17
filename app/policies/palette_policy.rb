@@ -39,6 +39,10 @@ class PalettePolicy < ApplicationPolicy
     edit?
   end
 
+  def batch_update?
+    edit?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       scope.where(creator: user)

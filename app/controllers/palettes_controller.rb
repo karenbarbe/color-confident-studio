@@ -1,5 +1,5 @@
 class PalettesController < ApplicationController
-  before_action :set_palette, only: %i[show edit update destroy pick_color panel_content matching_threads background_picker]
+  before_action :set_palette, only: %i[show edit update destroy pick_color panel_content matching_threads background_picker batch_update]
 
   # GET /palettes
   def index
@@ -257,7 +257,74 @@ class PalettesController < ApplicationController
     }
   end
 
-private
+  def batch_update
+    authorize @palette
+
+    changes = params.require(:changes).permit(
+      additions: [ :product_color_id, :slot_type, :position ],
+      updates: [ :id, :product_color_id ],
+      deletions: []
+    )
+
+    ActiveRecord::Base.transaction do
+      # Process deletions first
+      if changes[:deletions].present?
+        @palette.color_slots.where(id: changes[:deletions]).destroy_all
+      end
+
+      # Process updates
+      if changes[:updates].present?
+        changes[:updates].each do |update|
+          slot = @palette.color_slots.find(update[:id])
+          slot.update!(product_color_id: update[:product_color_id])
+        end
+      end
+
+      # Process additions
+      if changes[:additions].present?
+        changes[:additions].each do |addition|
+          # If adding a background and one already exists, replace it
+          if addition[:slot_type] == "background"
+            @palette.color_slots.where(slot_type: "background").destroy_all
+          end
+
+          @palette.color_slots.create!(
+            product_color_id: addition[:product_color_id],
+            slot_type: addition[:slot_type],
+            position: addition[:position] || 0
+          )
+        end
+      end
+    end
+
+    # Reload to get fresh data
+    @palette.reload
+
+    render json: {
+      success: true,
+      message: "Palette updated successfully",
+      palette: {
+        id: @palette.id,
+        complete: @palette.complete?,
+        thread_count: @palette.thread_slots.count,
+        has_background: @palette.background_color.present?
+      }
+    }
+
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {
+      success: false,
+      message: e.message
+    }, status: :unprocessable_entity
+
+  rescue ActiveRecord::RecordNotFound => e
+    render json: {
+      success: false,
+      message: "Color slot not found"
+    }, status: :not_found
+  end
+
+  private
 
   def filter_fabrics(fabrics, family, lightness)
     scope = fabrics

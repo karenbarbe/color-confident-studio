@@ -9,7 +9,10 @@
   </style>
 </div>
 
-<div class="min-h-screen" data-controller="palette-editor" data-palette-editor-palette-id-value="<%= @palette.id %>">
+<div class="min-h-screen" 
+     data-controller="palette-editor" 
+     data-palette-editor-palette-id-value="<%= @palette.id %>"
+     data-palette-editor-is-new-palette-value="<%= @palette.color_slots.empty? %>">
 
   <%# Flash messages container for Turbo Stream updates %>
   <div id="flash-messages" class="fixed top-4 right-4 z-100 space-y-2">

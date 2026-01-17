@@ -39,7 +39,7 @@
       </div>
 
       <% if palette.complete? %>
-        <%= link_to palette, class: "btn btn-sm btn-ghost" do %>
+        <%= link_to edit_palette_path(palette), class: "btn btn-sm btn-ghost" do %>
           View
         <% end %>
       <% else %>
