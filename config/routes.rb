@@ -32,10 +32,8 @@ Rails.application.routes.draw do
 
   resources :palettes do
     member do
-      get :background_picker
-      get :matching_threads
-      get :panel_content
-      get :pick_color
+      get :color_picker_content
+      get :matching_colors
       patch :batch_update
     end
     resources :color_slots, only: [ :create, :update, :destroy ]

@@ -1,4 +1,5 @@
-<%# locals: (selected_family: nil, controller_name: "color-controls") %>
+<%# app/views/palettes/editor/_palette_family_pills.html.erb %>
+<%# locals: (selected_family: nil) %>
 
 <%# Color families with their representative hex colors %>
 <% families = [
@@ -19,15 +20,15 @@
   { name: "Gray", hex: "6b7280" }
 ] %>
 
-<div class="flex gap-2 overflow-x-auto" data-<%= controller_name %>-target="familyPills">
+<div class="flex gap-2 overflow-x-auto pb-1" data-palette-color-picker-target="familyPills">
   <% families.each do |family| %>
     <% is_selected = selected_family == family[:name] %>
     <button type="button"
             class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-all
-                   <%= is_selected ? 'bg-base-content hover:bg-base-content/80 text-base-100' : 'bg-base-100 border border-base-content text-base-content/70 hover:bg-base-100' %>"
-            data-action="click-><%= controller_name %>#selectFamily"
+                   <%= is_selected ? 'bg-base-content hover:bg-base-content/80 text-base-100' : 'bg-base-100 border border-base-content text-base-content/70 hover:bg-base-200' %>"
+            data-action="click->palette-color-picker#selectFamily"
       data-family="<%= family[:name] %>"
-      data-<%= controller_name %>-target="familyPill"
+      data-palette-color-picker-target="familyPill"
       data-selected="<%= is_selected %>">
       <span class="shrink-0 size-3 rounded-full" style="background-color: #<%= family[:hex] %>;"></span>
       <span><%= family[:name] %></span>

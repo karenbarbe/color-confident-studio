@@ -31,11 +31,15 @@ class PalettePolicy < ApplicationPolicy
     edit?
   end
 
-  def matching_threads?
+  def matching_colors?
     edit?
   end
 
   def background_picker?
+    edit?
+  end
+
+  def color_picker_content?
     edit?
   end
 

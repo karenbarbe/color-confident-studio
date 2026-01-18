@@ -1,10 +1,23 @@
+// app/javascript/controllers/palette_color_picker_controller.js
+
 import { Controller } from "@hotwired/stimulus"
 
+/**
+ * PaletteColorPickerController
+ * 
+ * Unified controller for selecting colors in the palette editor.
+ * Handles both thread and fabric (background) color selection with
+ * consistent filtering controls.
+ * 
+ * Usage:
+ *   data-controller="palette-color-picker"
+ *   data-palette-color-picker-type-value="thread" or "fabric"
+ */
 export default class extends Controller {
   static targets = [
-    "threadsList",
+    "colorList",
     "countBadge",
-    "brandName",
+    "sourceName",
     "familyPills",
     "familyPill",
     "saturationSlider",
@@ -15,11 +28,13 @@ export default class extends Controller {
 
   static values = {
     paletteId: Number,
+    type: { type: String, default: "thread" }, // "thread" or "fabric"
     brandId: Number,
+    source: { type: String, default: "brand" }, // "brand" or "stash" (fabric only)
     family: String,
-    saturation: Number,
-    lightness: Number,
-    mode: { type: String, default: "add" },
+    saturation: { type: Number, default: 50 },
+    lightness: { type: Number, default: 50 },
+    mode: { type: String, default: "add" }, // "add" or "edit"
     slotId: Number
   }
 
@@ -29,19 +44,39 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-  // Brand selection
+  // Source/Brand selection
   // ===========================================================================
 
+  selectSource(event) {
+    const source = event.currentTarget.dataset.source
+    const sourceName = event.currentTarget.dataset.sourceName
+    const brandId = event.currentTarget.dataset.brandId
+
+    this.sourceValue = source
+
+    if (brandId) {
+      this.brandIdValue = parseInt(brandId, 10)
+    }
+
+    if (this.hasSourceNameTarget) {
+      this.sourceNameTarget.textContent = sourceName.length > 20
+        ? sourceName.substring(0, 20) + "..."
+        : sourceName
+    }
+
+    this.applyFilters()
+  }
+
+  // For thread panel (brand-only selection)
   selectBrand(event) {
     const brandId = event.currentTarget.dataset.brandId
     const brandName = event.currentTarget.dataset.brandName
 
     this.brandIdValue = parseInt(brandId, 10)
 
-    // Update the button text
-    if (this.hasBrandNameTarget) {
-      this.brandNameTarget.textContent = brandName.length > 20 
-        ? brandName.substring(0, 20) + "..." 
+    if (this.hasSourceNameTarget) {
+      this.sourceNameTarget.textContent = brandName.length > 20
+        ? brandName.substring(0, 20) + "..."
         : brandName
     }
 
@@ -57,11 +92,7 @@ export default class extends Controller {
     const isCurrentlySelected = event.currentTarget.dataset.selected === "true"
 
     // Toggle selection
-    if (isCurrentlySelected) {
-      this.familyValue = ""
-    } else {
-      this.familyValue = family
-    }
+    this.familyValue = isCurrentlySelected ? "" : family
 
     // Update pill styles
     this.familyPillTargets.forEach(pill => {
@@ -71,11 +102,11 @@ export default class extends Controller {
       pill.dataset.selected = isSelected.toString()
 
       if (isSelected) {
-        pill.classList.remove("bg-white", "border", "border-base-content", "text-base-content/70", "hover:bg-zinc-100")
-        pill.classList.add("bg-base-content", "text-white")
+        pill.classList.remove("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-200")
+        pill.classList.add("bg-base-content", "hover:bg-base-content/80", "text-base-100")
       } else {
-        pill.classList.add("bg-white", "border", "border-base-content", "text-base-content/70", "hover:bg-zinc-100")
-        pill.classList.remove("bg-base-content", "text-white")
+        pill.classList.add("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-200")
+        pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
       }
     })
 
@@ -99,6 +130,7 @@ export default class extends Controller {
   }
 
   updateThumbPosition(thumb, value) {
+    if (!thumb) return
     // Account for thumb width (20px = size-5)
     const thumbWidth = 20
     const trackWidth = thumb.parentElement.offsetWidth - thumbWidth
@@ -120,17 +152,23 @@ export default class extends Controller {
   // ===========================================================================
 
   applyFilters() {
-    // Debounce to avoid too many requests while sliding
     clearTimeout(this.debounceTimer)
     this.debounceTimer = setTimeout(() => {
-      this.fetchMatchingThreads()
+      this.fetchColors()
     }, 150)
   }
 
-  fetchMatchingThreads() {
-    const url = new URL(`/palettes/${this.paletteIdValue}/matching_threads`, window.location.origin)
+  fetchColors() {
+    const endpoint = this.typeValue === "fabric" 
+      ? "matching_colors?type=fabric" 
+      : "matching_colors?type=thread"
+    
+    const url = new URL(`/palettes/${this.paletteIdValue}/${endpoint}`, window.location.origin)
 
-    url.searchParams.set("brand_id", this.brandIdValue)
+    // Common params
+    if (this.brandIdValue) {
+      url.searchParams.set("brand_id", this.brandIdValue)
+    }
 
     if (this.familyValue) {
       url.searchParams.set("color_family", this.familyValue)
@@ -144,7 +182,7 @@ export default class extends Controller {
       url.searchParams.set("lightness", this.lightnessSliderTarget.value)
     }
 
-    // Pass mode and slot_id for edit mode support
+    // Mode and slot for edit support
     if (this.modeValue) {
       url.searchParams.set("mode", this.modeValue)
     }
@@ -153,7 +191,11 @@ export default class extends Controller {
       url.searchParams.set("slot_id", this.slotIdValue)
     }
 
-    // Fetch and update the threads list via Turbo
+    // Fabric-specific: source (stash vs brand)
+    if (this.typeValue === "fabric" && this.sourceValue) {
+      url.searchParams.set("source", this.sourceValue)
+    }
+
     fetch(url, {
       headers: {
         "Accept": "text/vnd.turbo-stream.html, text/html",
@@ -162,23 +204,26 @@ export default class extends Controller {
     })
       .then(response => response.text())
       .then(html => {
-        if (this.hasThreadsListTarget) {
-          this.threadsListTarget.innerHTML = html
+        if (this.hasColorListTarget) {
+          this.colorListTarget.innerHTML = html
         }
-        // Update count badge from response if available
-        this.updateCountFromHtml(html)
+        this.updateCountBadge(html)
       })
       .catch(error => {
-        console.error("Error fetching matching threads:", error)
+        console.error(`Error fetching ${this.typeValue} colors:`, error)
       })
   }
 
-  updateCountFromHtml(html) {
-    // Try to extract count from the HTML (look for the +N more indicator)
-    const match = html.match(/\+(\d+) more/)
-    if (match && this.hasCountBadgeTarget) {
-      const visibleCount = (html.match(/button_to/g) || []).length
-      // This is approximate; ideally the server returns the count
+  updateCountBadge(html) {
+    if (!this.hasCountBadgeTarget) return
+
+    // Look for data attribute in response
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, "text/html")
+    const countEl = doc.querySelector("[data-total-count]")
+    
+    if (countEl) {
+      this.countBadgeTarget.textContent = countEl.dataset.totalCount
     }
   }
 
@@ -191,8 +236,8 @@ export default class extends Controller {
     this.familyValue = ""
     this.familyPillTargets.forEach(pill => {
       pill.dataset.selected = "false"
-      pill.classList.add("bg-white", "border", "border-base-content", "text-base-content/70", "hover:bg-zinc-100")
-      pill.classList.remove("bg-base-content", "text-white")
+      pill.classList.add("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-200")
+      pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
     })
 
     // Reset sliders to middle

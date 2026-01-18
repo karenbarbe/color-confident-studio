@@ -22,17 +22,21 @@ export default class extends Controller {
     "pillsContainer", "colorPill", "addButton", "indicator",
     // Panel
     "backdrop", "panel", "panelHeader", "panelContent",
-    "addModeHeader", "editModeHeader", "backgroundModeHeader",
+    // Panel headers (updated)
+    "addThreadHeader", "editThreadHeader", 
+    "addBackgroundHeader", "editBackgroundHeader",
     "editColorSwatch", "editColorCode", "editColorName",
+    "editBackgroundSwatch", "editBackgroundCode", "editBackgroundName",
     "deleteButtonContainer",
     // Save/status
     "saveButton", "unsavedIndicator"
   ]
 
-  static values = {
+    static values = {
     paletteId: Number,
     panelOpen: { type: Boolean, default: false },
-    mode: { type: String, default: "add" }, // "add", "edit", or "background"
+    mode: { type: String, default: "add" },        // "add" or "edit"
+    colorType: { type: String, default: "thread" }, // "thread" or "fabric"
     selectedSlotId: { type: Number, default: 0 },
     maxThreadSlots: { type: Number, default: 12 },
     isNewPalette: { type: Boolean, default: true }
@@ -548,7 +552,6 @@ export default class extends Controller {
    * Update the unsaved changes indicator
    */
   updateUnsavedIndicator() {
-    // You can add an unsaved indicator element to your view
     // For now, we'll update the document title
     const hasChanges = this.hasUnsavedChanges()
     const baseTitle = document.title.replace(/^\* /, "")
@@ -563,7 +566,7 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-  // Name editing (unchanged from original)
+  // Name editing
   // ===========================================================================
 
   editName(event) {
@@ -663,15 +666,16 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-  // Color actions (modified to use client-side state)
+  // Color actions
   // ===========================================================================
 
   addColor(event) {
     event.preventDefault()
     this.modeValue = "add"
+    this.colorTypeValue = "thread"
     this.selectedSlotIdValue = 0
     this.updatePanelMode()
-    this.loadPanelContent("add")
+    this.loadPanelContent("add", "thread")
     this.openPanel()
   }
 
@@ -680,6 +684,7 @@ export default class extends Controller {
     const button = event.currentTarget
 
     this.modeValue = "edit"
+    this.colorTypeValue = "thread"
     this.selectedSlotIdValue = parseInt(button.dataset.slotId, 10)
 
     if (this.hasEditColorSwatchTarget) {
@@ -694,7 +699,7 @@ export default class extends Controller {
 
     this.updatePanelMode()
     this.updateSelectionIndicator(this.selectedSlotIdValue)
-    this.loadPanelContent("edit", {
+    this.loadPanelContent("edit", "thread", {
       slot_id: this.selectedSlotIdValue,
       color_id: button.dataset.colorId
     })
@@ -702,16 +707,22 @@ export default class extends Controller {
   }
 
   deleteColor() {
-    if (!this.selectedSlotIdValue) return
+    const isFabric = this.colorTypeValue === "fabric"
+    const confirmMsg = isFabric 
+      ? "Remove background color from the palette?" 
+      : "Remove this color from the palette?"
 
-    if (confirm("Remove this color from the palette?")) {
-      this.removeThreadColor(this.selectedSlotIdValue)
+    if (confirm(confirmMsg)) {
+      if (isFabric) {
+        this.removeBackgroundColor()
+      } else if (this.selectedSlotIdValue) {
+        this.removeThreadColor(this.selectedSlotIdValue)
+      }
     }
   }
 
   // ===========================================================================
-  // Thread color selection (from matching_threads_list buttons)
-  // Now updates client-side state instead of calling server
+  // Thread color selection
   // ===========================================================================
 
   selectThreadColor(event) {
@@ -738,8 +749,7 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-  // Background color selection (from fabric_swatch buttons)
-  // Now updates client-side state instead of calling server
+  // Background color selection
   // ===========================================================================
 
   selectBackgroundColor(event) {
@@ -759,80 +769,90 @@ export default class extends Controller {
     this.setBackgroundColor(colorData)
   }
 
-  removeBackgroundColor(event) {
-    event.preventDefault()
-
-    if (confirm("Remove background color?")) {
-      this.removeBackgroundColor()
-    }
-  }
-
   // ===========================================================================
   // Background picker
   // ===========================================================================
 
   openBackgroundPicker(event) {
     event.preventDefault()
-    this.modeValue = "background"
-    this.selectedSlotIdValue = 0
-    this.updatePanelMode()
-    this.loadBackgroundPicker()
-    this.openPanel()
-  }
+    
+    const selector = document.getElementById("background-selector")
+    const hasBackground = selector?.dataset.slotId
+    
+    this.modeValue = hasBackground ? "edit" : "add"
+    this.colorTypeValue = "fabric"
+    this.selectedSlotIdValue = hasBackground ? parseInt(selector.dataset.slotId, 10) : 0
 
-  loadBackgroundPicker() {
-    const url = new URL(`/palettes/${this.paletteIdValue}/background_picker`, window.location.origin)
-
-    if (this.hasPanelContentTarget) {
-      this.panelContentTarget.src = url.toString()
+    // Populate edit header if editing existing background
+    if (hasBackground) {
+      if (this.hasEditBackgroundSwatchTarget) {
+        this.editBackgroundSwatchTarget.style.backgroundColor = `#${selector.dataset.hex}`
+      }
+      if (this.hasEditBackgroundCodeTarget) {
+        this.editBackgroundCodeTarget.textContent = selector.dataset.vendorCode
+      }
+      if (this.hasEditBackgroundNameTarget) {
+        this.editBackgroundNameTarget.textContent = `${selector.dataset.name} · ${selector.dataset.brandName}`
+      }
     }
+
+    this.updatePanelMode()
+    this.loadPanelContent(this.modeValue, "fabric")
+    this.openPanel()
   }
 
   // ===========================================================================
   // Panel content
   // ===========================================================================
 
-  updatePanelMode() {
-    if (this.hasAddModeHeaderTarget) {
-      this.addModeHeaderTarget.classList.add("hidden")
-    }
-    if (this.hasEditModeHeaderTarget) {
-      this.editModeHeaderTarget.classList.add("hidden")
-      this.editModeHeaderTarget.classList.remove("flex")
-    }
-    if (this.hasBackgroundModeHeaderTarget) {
-      this.backgroundModeHeaderTarget.classList.add("hidden")
-    }
+    updatePanelMode() {
+    // Hide all headers first
+    const headers = [
+      this.addThreadHeaderTarget,
+      this.editThreadHeaderTarget,
+      this.addBackgroundHeaderTarget,
+      this.editBackgroundHeaderTarget
+    ]
+    
+    headers.forEach(header => {
+      if (header) {
+        header.classList.add("hidden")
+        header.classList.remove("flex")
+      }
+    })
+
+    // Hide delete button by default
     if (this.hasDeleteButtonContainerTarget) {
       this.deleteButtonContainerTarget.classList.add("hidden")
     }
 
-    switch (this.modeValue) {
-      case "add":
-        if (this.hasAddModeHeaderTarget) {
-          this.addModeHeaderTarget.classList.remove("hidden")
-        }
-        break
-      case "edit":
-        if (this.hasEditModeHeaderTarget) {
-          this.editModeHeaderTarget.classList.remove("hidden")
-          this.editModeHeaderTarget.classList.add("flex")
-        }
-        if (this.hasDeleteButtonContainerTarget) {
-          this.deleteButtonContainerTarget.classList.remove("hidden")
-        }
-        break
-      case "background":
-        if (this.hasBackgroundModeHeaderTarget) {
-          this.backgroundModeHeaderTarget.classList.remove("hidden")
-        }
-        break
+    // Show appropriate header based on mode and colorType
+    const isEdit = this.modeValue === "edit"
+    const isFabric = this.colorTypeValue === "fabric"
+
+    if (isFabric) {
+      if (isEdit && this.hasEditBackgroundHeaderTarget) {
+        this.editBackgroundHeaderTarget.classList.remove("hidden")
+        this.editBackgroundHeaderTarget.classList.add("flex")
+        this.deleteButtonContainerTarget?.classList.remove("hidden")
+      } else if (this.hasAddBackgroundHeaderTarget) {
+        this.addBackgroundHeaderTarget.classList.remove("hidden")
+      }
+    } else {
+      if (isEdit && this.hasEditThreadHeaderTarget) {
+        this.editThreadHeaderTarget.classList.remove("hidden")
+        this.editThreadHeaderTarget.classList.add("flex")
+        this.deleteButtonContainerTarget?.classList.remove("hidden")
+      } else if (this.hasAddThreadHeaderTarget) {
+        this.addThreadHeaderTarget.classList.remove("hidden")
+      }
     }
   }
 
-  loadPanelContent(mode, params = {}) {
-    const url = new URL(`/palettes/${this.paletteIdValue}/panel_content`, window.location.origin)
+  loadPanelContent(mode, type, params = {}) {
+    const url = new URL(`/palettes/${this.paletteIdValue}/color_picker_content`, window.location.origin)
     url.searchParams.set("mode", mode)
+    url.searchParams.set("type", type)
 
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.set(key, value)
