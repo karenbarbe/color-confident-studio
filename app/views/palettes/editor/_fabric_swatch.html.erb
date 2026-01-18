@@ -9,7 +9,7 @@
   data-name="<%= fabric.name %>"
   data-brand-name="<%= fabric.brand.name %>"
   <%= "disabled" if is_selected %>>
-  <div class="w-[100px] rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow <%= 'ring-2 ring-zinc-900' if is_selected %>">
+  <div class="w-[100px] rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow <%= 'ring-2 ring-base-content' if is_selected %>">
     <div class="h-20 relative"
          style="background-color: #<%= fabric.hex_color %>;">
       <% if is_selected %>
@@ -27,7 +27,7 @@
       <% end %>
     </div>
     <div class="p-2">
-      <p class="font-bold text-xs text-zinc-900 truncate"><%= fabric.vendor_code %></p>
+      <p class="font-bold text-xs text-base-content truncate"><%= fabric.vendor_code %></p>
       <p class="text-xs text-zinc-600 truncate"><%= fabric.name %></p>
     </div>
   </div>

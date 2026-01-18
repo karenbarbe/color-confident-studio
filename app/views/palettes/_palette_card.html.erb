@@ -2,7 +2,7 @@
 
 <div class="bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-200">
   <%# Color preview strip %>
-  <div class="h-16 flex">
+  <div class="h-32 flex">
     <%# Background color (40% width) %>
     <% if palette.background_slots.any? %>
       <% color = palette.background_slots.first.product_color %>
@@ -38,15 +38,8 @@
         </p>
       </div>
 
-      <% if palette.complete? %>
-        <%= link_to edit_palette_path(palette), class: "btn btn-sm btn-ghost" do %>
-          View
-        <% end %>
-      <% else %>
-        <%= link_to edit_palette_path(palette), class: "btn btn-sm btn-ghost" do %>
-          Continue
-        <% end %>
-      <% end %>
+        <%= link_to "Open", edit_palette_path(palette), class: "btn btn-sm btn-ghost" %>
+
     </div>
   </div>
 </div>
