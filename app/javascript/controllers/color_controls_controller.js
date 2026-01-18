@@ -71,11 +71,11 @@ export default class extends Controller {
       pill.dataset.selected = isSelected.toString()
 
       if (isSelected) {
-        pill.classList.remove("bg-white", "border", "border-zinc-900", "text-zinc-700", "hover:bg-zinc-100")
-        pill.classList.add("bg-zinc-900", "text-white")
+        pill.classList.remove("bg-white", "border", "border-base-content", "text-base-content/70", "hover:bg-zinc-100")
+        pill.classList.add("bg-base-content", "text-white")
       } else {
-        pill.classList.add("bg-white", "border", "border-zinc-900", "text-zinc-700", "hover:bg-zinc-100")
-        pill.classList.remove("bg-zinc-900", "text-white")
+        pill.classList.add("bg-white", "border", "border-base-content", "text-base-content/70", "hover:bg-zinc-100")
+        pill.classList.remove("bg-base-content", "text-white")
       }
     })
 
@@ -191,8 +191,8 @@ export default class extends Controller {
     this.familyValue = ""
     this.familyPillTargets.forEach(pill => {
       pill.dataset.selected = "false"
-      pill.classList.add("bg-white", "border", "border-zinc-900", "text-zinc-700", "hover:bg-zinc-100")
-      pill.classList.remove("bg-zinc-900", "text-white")
+      pill.classList.add("bg-white", "border", "border-base-content", "text-base-content/70", "hover:bg-zinc-100")
+      pill.classList.remove("bg-base-content", "text-white")
     })
 
     // Reset sliders to middle

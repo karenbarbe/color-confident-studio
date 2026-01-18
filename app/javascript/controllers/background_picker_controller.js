@@ -3,14 +3,18 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "fabricsList",
-    "brandName",
+    "sourceName",
     "lightnessSlider",
-    "lightnessThumb"
+    "lightnessThumb",
+    "familyPills",
+    "familyPill"
   ]
 
   static values = {
     paletteId: Number,
-    brandId: Number
+    brandId: Number,
+    source: { type: String, default: "brand" },
+    family: String
   }
 
   connect() {
@@ -19,21 +23,60 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-  // Brand selection
+  // Source selection (Stash or Brand)
   // ===========================================================================
 
-  selectBrand(event) {
+  selectSource(event) {
+    const source = event.currentTarget.dataset.source
+    const sourceName = event.currentTarget.dataset.sourceName
     const brandId = event.currentTarget.dataset.brandId
-    const brandName = event.currentTarget.dataset.brandName
 
-    this.brandIdValue = parseInt(brandId, 10)
+    this.sourceValue = source
+
+    if (source === "brand" && brandId) {
+      this.brandIdValue = parseInt(brandId, 10)
+    }
 
     // Update the button text
-    if (this.hasBrandNameTarget) {
-      this.brandNameTarget.textContent = brandName.length > 20
-        ? brandName.substring(0, 20) + "..."
-        : brandName
+    if (this.hasSourceNameTarget) {
+      this.sourceNameTarget.textContent = sourceName.length > 20
+        ? sourceName.substring(0, 20) + "..."
+        : sourceName
     }
+
+    this.applyFilters()
+  }
+
+  // ===========================================================================
+  // Color family selection
+  // ===========================================================================
+
+  selectFamily(event) {
+    const family = event.currentTarget.dataset.family
+    const isCurrentlySelected = event.currentTarget.dataset.selected === "true"
+
+    // Toggle selection
+    if (isCurrentlySelected) {
+      this.familyValue = ""
+    } else {
+      this.familyValue = family
+    }
+
+    // Update pill styles
+    this.familyPillTargets.forEach(pill => {
+      const pillFamily = pill.dataset.family
+      const isSelected = pillFamily === this.familyValue
+
+      pill.dataset.selected = isSelected.toString()
+
+      if (isSelected) {
+        pill.classList.remove("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-100")
+        pill.classList.add("bg-base-content", "hover:bg-base-content/80", "text-base-100")
+      } else {
+        pill.classList.add("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-100")
+        pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
+      }
+    })
 
     this.applyFilters()
   }
@@ -71,8 +114,15 @@ export default class extends Controller {
   fetchFabrics() {
     const url = new URL(`/palettes/${this.paletteIdValue}/background_picker`, window.location.origin)
 
-    if (this.brandIdValue) {
+    // Set source parameter
+    url.searchParams.set("source", this.sourceValue)
+
+    if (this.sourceValue === "brand" && this.brandIdValue) {
       url.searchParams.set("brand_id", this.brandIdValue)
+    }
+
+    if (this.familyValue) {
+      url.searchParams.set("color_family", this.familyValue)
     }
 
     if (this.hasLightnessSliderTarget) {
@@ -107,6 +157,15 @@ export default class extends Controller {
   // ===========================================================================
 
   resetFilters() {
+    // Reset family
+    this.familyValue = ""
+    this.familyPillTargets.forEach(pill => {
+      pill.dataset.selected = "false"
+      pill.classList.add("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-100")
+      pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
+    })
+
+    // Reset lightness slider to middle
     if (this.hasLightnessSliderTarget) {
       this.lightnessSliderTarget.value = 50
       this.updateThumbPosition()

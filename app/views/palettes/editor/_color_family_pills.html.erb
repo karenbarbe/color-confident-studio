@@ -1,4 +1,4 @@
-<%# locals: (selected_family: nil) %>
+<%# locals: (selected_family: nil, controller_name: "color-controls") %>
 
 <%# Color families with their representative hex colors %>
 <% families = [
@@ -19,17 +19,17 @@
   { name: "Gray", hex: "6b7280" }
 ] %>
 
-<div class="flex flex-wrap gap-2" data-color-controls-target="familyPills">
+<div class="flex gap-2 overflow-x-auto" data-<%= controller_name %>-target="familyPills">
   <% families.each do |family| %>
     <% is_selected = selected_family == family[:name] %>
     <button type="button"
-            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all
-                   <%= is_selected ? 'bg-zinc-900 text-white' : 'bg-white border border-zinc-900 text-zinc-700 hover:bg-zinc-100' %>"
-            data-action="click->color-controls#selectFamily"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-all
+                   <%= is_selected ? 'bg-base-content hover:bg-base-content/80 text-base-100' : 'bg-base-100 border border-base-content text-base-content/70 hover:bg-base-100' %>"
+            data-action="click-><%= controller_name %>#selectFamily"
       data-family="<%= family[:name] %>"
-      data-color-controls-target="familyPill"
+      data-<%= controller_name %>-target="familyPill"
       data-selected="<%= is_selected %>">
-      <span class="size-3 rounded-full" style="background-color: #<%= family[:hex] %>;"></span>
+      <span class="shrink-0 size-3 rounded-full" style="background-color: #<%= family[:hex] %>;"></span>
       <span><%= family[:name] %></span>
     </button>
   <% end %>

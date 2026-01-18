@@ -219,43 +219,77 @@ class PalettesController < ApplicationController
 
     # Get fabric brands
     @fabric_brands = Brand.where(category: "fabric").order(:name)
-    @selected_brand = if params[:brand_id].present?
-                        @fabric_brands.find_by(id: params[:brand_id]) || @fabric_brands.first
-    else
-                        @fabric_brands.first
-    end
 
-    # Get user's stash fabrics
-    @stash_fabrics = Current.user.stash_items
-                            .joins(product_color: :brand)
-                            .where(brands: { category: "fabric" })
-                            .includes(product_color: :brand)
-                            .order("product_colors.name")
-                            .map(&:product_color)
+    # Determine source (stash or brand)
+    @source = params[:source].presence || "brand"
 
-    # Get brand colors if a brand is selected
-    @brand_fabrics = @selected_brand&.product_colors&.order(:color_family, :oklch_l) || []
+    # Get user's stash fabrics count (for dropdown display)
+    @stash_fabric_count = Current.user.stash_items
+                                .joins(product_color: :brand)
+                                .where(brands: { category: "fabric" })
+                                .count
 
     # Parse filter params
     @selected_family = params[:color_family].presence
     @lightness = params[:lightness].present? ? params[:lightness].to_i : nil
 
-    # Apply filters if present
-    if @selected_family.present? || @lightness.present?
-      @brand_fabrics = filter_fabrics(@brand_fabrics, @selected_family, @lightness)
-    end
+    if @source == "stash"
+      # Load fabrics from user's stash
+      @selected_brand = nil
+      stash_fabrics_scope = Current.user.stash_items
+                                  .joins(product_color: :brand)
+                                  .where(brands: { category: "fabric" })
+                                  .includes(product_color: :brand)
 
-    @brand_fabrics = @brand_fabrics.limit(30)
+      # Apply family filter if present
+      if @selected_family.present?
+        stash_fabrics_scope = stash_fabrics_scope.joins(:product_color)
+                                                .where(product_colors: { color_family: @selected_family })
+      end
+
+      # Apply lightness filter if present
+      if @lightness.present?
+        center = 0.2 + (@lightness / 100.0) * 0.75
+        tolerance = 0.15
+        min_l = [ center - tolerance, 0.2 ].max
+        max_l = [ center + tolerance, 0.95 ].min
+        stash_fabrics_scope = stash_fabrics_scope.joins(:product_color)
+                                                .where(product_colors: { oklch_l: min_l..max_l })
+      end
+
+      @brand_fabrics = stash_fabrics_scope
+                        .order("product_colors.color_family, product_colors.oklch_l")
+                        .limit(30)
+                        .map(&:product_color)
+    else
+      # Load fabrics from selected brand
+      @selected_brand = if params[:brand_id].present?
+                          @fabric_brands.find_by(id: params[:brand_id]) || @fabric_brands.first
+      else
+                          @fabric_brands.first
+      end
+
+      # Get brand colors if a brand is selected
+      @brand_fabrics = @selected_brand&.product_colors&.order(:color_family, :oklch_l) || []
+
+      # Apply filters if present
+      if @selected_family.present? || @lightness.present?
+        @brand_fabrics = filter_fabrics(@brand_fabrics, @selected_family, @lightness)
+      end
+
+      @brand_fabrics = @brand_fabrics.limit(30)
+    end
 
     render partial: "palettes/editor/background_picker_content", locals: {
       palette: @palette,
       current_background: @current_background,
-      stash_fabrics: @stash_fabrics,
+      stash_fabric_count: @stash_fabric_count,
       fabric_brands: @fabric_brands,
       selected_brand: @selected_brand,
       brand_fabrics: @brand_fabrics,
       selected_family: @selected_family,
-      lightness: @lightness
+      lightness: @lightness,
+      source: @source
     }
   end
 

@@ -383,7 +383,7 @@ export default class extends Controller {
       html += `
         <div class="flex flex-col items-center gap-2 shrink-0">
           <button type="button"
-                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-zinc-900/20 ${ringClass}"
+                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 ${ringClass}"
                   style="background-color: #${slot.productColor.hex};"
                   data-action="click->palette-editor#editColor"
                   data-slot-id="${slot.id}"
@@ -396,7 +396,7 @@ export default class extends Controller {
                   data-palette-editor-target="colorPill"
                   title="${slot.productColor.vendorCode} - ${slot.productColor.name}">
           </button>
-          <div class="h-2 w-12 rounded-full bg-zinc-900 opacity-0 transition-opacity"
+          <div class="h-2 w-12 rounded-full bg-base-content opacity-0 transition-opacity"
                data-palette-editor-target="indicator"
                data-slot-id="${slot.id}">
           </div>
@@ -409,11 +409,11 @@ export default class extends Controller {
       html += `
         <div class="flex flex-col items-center gap-2 shrink-0">
           <button type="button"
-                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full border-2 border-dashed border-zinc-900/30 flex items-center justify-center hover:border-zinc-900/50 hover:bg-zinc-900/5 transition-all focus:outline-none focus:ring-4 focus:ring-zinc-900/20"
+                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus:ring-4 focus:ring-base-content/20"
                   data-action="click->palette-editor#addColor"
                   data-palette-editor-target="addButton">
-            <div class="size-12 rounded-full bg-zinc-900/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-zinc-900/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="size-12 rounded-full bg-base-content/10 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </div>
