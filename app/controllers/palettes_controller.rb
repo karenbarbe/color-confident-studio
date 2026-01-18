@@ -228,9 +228,9 @@ class PalettesController < ApplicationController
 
     @current_slot = if @type == "fabric"
                       @palette.background_slots.first
-                    elsif params[:slot_id].present?
-                      @palette.color_slots.find_by(id: params[:slot_id])
-                    end
+    elsif params[:slot_id].present?
+      @palette.color_slots.find_by(id: params[:slot_id])
+    end
 
     @current_color = @current_slot&.product_color
   end
@@ -250,12 +250,12 @@ class PalettesController < ApplicationController
       **@filter_params
     )
 
-    [query.results, query.count]
+    [ query.results, query.count ]
   end
 
   def fetch_brand_colors
     matcher = build_color_matcher
-    [matcher.matching_colors.limit(30), matcher.count]
+    [ matcher.matching_colors.limit(30), matcher.count ]
   end
 
   def build_color_matcher
@@ -393,7 +393,7 @@ class PalettesController < ApplicationController
       .includes(:color_slots)
       .left_joins(:color_slots)
       .where(color_slots: { id: nil })
-      .where(name: [nil, ""])
+      .where(name: [ nil, "" ])
       .destroy_all
   end
 
