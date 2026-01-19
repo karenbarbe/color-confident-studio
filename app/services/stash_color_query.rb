@@ -124,8 +124,8 @@ class StashColorQuery
 
     center = slider_to_chroma(@saturation)
     tolerance = BASE_TOLERANCE_CHROMA * tolerance_multiplier
-    min_c = [center - tolerance, SATURATION_RANGE[:min]].max
-    max_c = [center + tolerance, SATURATION_RANGE[:max]].min
+    min_c = [ center - tolerance, SATURATION_RANGE[:min] ].max
+    max_c = [ center + tolerance, SATURATION_RANGE[:max] ].min
 
     scope.where(product_colors: { oklch_c: min_c..max_c })
   end
