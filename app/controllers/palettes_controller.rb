@@ -187,7 +187,7 @@ class PalettesController < ApplicationController
   private
 
   # ============================================================================
-  # Before Actions
+  # Before actions
   # ============================================================================
 
   def set_palette
@@ -209,7 +209,7 @@ class PalettesController < ApplicationController
   end
 
   # ============================================================================
-  # Color Picker Helpers
+  # Color picker helpers
   # ============================================================================
 
   def extract_filter_params
@@ -271,7 +271,7 @@ class PalettesController < ApplicationController
   end
 
   # ============================================================================
-  # Picker Data Loaders (for color_picker_content)
+  # Picker data loaders (for color_picker_content)
   # ============================================================================
 
   def load_thread_picker_data
@@ -349,7 +349,7 @@ class PalettesController < ApplicationController
   end
 
   # ============================================================================
-  # Batch Update Helpers
+  # Batch update helpers
   # ============================================================================
 
   def process_deletions(deletions)
@@ -385,7 +385,7 @@ class PalettesController < ApplicationController
   end
 
   # ============================================================================
-  # Other Helpers
+  # Other helpers
   # ============================================================================
 
   def cleanup_empty_palettes

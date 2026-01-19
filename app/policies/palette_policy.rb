@@ -23,19 +23,7 @@ class PalettePolicy < ApplicationPolicy
     owner?
   end
 
-  def pick_color?
-    owner?
-  end
-
-  def panel_content?
-    edit?
-  end
-
   def matching_colors?
-    edit?
-  end
-
-  def background_picker?
     edit?
   end
 
