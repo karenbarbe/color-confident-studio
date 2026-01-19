@@ -36,7 +36,6 @@ Rails.application.routes.draw do
       get :matching_colors
       patch :batch_update
     end
-    resources :color_slots, only: [ :create, :update, :destroy ]
   end
 
   resources :product_colors, only: [ :index, :show ]
