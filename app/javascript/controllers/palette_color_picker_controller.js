@@ -1,5 +1,3 @@
-// app/javascript/controllers/palette_color_picker_controller.js
-
 import { Controller } from "@hotwired/stimulus"
 
 /**
@@ -7,11 +5,7 @@ import { Controller } from "@hotwired/stimulus"
  * 
  * Unified controller for selecting colors in the palette editor.
  * Handles both thread and fabric (background) color selection with
- * consistent filtering controls.
- * 
- * Usage:
- *   data-controller="palette-color-picker"
- *   data-palette-color-picker-type-value="thread" or "fabric"
+ * consistent filtering controls and distribution visualization.
  */
 export default class extends Controller {
   static targets = [
@@ -23,19 +17,23 @@ export default class extends Controller {
     "saturationSlider",
     "saturationThumb",
     "lightnessSlider",
-    "lightnessThumb"
+    "lightnessThumb",
+    "saturationDistribution",
+    "lightnessDistribution"
   ]
 
   static values = {
     paletteId: Number,
-    type: { type: String, default: "thread" }, // "thread" or "fabric"
+    type: { type: String, default: "thread" },
     brandId: Number,
-    source: { type: String, default: "brand" }, // "brand" or "stash" (fabric only)
+    source: { type: String, default: "brand" },
     family: String,
     saturation: { type: Number, default: 50 },
     lightness: { type: Number, default: 50 },
-    mode: { type: String, default: "add" }, // "add" or "edit"
-    slotId: Number
+    mode: { type: String, default: "add" },
+    slotId: Number,
+    saturationDistribution: { type: Array, default: [] },
+    lightnessDistribution: { type: Array, default: [] }
   }
 
   connect() {
@@ -67,7 +65,6 @@ export default class extends Controller {
     this.applyFilters()
   }
 
-  // For thread panel (brand-only selection)
   selectBrand(event) {
     const brandId = event.currentTarget.dataset.brandId
     const brandName = event.currentTarget.dataset.brandName
@@ -91,10 +88,8 @@ export default class extends Controller {
     const family = event.currentTarget.dataset.family
     const isCurrentlySelected = event.currentTarget.dataset.selected === "true"
 
-    // Toggle selection
     this.familyValue = isCurrentlySelected ? "" : family
 
-    // Update pill styles
     this.familyPillTargets.forEach(pill => {
       const pillFamily = pill.dataset.family
       const isSelected = pillFamily === this.familyValue
@@ -131,7 +126,6 @@ export default class extends Controller {
 
   updateThumbPosition(thumb, value) {
     if (!thumb) return
-    // Account for thumb width (20px = size-5)
     const thumbWidth = 20
     const trackWidth = thumb.parentElement.offsetWidth - thumbWidth
     const position = (value / 100) * trackWidth
@@ -165,7 +159,6 @@ export default class extends Controller {
     
     const url = new URL(`/palettes/${this.paletteIdValue}/${endpoint}`, window.location.origin)
 
-    // Common params
     if (this.brandIdValue) {
       url.searchParams.set("brand_id", this.brandIdValue)
     }
@@ -182,7 +175,6 @@ export default class extends Controller {
       url.searchParams.set("lightness", this.lightnessSliderTarget.value)
     }
 
-    // Mode and slot for edit support
     if (this.modeValue) {
       url.searchParams.set("mode", this.modeValue)
     }
@@ -191,14 +183,16 @@ export default class extends Controller {
       url.searchParams.set("slot_id", this.slotIdValue)
     }
 
-    // Fabric-specific: source (stash vs brand)
     if (this.typeValue === "fabric" && this.sourceValue) {
       url.searchParams.set("source", this.sourceValue)
     }
 
+    // Request distribution data as well
+    url.searchParams.set("include_distribution", "true")
+
     fetch(url, {
       headers: {
-        "Accept": "text/vnd.turbo-stream.html, text/html",
+        "Accept": "text/vnd.turbo-stream.html, text/html, application/json",
         "X-Requested-With": "XMLHttpRequest"
       }
     })
@@ -208,6 +202,7 @@ export default class extends Controller {
           this.colorListTarget.innerHTML = html
         }
         this.updateCountBadge(html)
+        this.updateDistributionFromResponse(html)
       })
       .catch(error => {
         console.error(`Error fetching ${this.typeValue} colors:`, error)
@@ -217,7 +212,6 @@ export default class extends Controller {
   updateCountBadge(html) {
     if (!this.hasCountBadgeTarget) return
 
-    // Look for data attribute in response
     const parser = new DOMParser()
     const doc = parser.parseFromString(html, "text/html")
     const countEl = doc.querySelector("[data-total-count]")
@@ -227,12 +221,54 @@ export default class extends Controller {
     }
   }
 
+  updateDistributionFromResponse(html) {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, "text/html")
+    
+    const satDistEl = doc.querySelector("[data-saturation-distribution]")
+    const lightDistEl = doc.querySelector("[data-lightness-distribution]")
+
+    if (satDistEl && this.hasSaturationDistributionTarget) {
+      try {
+        const distribution = JSON.parse(satDistEl.dataset.saturationDistribution)
+        this.renderDistribution(this.saturationDistributionTarget, distribution)
+      } catch (e) {
+        console.error("Error parsing saturation distribution:", e)
+      }
+    }
+
+    if (lightDistEl && this.hasLightnessDistributionTarget) {
+      try {
+        const distribution = JSON.parse(lightDistEl.dataset.lightnessDistribution)
+        this.renderDistribution(this.lightnessDistributionTarget, distribution)
+      } catch (e) {
+        console.error("Error parsing lightness distribution:", e)
+      }
+    }
+  }
+
+  renderDistribution(container, distribution) {
+    if (!container || !distribution || distribution.length === 0) return
+
+    const dots = container.querySelectorAll("div")
+    distribution.forEach((density, i) => {
+      if (dots[i]) {
+        const opacity = density > 0 ? Math.min(density * 0.8 + 0.2, 1) : 0
+        const height = density > 0 ? Math.min(density * 8 + 2, 8) : 0
+        
+        dots[i].style.opacity = opacity
+        dots[i].style.height = `${height}px`
+        dots[i].classList.toggle("bg-base-content", density > 0)
+        dots[i].classList.toggle("bg-transparent", density === 0)
+      }
+    })
+  }
+
   // ===========================================================================
   // Reset
   // ===========================================================================
 
   resetFilters() {
-    // Reset family
     this.familyValue = ""
     this.familyPillTargets.forEach(pill => {
       pill.dataset.selected = "false"
@@ -240,7 +276,6 @@ export default class extends Controller {
       pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
     })
 
-    // Reset sliders to middle
     if (this.hasSaturationSliderTarget) {
       this.saturationSliderTarget.value = 50
       this.saturationValue = 50

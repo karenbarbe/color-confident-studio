@@ -120,7 +120,8 @@ class PalettesController < ApplicationController
       saturation: @filter_params[:saturation],
       lightness: @filter_params[:lightness],
       source: @source,
-      stash_count: @stash_count || 0
+      stash_count: @stash_count || 0,
+      distribution: @distribution || { saturation: [], lightness: [] }
     }
   end
 
@@ -133,7 +134,15 @@ class PalettesController < ApplicationController
 
     set_current_slot_for_edit_mode
 
-    @colors, @total_count = fetch_matching_colors
+    if @filter_params[:color_family].blank?
+      if @mode == "edit" && @current_color
+        @filter_params[:color_family] = @current_color.color_family
+      else
+        @filter_params[:color_family] = "Red"
+      end
+    end
+
+    @colors, @total_count, @distribution = fetch_matching_colors_with_distribution
 
     render partial: "palettes/editor/palette_color_list", locals: {
       palette: @palette,
@@ -142,7 +151,8 @@ class PalettesController < ApplicationController
       type: @type,
       mode: @mode,
       current_slot: @current_slot,
-      current_color: @current_color
+      current_color: @current_color,
+      distribution: @distribution
     }
   end
 
@@ -243,6 +253,20 @@ class PalettesController < ApplicationController
     end
   end
 
+  def fetch_matching_colors_with_distribution
+    if @type == "fabric" && @source == "stash"
+      query = StashColorQuery.new(
+        user: Current.user,
+        exclude_color_ids: @palette_color_ids,
+        **@filter_params
+      )
+      [ query.results, query.count, query.distribution_data ]
+    else
+      matcher = build_color_matcher
+      [ matcher.matching_colors.limit(30), matcher.count, matcher.distribution_data ]
+    end
+  end
+
   def fetch_stash_colors
     query = StashColorQuery.new(
       user: Current.user,
@@ -281,6 +305,14 @@ class PalettesController < ApplicationController
 
     set_thread_edit_mode_slot
 
+    if @mode == "add" && @filter_params[:color_family].blank?
+      @filter_params[:color_family] = "Red"
+    end
+
+    if @mode == "edit" && @current_color && @filter_params[:color_family].blank?
+      @filter_params[:color_family] = @current_color.color_family
+    end
+
     matcher = ColorMatcher.new(
       brand: @selected_brand,
       exclude_color_ids: @palette_color_ids,
@@ -289,6 +321,7 @@ class PalettesController < ApplicationController
 
     @colors = matcher.matching_colors.limit(30)
     @total_count = matcher.count
+    @distribution = matcher.distribution_data
   end
 
   def load_fabric_picker_data
@@ -301,6 +334,14 @@ class PalettesController < ApplicationController
 
     set_fabric_edit_mode_slot
 
+    if @mode == "add" && @filter_params[:color_family].blank?
+      @filter_params[:color_family] = "Red"
+    end
+
+    if @mode == "edit" && @current_color && @filter_params[:color_family].blank?
+      @filter_params[:color_family] = @current_color.color_family
+    end
+
     if @source == "stash"
       query = StashColorQuery.new(
         user: Current.user,
@@ -309,6 +350,7 @@ class PalettesController < ApplicationController
       )
       @colors = query.results
       @total_count = query.count
+      @distribution = query.distribution_data
     else
       matcher = ColorMatcher.new(
         brand: @selected_brand,
@@ -317,6 +359,7 @@ class PalettesController < ApplicationController
       )
       @colors = matcher.matching_colors.limit(30)
       @total_count = matcher.count
+      @distribution = matcher.distribution_data
     end
   end
 

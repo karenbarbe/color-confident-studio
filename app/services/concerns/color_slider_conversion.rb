@@ -19,6 +19,16 @@ module ColorSliderConversion
     LIGHTNESS_RANGE[:min] + (value / 100.0) * (LIGHTNESS_RANGE[:max] - LIGHTNESS_RANGE[:min])
   end
 
+  # Convert OKLCH chroma back to slider value (0-100)
+  def chroma_to_slider(chroma)
+    ((chroma - SATURATION_RANGE[:min]) / (SATURATION_RANGE[:max] - SATURATION_RANGE[:min]) * 100).round
+  end
+
+  # Convert OKLCH lightness back to slider value (0-100)
+  def lightness_to_slider(lightness)
+    ((lightness - LIGHTNESS_RANGE[:min]) / (LIGHTNESS_RANGE[:max] - LIGHTNESS_RANGE[:min]) * 100).round
+  end
+
   # Calculate tolerance range for chroma filtering
   def chroma_range(center_value, tolerance_percent = 20)
     center = slider_to_chroma(center_value)

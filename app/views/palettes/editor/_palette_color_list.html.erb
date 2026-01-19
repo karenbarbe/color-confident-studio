@@ -1,8 +1,10 @@
-<%# app/views/palettes/editor/_palette_color_list.html.erb %>
-<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil) %>
+<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil, distribution: nil) %>
 
 <%# Include total count as data attribute for JS to read %>
-<div data-total-count="<%= total_count %>">
+<div data-total-count="<%= total_count %>" 
+      data-saturation-distribution="<%= (defined?(distribution) && distribution ? distribution[:saturation] : []).to_json %>"
+      data-lightness-distribution="<%= (defined?(distribution) && distribution ? distribution[:lightness] : []).to_json %>">
+
   <div class="flex gap-3 overflow-x-auto py-4 min-h-32"
        style="<%= "background-color: ##{palette.background_color&.hex_color};" if type == "thread" && palette.background_color %>">
 

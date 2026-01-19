@@ -91,7 +91,8 @@ export default class extends Controller {
           vendorCode: pill.dataset.vendorCode,
           name: pill.dataset.name,
           brandName: pill.dataset.brandName,
-          oklchL: parseFloat(pill.dataset.oklchL) || null
+          oklchL: parseFloat(pill.dataset.oklchL) || null,
+          colorFamily: pill.dataset.colorFamily || null
         }
       })
     })
@@ -111,7 +112,8 @@ export default class extends Controller {
             hex: backgroundSelector.dataset.hex,
             vendorCode: backgroundSelector.dataset.vendorCode,
             name: backgroundSelector.dataset.name,
-            brandName: backgroundSelector.dataset.brandName
+            brandName: backgroundSelector.dataset.brandName,
+            colorFamily: backgroundSelector.dataset.colorFamily || null
           }
         }
       }
@@ -245,7 +247,8 @@ export default class extends Controller {
         vendorCode: colorData.vendorCode,
         name: colorData.name,
         brandName: colorData.brandName,
-        oklchL: colorData.oklchL
+        oklchL: colorData.oklchL,
+        colorFamily: colorData.colorFamily
       }
     }
 
@@ -282,7 +285,8 @@ export default class extends Controller {
       vendorCode: colorData.vendorCode,
       name: colorData.name,
       brandName: colorData.brandName,
-      oklchL: colorData.oklchL
+      oklchL: colorData.oklchL,
+      colorFamily: colorData.colorFamily
     }
 
     this.renderThreadPills()
@@ -338,7 +342,8 @@ export default class extends Controller {
         hex: colorData.hex,
         vendorCode: colorData.vendorCode,
         name: colorData.name,
-        brandName: colorData.brandName
+        brandName: colorData.brandName,
+        colorFamily: colorData.colorFamily
       }
     }
 
@@ -387,7 +392,7 @@ export default class extends Controller {
       html += `
         <div class="flex flex-col items-center gap-2 shrink-0">
           <button type="button"
-                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 ${ringClass}"
+                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 ${ringClass}"
                   style="background-color: #${slot.productColor.hex};"
                   data-action="click->palette-editor#editColor"
                   data-slot-id="${slot.id}"
@@ -397,6 +402,7 @@ export default class extends Controller {
                   data-name="${slot.productColor.name}"
                   data-brand-name="${slot.productColor.brandName}"
                   data-oklch-l="${slot.productColor.oklchL || ''}"
+                  data-color-family="${slot.productColor.colorFamily || ''}"
                   data-palette-editor-target="colorPill"
                   title="${slot.productColor.vendorCode} - ${slot.productColor.name}">
           </button>
@@ -470,6 +476,7 @@ export default class extends Controller {
       selector.dataset.vendorCode = bg.productColor.vendorCode
       selector.dataset.name = bg.productColor.name
       selector.dataset.brandName = bg.productColor.brandName
+      selector.dataset.colorFamily = bg.productColor.colorFamily || ''
     } else {
       selector.innerHTML = `
         <span class="size-4 rounded-full border-2 border-dashed border-zinc-400"></span>
@@ -484,6 +491,7 @@ export default class extends Controller {
       delete selector.dataset.vendorCode
       delete selector.dataset.name
       delete selector.dataset.brandName
+      delete selector.dataset.colorFamily
     }
   }
 
@@ -701,7 +709,8 @@ export default class extends Controller {
     this.updateSelectionIndicator(this.selectedSlotIdValue)
     this.loadPanelContent("edit", "thread", {
       slot_id: this.selectedSlotIdValue,
-      color_id: button.dataset.colorId
+      color_id: button.dataset.colorId,
+      color_family: button.dataset.colorFamily
     })
     this.openPanel()
   }
@@ -735,7 +744,8 @@ export default class extends Controller {
       vendorCode: button.dataset.vendorCode,
       name: button.dataset.name,
       brandName: button.dataset.brandName,
-      oklchL: parseFloat(button.dataset.oklchL) || null
+      oklchL: parseFloat(button.dataset.oklchL) || null,
+      colorFamily: button.dataset.colorFamily || null
     }
 
     const mode = button.dataset.mode
@@ -763,7 +773,8 @@ export default class extends Controller {
       hex: button.dataset.hex,
       vendorCode: button.dataset.vendorCode,
       name: button.dataset.name,
-      brandName: button.dataset.brandName
+      brandName: button.dataset.brandName,
+      colorFamily: button.dataset.colorFamily || null
     }
 
     this.setBackgroundColor(colorData)
@@ -797,7 +808,13 @@ export default class extends Controller {
     }
 
     this.updatePanelMode()
-    this.loadPanelContent(this.modeValue, "fabric")
+    
+    // Pass color_family when editing existing background
+    const params = hasBackground && selector.dataset.colorFamily
+      ? { color_family: selector.dataset.colorFamily }
+      : {}
+    
+    this.loadPanelContent(this.modeValue, "fabric", params)
     this.openPanel()
   }
 
@@ -855,7 +872,9 @@ export default class extends Controller {
     url.searchParams.set("type", type)
 
     Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.set(key, value)
+      if (value) {
+        url.searchParams.set(key, value)
+      }
     })
 
     if (this.hasPanelContentTarget) {

@@ -1,5 +1,4 @@
-<%# app/views/palettes/editor/_palette_color_picker_content.html.erb %>
-<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, saturation: nil, lightness: nil, source: "brand", stash_count: 0) %>
+<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, saturation: nil, lightness: nil, source: "brand", stash_count: 0, distribution: { saturation: [], lightness: [] }) %>
 
 <turbo-frame id="panel-content">
   <div class="space-y-6"
@@ -12,7 +11,9 @@
        data-palette-color-picker-saturation-value="<%= saturation || 50 %>"
        data-palette-color-picker-lightness-value="<%= lightness || 50 %>"
        data-palette-color-picker-mode-value="<%= mode %>"
-       data-palette-color-picker-slot-id-value="<%= current_slot&.id %>">
+       data-palette-color-picker-slot-id-value="<%= current_slot&.id %>"
+       data-palette-color-picker-saturation-distribution-value="<%= distribution[:saturation].to_json %>"
+       data-palette-color-picker-lightness-distribution-value="<%= distribution[:lightness].to_json %>">
 
     <%# ================================================================== %>
     <%# Matching Colors Section %>
@@ -99,7 +100,7 @@
         <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Color Controls</span>
         <button type="button"
                 class="text-base-content/40 hover:text-base-content/60"
-                title="Filter colors by family, saturation, and lightness">
+                title="Filter colors by family, saturation, and lightness. Dots below sliders show where colors are concentrated.">
           <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
           </svg>
@@ -132,6 +133,15 @@
                  style="left: calc(<%= saturation || 50 %>% - 10px);">
             </div>
           </div>
+          <%# Distribution hint dots %>
+          <div class="flex justify-between px-0.5 h-2" data-palette-color-picker-target="saturationDistribution">
+            <% distribution[:saturation].each_with_index do |density, i| %>
+              <div class="w-1.5 rounded-full transition-all duration-200 <%= density > 0 ? 'bg-base-content' : 'bg-transparent' %>"
+                   style="opacity: <%= [density * 0.8 + 0.2, 1].min %>; height: <%= [(density * 8 + 2), 8].min %>px;"
+                   title="<%= (i * 10) %>-<%= (i + 1) * 10 %>%: <%= (density * 100).round %>% density">
+              </div>
+            <% end %>
+          </div>
         </div>
 
         <%# Lightness slider %>
@@ -153,6 +163,15 @@
                  data-palette-color-picker-target="lightnessThumb"
                  style="left: calc(<%= lightness || 50 %>% - 10px);">
             </div>
+          </div>
+          <%# Distribution hint dots %>
+          <div class="flex justify-between px-0.5 h-2" data-palette-color-picker-target="lightnessDistribution">
+            <% distribution[:lightness].each_with_index do |density, i| %>
+              <div class="w-1.5 rounded-full transition-all duration-200 <%= density > 0 ? 'bg-base-content' : 'bg-transparent' %>"
+                   style="opacity: <%= [density * 0.8 + 0.2, 1].min %>; height: <%= [(density * 8 + 2), 8].min %>px;"
+                   title="<%= (i * 10) %>-<%= (i + 1) * 10 %>%: <%= (density * 100).round %>% density">
+              </div>
+            <% end %>
           </div>
         </div>
       </div>

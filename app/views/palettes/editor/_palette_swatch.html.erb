@@ -1,13 +1,11 @@
-<%# app/views/palettes/editor/_palette_swatch.html.erb %>
 <%# locals: (color:, type:, mode: "add", current_slot: nil, is_selected: false, background_hex: nil) %>
 
 <%
   # Determine the action based on type
   action = type == "fabric" ? "palette-editor#selectBackgroundColor" : "palette-editor#selectThreadColor"
   
-  # Consistent sizing for both types
-  card_width = "w-28"      # 112px
-  color_height = "h-20"    # 80px
+  card_width = "w-28"
+  color_height = "h-20"
 %>
 
 <button type="button"
@@ -18,6 +16,7 @@
   data-vendor-code="<%= color.vendor_code %>"
   data-name="<%= color.name %>"
   data-brand-name="<%= color.brand.name %>"
+  data-color-family="<%= color.color_family %>"
   <% if type == "thread" %>data-oklch-l="<%= color.oklch_l %>"<% end %>
   data-mode="<%= mode %>"
   data-slot-id="<%= current_slot&.id %>"
