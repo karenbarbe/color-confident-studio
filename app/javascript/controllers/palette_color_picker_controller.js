@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus"
  * 
  * Unified controller for selecting colors in the palette editor.
  * Handles both thread and fabric (background) color selection with
- * consistent filtering controls and distribution visualization.
+ * filtering by color family and lightness.
  */
 export default class extends Controller {
   static targets = [
@@ -14,56 +14,28 @@ export default class extends Controller {
     "sourceName",
     "familyPills",
     "familyPill",
-    "saturationSlider",
-    "saturationThumb",
     "lightnessSlider",
-    "lightnessThumb",
-    "saturationDistribution",
-    "lightnessDistribution"
+    "lightnessThumb"
   ]
 
   static values = {
     paletteId: Number,
     type: { type: String, default: "thread" },
     brandId: Number,
-    source: { type: String, default: "brand" },
     family: String,
-    saturation: { type: Number, default: 50 },
     lightness: { type: Number, default: 50 },
     mode: { type: String, default: "add" },
-    slotId: Number,
-    saturationDistribution: { type: Array, default: [] },
-    lightnessDistribution: { type: Array, default: [] }
+    slotId: Number
   }
 
   connect() {
     this.debounceTimer = null
-    this.updateThumbPositions()
+    this.updateThumbPosition()
   }
 
   // ===========================================================================
   // Source/Brand selection
   // ===========================================================================
-
-  selectSource(event) {
-    const source = event.currentTarget.dataset.source
-    const sourceName = event.currentTarget.dataset.sourceName
-    const brandId = event.currentTarget.dataset.brandId
-
-    this.sourceValue = source
-
-    if (brandId) {
-      this.brandIdValue = parseInt(brandId, 10)
-    }
-
-    if (this.hasSourceNameTarget) {
-      this.sourceNameTarget.textContent = sourceName.length > 20
-        ? sourceName.substring(0, 20) + "..."
-        : sourceName
-    }
-
-    this.applyFilters()
-  }
 
   selectBrand(event) {
     const brandId = event.currentTarget.dataset.brandId
@@ -112,33 +84,21 @@ export default class extends Controller {
   // Slider controls
   // ===========================================================================
 
-  updateSaturation(event) {
-    const value = parseInt(event.target.value, 10)
-    this.saturationValue = value
-    this.updateThumbPosition(this.saturationThumbTarget, value)
-  }
-
   updateLightness(event) {
     const value = parseInt(event.target.value, 10)
     this.lightnessValue = value
-    this.updateThumbPosition(this.lightnessThumbTarget, value)
+    this.updateThumbPosition()
   }
 
-  updateThumbPosition(thumb, value) {
-    if (!thumb) return
+  updateThumbPosition() {
+    if (!this.hasLightnessThumbTarget || !this.hasLightnessSliderTarget) return
+    
+    const thumb = this.lightnessThumbTarget
+    const value = this.lightnessSliderTarget.value
     const thumbWidth = 20
     const trackWidth = thumb.parentElement.offsetWidth - thumbWidth
     const position = (value / 100) * trackWidth
     thumb.style.left = `${position}px`
-  }
-
-  updateThumbPositions() {
-    if (this.hasSaturationThumbTarget && this.hasSaturationSliderTarget) {
-      this.updateThumbPosition(this.saturationThumbTarget, this.saturationSliderTarget.value)
-    }
-    if (this.hasLightnessThumbTarget && this.hasLightnessSliderTarget) {
-      this.updateThumbPosition(this.lightnessThumbTarget, this.lightnessSliderTarget.value)
-    }
   }
 
   // ===========================================================================
@@ -167,10 +127,6 @@ export default class extends Controller {
       url.searchParams.set("color_family", this.familyValue)
     }
 
-    if (this.hasSaturationSliderTarget) {
-      url.searchParams.set("saturation", this.saturationSliderTarget.value)
-    }
-
     if (this.hasLightnessSliderTarget) {
       url.searchParams.set("lightness", this.lightnessSliderTarget.value)
     }
@@ -182,13 +138,6 @@ export default class extends Controller {
     if (this.slotIdValue) {
       url.searchParams.set("slot_id", this.slotIdValue)
     }
-
-    if (this.typeValue === "fabric" && this.sourceValue) {
-      url.searchParams.set("source", this.sourceValue)
-    }
-
-    // Request distribution data as well
-    url.searchParams.set("include_distribution", "true")
 
     fetch(url, {
       headers: {
@@ -202,7 +151,6 @@ export default class extends Controller {
           this.colorListTarget.innerHTML = html
         }
         this.updateCountBadge(html)
-        this.updateDistributionFromResponse(html)
       })
       .catch(error => {
         console.error(`Error fetching ${this.typeValue} colors:`, error)
@@ -219,75 +167,5 @@ export default class extends Controller {
     if (countEl) {
       this.countBadgeTarget.textContent = countEl.dataset.totalCount
     }
-  }
-
-  updateDistributionFromResponse(html) {
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(html, "text/html")
-    
-    const satDistEl = doc.querySelector("[data-saturation-distribution]")
-    const lightDistEl = doc.querySelector("[data-lightness-distribution]")
-
-    if (satDistEl && this.hasSaturationDistributionTarget) {
-      try {
-        const distribution = JSON.parse(satDistEl.dataset.saturationDistribution)
-        this.renderDistribution(this.saturationDistributionTarget, distribution)
-      } catch (e) {
-        console.error("Error parsing saturation distribution:", e)
-      }
-    }
-
-    if (lightDistEl && this.hasLightnessDistributionTarget) {
-      try {
-        const distribution = JSON.parse(lightDistEl.dataset.lightnessDistribution)
-        this.renderDistribution(this.lightnessDistributionTarget, distribution)
-      } catch (e) {
-        console.error("Error parsing lightness distribution:", e)
-      }
-    }
-  }
-
-  renderDistribution(container, distribution) {
-    if (!container || !distribution || distribution.length === 0) return
-
-    const dots = container.querySelectorAll("div")
-    distribution.forEach((density, i) => {
-      if (dots[i]) {
-        const opacity = density > 0 ? Math.min(density * 0.8 + 0.2, 1) : 0
-        const height = density > 0 ? Math.min(density * 8 + 2, 8) : 0
-        
-        dots[i].style.opacity = opacity
-        dots[i].style.height = `${height}px`
-        dots[i].classList.toggle("bg-base-content", density > 0)
-        dots[i].classList.toggle("bg-transparent", density === 0)
-      }
-    })
-  }
-
-  // ===========================================================================
-  // Reset
-  // ===========================================================================
-
-  resetFilters() {
-    this.familyValue = ""
-    this.familyPillTargets.forEach(pill => {
-      pill.dataset.selected = "false"
-      pill.classList.add("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-200")
-      pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
-    })
-
-    if (this.hasSaturationSliderTarget) {
-      this.saturationSliderTarget.value = 50
-      this.saturationValue = 50
-      this.updateThumbPosition(this.saturationThumbTarget, 50)
-    }
-
-    if (this.hasLightnessSliderTarget) {
-      this.lightnessSliderTarget.value = 50
-      this.lightnessValue = 50
-      this.updateThumbPosition(this.lightnessThumbTarget, 50)
-    }
-
-    this.applyFilters()
   }
 }

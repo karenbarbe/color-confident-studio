@@ -95,7 +95,6 @@ class PalettesController < ApplicationController
 
     @type = params[:type] || "thread"
     @mode = params[:mode] || "add"
-    @source = params[:source] || "brand"
 
     # Colors already in palette (to exclude from selection)
     @palette_color_ids = @palette.product_colors.pluck(:id)
@@ -117,11 +116,7 @@ class PalettesController < ApplicationController
       brands: @brands,
       selected_brand: @selected_brand,
       selected_family: @filter_params[:color_family],
-      saturation: @filter_params[:saturation],
-      lightness: @filter_params[:lightness],
-      source: @source,
-      stash_count: @stash_count || 0,
-      distribution: @distribution || { saturation: [], lightness: [] }
+      lightness: @filter_params[:lightness]
     }
   end
 
@@ -130,7 +125,6 @@ class PalettesController < ApplicationController
     authorize @palette
 
     @type = params[:type] || "thread"
-    @source = params[:source] || "brand"
 
     set_current_slot_for_edit_mode
 
@@ -142,7 +136,7 @@ class PalettesController < ApplicationController
       end
     end
 
-    @colors, @total_count, @distribution = fetch_matching_colors_with_distribution
+    @colors, @total_count = fetch_matching_colors
 
     render partial: "palettes/editor/palette_color_list", locals: {
       palette: @palette,
@@ -151,8 +145,7 @@ class PalettesController < ApplicationController
       type: @type,
       mode: @mode,
       current_slot: @current_slot,
-      current_color: @current_color,
-      distribution: @distribution
+      current_color: @current_color
     }
   end
 
@@ -225,7 +218,6 @@ class PalettesController < ApplicationController
   def extract_filter_params
     {
       color_family: params[:color_family].presence,
-      saturation: params[:saturation].present? ? params[:saturation].to_i : nil,
       lightness: params[:lightness].present? ? params[:lightness].to_i : nil
     }
   end
@@ -246,40 +238,8 @@ class PalettesController < ApplicationController
   end
 
   def fetch_matching_colors
-    if @type == "fabric" && @source == "stash"
-      fetch_stash_colors
-    else
-      fetch_brand_colors
-    end
-  end
-
-  def fetch_matching_colors_with_distribution
-    if @type == "fabric" && @source == "stash"
-      query = StashColorQuery.new(
-        user: Current.user,
-        exclude_color_ids: @palette_color_ids,
-        **@filter_params
-      )
-      [ query.results, query.count, query.distribution_data ]
-    else
-      matcher = build_color_matcher
-      [ matcher.matching_colors.limit(30), matcher.count, matcher.distribution_data ]
-    end
-  end
-
-  def fetch_stash_colors
-    query = StashColorQuery.new(
-      user: Current.user,
-      exclude_color_ids: @palette_color_ids,
-      **@filter_params
-    )
-
-    [ query.results, query.count ]
-  end
-
-  def fetch_brand_colors
     matcher = build_color_matcher
-    [ matcher.matching_colors.limit(30), matcher.count ]
+    [ matcher.matching_colors.limit(45), matcher.count ]
   end
 
   def build_color_matcher
@@ -319,18 +279,14 @@ class PalettesController < ApplicationController
       **@filter_params
     )
 
-    @colors = matcher.matching_colors.limit(30)
+    @colors = matcher.matching_colors.limit(45)
     @total_count = matcher.count
-    @distribution = matcher.distribution_data
   end
 
   def load_fabric_picker_data
     @filter_params = extract_filter_params
     @brands = Brand.where(category: "fabric").order(:name)
     @selected_brand = find_selected_brand(@brands)
-
-    stash_query = StashColorQuery.new(user: Current.user, exclude_color_ids: @palette_color_ids)
-    @stash_count = stash_query.total_stash_count
 
     set_fabric_edit_mode_slot
 
@@ -342,25 +298,14 @@ class PalettesController < ApplicationController
       @filter_params[:color_family] = @current_color.color_family
     end
 
-    if @source == "stash"
-      query = StashColorQuery.new(
-        user: Current.user,
-        exclude_color_ids: @palette_color_ids,
-        **@filter_params
-      )
-      @colors = query.results
-      @total_count = query.count
-      @distribution = query.distribution_data
-    else
-      matcher = ColorMatcher.new(
-        brand: @selected_brand,
-        exclude_color_ids: @palette_color_ids,
-        **@filter_params
-      )
-      @colors = matcher.matching_colors.limit(30)
-      @total_count = matcher.count
-      @distribution = matcher.distribution_data
-    end
+    matcher = ColorMatcher.new(
+      brand: @selected_brand,
+      exclude_color_ids: @palette_color_ids,
+      **@filter_params
+    )
+
+    @colors = matcher.matching_colors.limit(45)
+    @total_count = matcher.count
   end
 
   def find_selected_brand(brands)
