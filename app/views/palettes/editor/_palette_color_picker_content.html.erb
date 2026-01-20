@@ -16,12 +16,12 @@
        data-palette-color-picker-lightness-distribution-value="<%= distribution[:lightness].to_json %>">
 
     <%# ================================================================== %>
-    <%# Matching Colors Section %>
+    <%# Matching colors section %>
     <%# ================================================================== %>
     <section class="px-4 pt-4">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Matching colors</span>
+          <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Matching colors</span>
           <span class="px-2 py-0.5 text-xs bg-base-200 text-base-content/70 rounded"
                 data-palette-color-picker-target="countBadge">
             <%= total_count %>
@@ -93,11 +93,11 @@
     </section>
 
     <%# ================================================================== %>
-    <%# Color Controls Section %>
+    <%# Color controls section %>
     <%# ================================================================== %>
     <section class="px-4 pb-6">
       <div class="flex items-center gap-2 mb-4 pt-4">
-        <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Color controls</span>
+        <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Color controls</span>
         <button type="button"
                 class="text-base-content/40 hover:text-base-content/60"
                 title="Filter colors by family, saturation, and lightness. Dots below sliders show where colors are concentrated.">
@@ -115,7 +115,7 @@
       <div class="grid grid-cols-2 gap-8 mt-6">
         <%# Saturation slider %>
         <div class="space-y-2">
-          <div class="flex justify-between text-xs text-base-content/50">
+          <div class="flex justify-between text-xs text-base-content/70">
             <span>Muted</span>
             <span>Vivid</span>
           </div>
@@ -128,7 +128,7 @@
                    class="absolute inset-0 w-full h-3 opacity-0 cursor-pointer"
                    data-palette-color-picker-target="saturationSlider"
                    data-action="input->palette-color-picker#updateSaturation change->palette-color-picker#applyFilters">
-            <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-base-100 rounded-full shadow-md border-2 border-base-300 pointer-events-none transition-all"
+            <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-base-100 rounded-full shadow-md border-2 border-base-content/70 pointer-events-none transition-all"
                  data-palette-color-picker-target="saturationThumb"
                  style="left: calc(<%= saturation || 50 %>% - 10px);">
             </div>
@@ -146,7 +146,7 @@
 
         <%# Lightness slider %>
         <div class="space-y-2">
-          <div class="flex justify-between text-xs text-base-content/50">
+          <div class="flex justify-between text-xs text-base-content/70">
             <span>Dark</span>
             <span>Light</span>
           </div>
@@ -159,7 +159,7 @@
                    class="absolute inset-0 w-full h-3 opacity-0 cursor-pointer"
                    data-palette-color-picker-target="lightnessSlider"
                    data-action="input->palette-color-picker#updateLightness change->palette-color-picker#applyFilters">
-            <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-base-100 rounded-full shadow-md border-2 border-base-300 pointer-events-none transition-all"
+            <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-base-100 rounded-full shadow-md border-2 border-base-content/70 pointer-events-none transition-all"
                  data-palette-color-picker-target="lightnessThumb"
                  style="left: calc(<%= lightness || 50 %>% - 10px);">
             </div>

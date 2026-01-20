@@ -51,7 +51,7 @@
         <%# Delete button (shown in edit modes) %>
         <div class="hidden" data-palette-editor-target="deleteButtonContainer">
           <button type="button"
-                  class="p-2 text-base-content/50 hover:text-error transition-colors cursor-pointer"
+                  class="p-2.5 rounded-full text-base-content/50 hover:text-error hover:bg-base-content/10 transition-colors cursor-pointer"
                   data-action="click->palette-editor#deleteColor"
             title="Remove color">
             <%= icon(:trash_outline, css_class: "size-6") %>
@@ -61,7 +61,8 @@
         <%# Close button %>
         <button type="button"
                 class="p-2.5 bg-base-200 rounded-full text-base-content/70 hover:text-base-content hover:bg-base-content/10 transition-colors cursor-pointer"
-                data-action="click->palette-editor#closePanel">
+                data-action="click->palette-editor#closePanel"
+                title="Close panel">
           <%= icon(:x_mark_outline, css_class: "size-6") %>
         </button>
       </div>
