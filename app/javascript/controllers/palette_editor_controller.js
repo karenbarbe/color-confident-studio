@@ -22,7 +22,7 @@ export default class extends Controller {
     "pillsContainer", "colorPill", "addButton", "indicator",
     // Panel
     "backdrop", "panel", "panelHeader", "panelContent",
-    // Panel headers (updated)
+    // Panel headers
     "addThreadHeader", "editThreadHeader", 
     "addBackgroundHeader", "editBackgroundHeader",
     "editColorSwatch", "editColorCode", "editColorName",
@@ -385,14 +385,13 @@ export default class extends Controller {
     let html = ""
 
     // Render existing pills
+    // Compare markup to _color_pills_container.html.erb
     this.pendingState.threadSlots.forEach(slot => {
-      const needsRing = !(slot.productColor.oklchL && slot.productColor.oklchL >= 0.9)
-      const ringClass = needsRing ? "ring-1 ring-inset ring-white/20" : ""
 
       html += `
-        <div class="flex flex-col items-center gap-2 shrink-0">
+        <div class="flex flex-col flex-1 min-w-0 max-w-16 items-center gap-2">
           <button type="button"
-                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 ${ringClass}"
+                  class="w-full aspect-1/4 rounded-full transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 cursor-pointer"
                   style="background-color: #${slot.productColor.hex};"
                   data-action="click->palette-editor#editColor"
                   data-slot-id="${slot.id}"
@@ -406,9 +405,9 @@ export default class extends Controller {
                   data-palette-editor-target="colorPill"
                   title="${slot.productColor.vendorCode} - ${slot.productColor.name}">
           </button>
-          <div class="h-2 w-12 rounded-full bg-base-content opacity-0 transition-opacity"
-               data-palette-editor-target="indicator"
-               data-slot-id="${slot.id}">
+          <div class="h-2 w-3/4 max-w-12 rounded-full bg-base-content opacity-0 transition-opacity"
+              data-palette-editor-target="indicator"
+              data-slot-id="${slot.id}">
           </div>
         </div>
       `
@@ -417,18 +416,18 @@ export default class extends Controller {
     // Render add button if not full
     if (!isFull) {
       html += `
-        <div class="flex flex-col items-center gap-2 shrink-0">
+        <div class="flex flex-col flex-1 min-w-0 max-w-16 items-center gap-2">
           <button type="button"
-                  class="w-[100px] sm:w-[120px] h-[300px] sm:h-[360px] rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus:ring-4 focus:ring-base-content/20"
+                  class="w-full aspect-1/4 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus:ring-4 focus:ring-base-content/20"
                   data-action="click->palette-editor#addColor"
                   data-palette-editor-target="addButton">
-            <div class="size-12 rounded-full bg-base-content/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="size-12 rounded-full bg-white text-gray-900 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </div>
           </button>
-          <div class="h-2 w-12"></div>
+          <div class="h-2 w-3/4 max-w-12"></div>
         </div>
       `
     }
@@ -495,7 +494,7 @@ export default class extends Controller {
     }
   }
 
-  /**
+    /**
    * Update the background layer color
    */
   renderBackgroundLayer() {
@@ -503,11 +502,11 @@ export default class extends Controller {
     if (!styleEl) return
 
     const bg = this.pendingState.background
-    const color = bg ? `#${bg.productColor.hex}` : "transparent"
+    const color = bg ? `#${bg.productColor.hex}` : "var(--color-base-200)"
 
     styleEl.innerHTML = `
       <style>
-        #background-layer {
+        [data-palette-editor-target="backgroundLayer"] {
           background-color: ${color};
         }
       </style>
@@ -535,7 +534,7 @@ export default class extends Controller {
     if (isEnabled) {
       saveButtonContainer.innerHTML = `
         <button type="button"
-                class="btn ${hasChanges ? 'btn-primary' : 'btn-neutral'}"
+                class="btn ${hasChanges ? 'btn-neutral' : 'btn-neutral btn-outline'}"
                 data-action="click->palette-editor#savePalette">
           ${buttonText}
         </button>
@@ -560,14 +559,10 @@ export default class extends Controller {
    * Update the unsaved changes indicator
    */
   updateUnsavedIndicator() {
-    // For now, we'll update the document title
     const hasChanges = this.hasUnsavedChanges()
-    const baseTitle = document.title.replace(/^\* /, "")
-    document.title = hasChanges ? `* ${baseTitle}` : baseTitle
-
-    // Optional: Add beforeunload warning
+    
     if (hasChanges) {
-      window.onbeforeunload = () => "You have unsaved changes. Are you sure you want to leave?"
+      window.onbeforeunload = () => true
     } else {
       window.onbeforeunload = null
     }
@@ -716,17 +711,10 @@ export default class extends Controller {
   }
 
   deleteColor() {
-    const isFabric = this.colorTypeValue === "fabric"
-    const confirmMsg = isFabric 
-      ? "Remove background color from the palette?" 
-      : "Remove this color from the palette?"
-
-    if (confirm(confirmMsg)) {
-      if (isFabric) {
-        this.removeBackgroundColor()
-      } else if (this.selectedSlotIdValue) {
-        this.removeThreadColor(this.selectedSlotIdValue)
-      }
+    if (this.colorTypeValue === "fabric") {
+      this.removeBackgroundColor()
+    } else if (this.selectedSlotIdValue) {
+      this.removeThreadColor(this.selectedSlotIdValue)
     }
   }
 

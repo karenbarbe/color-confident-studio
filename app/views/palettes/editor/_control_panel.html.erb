@@ -13,7 +13,7 @@
   <div class="bg-base-100 rounded-t-2xl shadow-2xl max-h-[85vh] overflow-hidden flex flex-col mx-auto max-w-xl">
 
     <%# Panel header %>
-    <div class="flex items-center justify-between p-4 border-b border-base-300"
+    <div class="flex items-center justify-between p-4 border-b border-base-content/70"
          data-palette-editor-target="panelHeader">
 
       <%# "Add thread" mode header %>
@@ -51,20 +51,18 @@
         <%# Delete button (shown in edit modes) %>
         <div class="hidden" data-palette-editor-target="deleteButtonContainer">
           <button type="button"
-                  class="p-2 text-base-content/70 hover:text-error transition-colors"
+                  class="p-2 text-base-content/50 hover:text-error transition-colors cursor-pointer"
                   data-action="click->palette-editor#deleteColor"
             title="Remove color">
-            <%= icon(:trash_outline, class: "size-6") %>
+            <%= icon(:trash_outline, css_class: "size-6") %>
           </button>
         </div>
 
         <%# Close button %>
         <button type="button"
-                class="p-2.5 bg-base-200 rounded-full text-base-content/50 hover:text-base-content/70 hover:bg-base-300 transition-colors"
+                class="p-2.5 bg-base-200 rounded-full text-base-content/70 hover:text-base-content hover:bg-base-content/10 transition-colors cursor-pointer"
                 data-action="click->palette-editor#closePanel">
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <%= icon(:x_mark_outline, css_class: "size-6") %>
         </button>
       </div>
     </div>

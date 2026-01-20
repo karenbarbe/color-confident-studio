@@ -12,27 +12,27 @@
     </div>
     <div class="flex gap-2">
       <% if policy(@palette).edit? %>
-        <%= link_to "Edit", edit_palette_path(@palette), class: "btn btn-ghost btn-sm" %>
+        <%= link_to "Edit", edit_palette_path(@palette), class: "btn btn-outline" %>
       <% end %>
     </div>
   </div>
 
   <%# Full palette preview %>
-  <div class="bg-base-100 overflow-hidden">
+  <div class="bg-base-100">
     <%# Background with colors on top %>
-    <div class="h-64 sm:h-80" style="background-color: #<%= @palette.background_color&.hex_color || 'f5f5f5' %>;">
+    <div class="p-4 md:p-8" style="background-color: #<%= @palette.background_color&.hex_color || 'f5f5f5' %>;">
       <%# Color swatches arranged on background %>
-      <div class="flex items-center p-8">
-        <div class="flex gap-2">
+
+        <div class="flex gap-1 md:gap-2">
           <% @palette.thread_slots.each do |slot| %>
-            <div class="aspect-1/4 h-40 sm:h-60 rounded-full"
+            <div class="w-full aspect-1/4 min-w-0 max-w-16 rounded-full"
                  style="background-color: #<%= slot.product_color.hex_color %>;"
                  title="<%= slot.product_color.vendor_code %>">
             </div>
           <% end %>
         </div>
       </div>
-    </div>
+
   </div>
 
   <%# Color details %>

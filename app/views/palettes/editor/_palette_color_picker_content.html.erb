@@ -21,7 +21,7 @@
     <section class="px-4 pt-4">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Matching Colors</span>
+          <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Matching colors</span>
           <span class="px-2 py-0.5 text-xs bg-base-200 text-base-content/70 rounded"
                 data-palette-color-picker-target="countBadge">
             <%= total_count %>
@@ -31,7 +31,7 @@
         <%# Source/Brand selector dropdown %>
         <div class="relative" data-controller="dropdown">
           <button type="button"
-                  class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors"
+                  class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors cursor-pointer"
                   data-action="click->dropdown#toggle">
             <span data-palette-color-picker-target="sourceName">
               <% if type == "fabric" && source == "stash" %>
@@ -51,8 +51,8 @@
               <%# Stash option (fabric only) %>
               <% if type == "fabric" && stash_count > 0 %>
                 <button type="button"
-                        class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between <%= 'bg-base-200 font-medium' if source == 'stash' %>"
-                        data-action="click->palette-color-picker#selectSource"
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between cursor-pointer <%= 'bg-base-200 font-medium' if source == 'stash' %>"
+                        data-action="click->palette-color-picker#selectSource click->dropdown#close"
                   data-source="stash"
                   data-source-name="From stash">
                   <span>From stash</span>
@@ -64,8 +64,8 @@
               <%# Brand options %>
               <% brands.each do |brand| %>
                 <button type="button"
-                        class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between <%= 'bg-base-200 font-medium' if source == 'brand' && brand.id == selected_brand&.id %>"
-                        data-action="click->palette-color-picker#<%= type == 'fabric' ? 'selectSource' : 'selectBrand' %>"
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between cursor-pointer <%= 'bg-base-200 font-medium' if source == 'brand' && brand.id == selected_brand&.id %>"
+                        data-action="click->palette-color-picker#<%= type == 'fabric' ? 'selectSource' : 'selectBrand' %> click->dropdown#close"
                   data-source="brand"
                   data-brand-id="<%= brand.id %>"
                   data-brand-name="<%= brand.name %>"
@@ -96,8 +96,8 @@
     <%# Color Controls Section %>
     <%# ================================================================== %>
     <section class="px-4 pb-6">
-      <div class="flex items-center gap-2 mb-4 pt-4 border-t border-base-300">
-        <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Color Controls</span>
+      <div class="flex items-center gap-2 mb-4 pt-4">
+        <span class="text-sm font-medium text-base-content/50 uppercase tracking-wide">Color controls</span>
         <button type="button"
                 class="text-base-content/40 hover:text-base-content/60"
                 title="Filter colors by family, saturation, and lightness. Dots below sliders show where colors are concentrated.">

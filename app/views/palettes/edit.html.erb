@@ -1,42 +1,43 @@
 <% content_for :title, @palette.name.presence || "Untitled palette" %>
 
-<%# Dynamic background style container %>
-<div id="background-layer-style">
-  <style>
-    #background-layer {
-      background-color: <%= @palette.background_color ? "##{@palette.background_color.hex_color}" : 'transparent' %>;
-    }
-  </style>
-</div>
-
-<div class="min-h-screen" 
-     data-controller="palette-editor" 
-     data-palette-editor-palette-id-value="<%= @palette.id %>"
-     data-palette-editor-is-new-palette-value="<%= @palette.color_slots.empty? %>">
-
-  <%# Flash messages container for Turbo Stream updates %>
-  <div id="flash-messages" class="fixed top-4 right-4 z-100 space-y-2">
-    <%= render "shared/flash", notice: notice, alert: alert %>
+<% content_for :full_width_after do %>
+  <%# Dynamic background style container %>
+  <div id="background-layer-style">
+    <style>
+      [data-palette-editor-target="backgroundLayer"] {
+        background-color: <%= @palette.background_color ? "##{@palette.background_color.hex_color}" : 'var(--color-base-200)' %>;
+      }
+    </style>
   </div>
 
-  <%# Background layer - takes the background color %>
-  <div id="background-layer"
-       class="min-h-screen pb-32 transition-colors duration-300"
+  <div class="w-full -mt-16 md:-mt-8 -mb-16 min-h-screen pt-16 md:pt-8 pb-32 transition-colors duration-300" 
+       data-controller="palette-editor" 
+       data-palette-editor-palette-id-value="<%= @palette.id %>"
+       data-palette-editor-is-new-palette-value="<%= @palette.color_slots.empty? %>"
        data-palette-editor-target="backgroundLayer">
 
-    <%# Header card %>
-    <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
-
-    <%# Color pills area %>
-    <div class="px-6 lg:px-12 mt-8">
-      <%= render "palettes/editor/color_pills_container",
-      palette: @palette,
-      thread_slots: @thread_slots %>
+    <%# Flash messages container for Turbo Stream updates %>
+    <div id="flash-messages" class="fixed top-4 right-4 z-100 space-y-2">
+      <%= render "shared/flash", notice: notice, alert: alert %>
     </div>
 
+    <%# Constrained content wrapper %>
+    <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+
+      <%# Header card %>
+      <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
+
+      <%# Color pills area %>
+      <div class="mt-8">
+        <%= render "palettes/editor/color_pills_container",
+        palette: @palette,
+        thread_slots: @thread_slots %>
+      </div>
+
+    </div>
+
+    <%# Control panel (slide-up drawer) %>
+    <%= render "palettes/editor/control_panel", palette: @palette %>
+
   </div>
-
-  <%# Control panel (slide-up drawer) %>
-  <%= render "palettes/editor/control_panel", palette: @palette %>
-
-</div>
+<% end %>
