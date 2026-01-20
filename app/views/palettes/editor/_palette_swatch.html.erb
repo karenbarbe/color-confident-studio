@@ -1,4 +1,4 @@
-<%# locals: (color:, type:, mode: "add", current_slot: nil, is_selected: false, background_hex: nil) %>
+<%# locals: (color:, type:, mode: "add", current_slot: nil, is_in_palette: false, is_in_stash: false, background_hex: nil) %>
 
 <%
   # Determine the action based on type
@@ -9,7 +9,7 @@
 %>
 
 <button type="button"
-        class="shrink-0 group text-left cursor-pointer"
+        class="shrink-0 group text-left <%= is_in_palette ? 'cursor-default' : 'cursor-pointer' %>"
         data-action="click-><%= action %>"
   data-color-id="<%= color.id %>"
   data-hex="<%= color.hex_color %>"
@@ -20,29 +20,38 @@
   <% if type == "thread" %>data-oklch-l="<%= color.oklch_l %>"<% end %>
   data-mode="<%= mode %>"
   data-slot-id="<%= current_slot&.id %>"
-  <%= "disabled" if is_selected %>>
+  <%= "disabled" if is_in_palette %>>
   <div class="<%= card_width %> rounded-md overflow-hidden bg-base-100
-              <%= is_selected ? 'ring-2 ring-base-content' : '' %>">
+              <%= is_in_palette ? 'ring-1 ring-base-content/30' : '' %>">
 
     <%# Color preview area %>
     <div class="<%= color_height %> relative"
          style="background-color: #<%= color.hex_color %>;">
 
-      <% if is_selected %>
-        <%# Selected state: checkmark overlay %>
-        <div class="absolute inset-0 flex items-center justify-center bg-black/20 text-white">
-          <%= icon(:check_outline, class: "size-4") %>
+      <% if is_in_palette %>
+        <%# In palette indicator: permanently visible in top-right %>
+        <div class="absolute top-1.5 right-1.5 size-6 bg-white/70 text-gray-700 rounded-full flex items-center justify-center">
+          <%= icon(:palette_outline, css_class: "size-4") %>
         </div>
       <% else %>
-        <%# Hover state: action icon %>
+        <%# Hover state: action icon (only for colors not in palette) %>
         <div class="absolute top-1.5 right-1.5 size-6 bg-white/50 text-gray-900 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
           <% if mode == "edit" %>
-            <%# Arrow path for replace %>
             <%= icon(:arrow_path_outline, css_class: "size-4") %>
           <% else %>
-            <%# Plus for add %>
             <%= icon(:plus_outline, css_class: "size-4") %>
           <% end %>
+        </div>
+      <% end %>
+
+      <%# Stash indicator: bottom-left corner %>
+      <% if is_in_stash %>
+        <div class="absolute bottom-1.5 left-1.5">
+          <div class="size-6 flex justify-center items-center rounded-full bg-white/85">
+            <div class="size-3.5 flex justify-center items-center text-gray-700">
+              <%= icon(:heart_solid) %>
+            </div>
+          </div>
         </div>
       <% end %>
     </div>

@@ -44,16 +44,21 @@ export default class extends Controller {
 
   connect() {
     this.handleEscape = this.handleEscape.bind(this)
+    this.handleFrameLoad = this.handleFrameLoad.bind(this)
     
     // Initialize state management
     this.initializeState()
     
     // Generate unique IDs for new slots (negative to distinguish from server IDs)
     this.nextTempId = -1
+    
+    // Listen for turbo frame loads to mark pending colors
+    document.addEventListener("turbo:frame-load", this.handleFrameLoad)
   }
 
   disconnect() {
     document.removeEventListener("keydown", this.handleEscape)
+    document.removeEventListener("turbo:frame-load", this.handleFrameLoad)
   }
 
   // ===========================================================================
@@ -892,6 +897,76 @@ export default class extends Controller {
       el.classList.add("opacity-0")
       el.classList.remove("opacity-100")
     })
+  }
+
+  // ===========================================================================
+// Pending state indicators for color list
+// ===========================================================================
+
+  handleFrameLoad(event) {
+    if (event.target.id === "panel-content") {
+      requestAnimationFrame(() => {
+        this.markPendingColorsInList()
+      })
+    }
+  }
+
+  markPendingColorsInList() {
+    // Get all color IDs currently in pending state
+    const pendingColorIds = new Set(
+      this.pendingState.threadSlots.map(slot => slot.productColor.id)
+    )
+
+    if (this.pendingState.background) {
+      pendingColorIds.add(this.pendingState.background.productColor.id)
+    }
+
+    // Find all swatches in the panel content
+    if (!this.hasPanelContentTarget) return
+
+    const frame = this.panelContentTarget.querySelector("turbo-frame") || this.panelContentTarget
+    const swatchButtons = frame.querySelectorAll("button[data-color-id]")
+
+    swatchButtons.forEach(button => {
+      const colorId = parseInt(button.dataset.colorId, 10)
+      // Only mark if in pending state but not already marked by server
+      if (pendingColorIds.has(colorId) && !button.disabled) {
+        this.markSwatchAsInPalette(button)
+      }
+    })
+  }
+
+  markSwatchAsInPalette(button) {
+    // Disable the button
+    button.disabled = true
+    button.classList.remove("cursor-pointer")
+    button.classList.add("cursor-default")
+
+    // Add ring to the card
+    const card = button.querySelector("div.rounded-md")
+    if (card) {
+      card.classList.add("ring-1", "ring-base-content/30")
+    }
+
+    // Find the color preview area
+    const colorPreview = button.querySelector("div.relative")
+    if (!colorPreview) return
+
+    // Remove any existing hover action icon
+    const hoverIcon = colorPreview.querySelector(".group-hover\\:opacity-100")
+    if (hoverIcon) {
+      hoverIcon.remove()
+    }
+
+    // Add the palette indicator (matching the server-rendered version)
+    const indicator = document.createElement("div")
+    indicator.className = "absolute top-1.5 right-1.5 size-6 bg-white/70 text-gray-700 rounded-full flex items-center justify-center"
+    indicator.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
+      </svg>
+    `
+    colorPreview.appendChild(indicator)
   }
 
   // ===========================================================================

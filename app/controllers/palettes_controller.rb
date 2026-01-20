@@ -96,8 +96,8 @@ class PalettesController < ApplicationController
     @type = params[:type] || "thread"
     @mode = params[:mode] || "add"
 
-    # Colors already in palette (to exclude from selection)
     @palette_color_ids = @palette.product_colors.pluck(:id)
+    @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id)
 
     if @type == "fabric"
       load_fabric_picker_data
@@ -116,7 +116,9 @@ class PalettesController < ApplicationController
       brands: @brands,
       selected_brand: @selected_brand,
       selected_family: @filter_params[:color_family],
-      lightness: @filter_params[:lightness]
+      lightness: @filter_params[:lightness],
+      palette_color_ids: @palette_color_ids,
+      stashed_color_ids: @stashed_color_ids
     }
   end
 
@@ -137,6 +139,7 @@ class PalettesController < ApplicationController
     end
 
     @colors, @total_count = fetch_matching_colors
+    @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id)
 
     render partial: "palettes/editor/palette_color_list", locals: {
       palette: @palette,
@@ -145,7 +148,9 @@ class PalettesController < ApplicationController
       type: @type,
       mode: @mode,
       current_slot: @current_slot,
-      current_color: @current_color
+      current_color: @current_color,
+      palette_color_ids: @palette_color_ids,
+      stashed_color_ids: @stashed_color_ids
     }
   end
 
@@ -249,7 +254,6 @@ class PalettesController < ApplicationController
 
     ColorMatcher.new(
       brand: selected_brand,
-      exclude_color_ids: @palette_color_ids,
       **@filter_params
     )
   end
@@ -275,7 +279,6 @@ class PalettesController < ApplicationController
 
     matcher = ColorMatcher.new(
       brand: @selected_brand,
-      exclude_color_ids: @palette_color_ids,
       **@filter_params
     )
 
@@ -300,7 +303,6 @@ class PalettesController < ApplicationController
 
     matcher = ColorMatcher.new(
       brand: @selected_brand,
-      exclude_color_ids: @palette_color_ids,
       **@filter_params
     )
 
