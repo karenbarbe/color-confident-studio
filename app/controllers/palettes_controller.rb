@@ -20,6 +20,7 @@ class PalettesController < ApplicationController
   # GET /palettes/1
   def show
     authorize @palette
+    load_stash_items_for_palette
   end
 
   # GET /palettes/new
@@ -380,6 +381,14 @@ class PalettesController < ApplicationController
       .where(color_slots: { id: nil })
       .where(name: [ nil, "" ])
       .destroy_all
+  end
+
+  def load_stash_items_for_palette
+    color_ids = @palette.product_colors.pluck(:id)
+    @stash_items_by_color_id = Current.user
+      .stash_items
+      .where(product_color_id: color_ids)
+      .index_by(&:product_color_id)
   end
 
   def load_edit_slots
