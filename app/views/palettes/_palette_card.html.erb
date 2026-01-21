@@ -38,7 +38,9 @@
         </p>
       </div>
 
-        <%= link_to "Open", edit_palette_path(palette), class: "btn btn-sm btn-ghost" %>
+        <%= link_to edit_palette_path(palette), title: "Open palette", class: "btn btn-sm btn-ghost" do %>
+          <%= icon(:eye_outline, css_class: "size-6") %>
+        <% end %>
 
     </div>
   </div>

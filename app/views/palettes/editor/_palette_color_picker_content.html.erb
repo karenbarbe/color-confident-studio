@@ -14,7 +14,7 @@
     <%# ================================================================== %>
     <%# Matching colors section %>
     <%# ================================================================== %>
-    <section class="px-4 pt-4">
+    <section class="px-4 pt-6">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
           <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Matching colors</span>
@@ -74,15 +74,13 @@
     <%# ================================================================== %>
     <%# Color controls section %>
     <%# ================================================================== %>
-    <section class="px-4 pb-6">
+    <section class="px-4 pb-16">
       <div class="flex items-center gap-2 mb-4 pt-4">
         <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Color controls</span>
         <button type="button"
                 class="text-base-content/40 hover:text-base-content/60"
                 title="Filter colors by family and lightness.">
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd" />
-          </svg>
+          <%= icon(:info_circle_outline, css_class: "size-4") %>
         </button>
       </div>
 

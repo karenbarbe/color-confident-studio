@@ -44,7 +44,7 @@
       <% if @palette.background_color %>
         <% color = @palette.background_color %>
         <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-lg "
+          <div class="w-12 h-12 rounded-md"
                style="background-color: #<%= color.hex_color %>;"></div>
           <div>
             <p class="font-medium text-base-content"><%= color.vendor_code %></p>
@@ -58,13 +58,13 @@
     <%# Thread colors %>
     <div class="bg-base-100 rounded-xl p-5">
       <h3 class="font-semibold text-base-content mb-3">Thread colors</h3>
-      <div class="space-y-2">
+      <div class="space-y-3">
         <% @palette.thread_slots.each do |slot| %>
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg"
+            <div class="w-10 h-10 rounded-md"
                  style="background-color: #<%= slot.product_color.hex_color %>;"></div>
             <div>
-              <p class="font-medium text-base-content text-sm"><%= slot.product_color.vendor_code %></p>
+              <p class="font-medium text-base-content"><%= slot.product_color.vendor_code %></p>
               <p class="text-xs text-base-content/70"><%= slot.product_color.name %></p>
               <p class="text-xs text-base-content/50"><%= slot.product_color.brand.name %></p>
             </div>

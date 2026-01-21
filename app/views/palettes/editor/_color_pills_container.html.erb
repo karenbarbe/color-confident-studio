@@ -5,7 +5,7 @@
 <% max_slots = Palette::SLOT_LIMITS["thread"][:max] %>
 <% is_full = thread_slots.length >= max_slots %>
 
-<div id="color-pills-container" class="flex gap-1 md:gap-2 pb-4" data-palette-editor-target="pillsContainer">
+<div id="color-pills-container" class="flex gap-1 md:gap-2 px-4 pb-4" data-palette-editor-target="pillsContainer">
 
   <%# Existing color pills %>
   <% thread_slots.each_with_index do |slot, index| %>
