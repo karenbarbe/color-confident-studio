@@ -699,7 +699,9 @@ export default class extends Controller {
     }
 
     const mode = button.dataset.mode
-    const slotId = parseInt(button.dataset.slotId, 10)
+    // Use the controller's selectedSlotIdValue for edit mode
+    // This handles temp IDs (negative) that don't exist in the database
+    const slotId = mode === "edit" ? this.selectedSlotIdValue : parseInt(button.dataset.slotId, 10)
 
     if (mode === "edit" && slotId) {
       this.updateThreadColor(slotId, colorData)
@@ -821,8 +823,13 @@ export default class extends Controller {
     url.searchParams.set("mode", mode)
     url.searchParams.set("type", type)
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
+    // Pass pending background hex for thread color picker display
+    if (type === "thread" && this.pendingState.background) {
+      url.searchParams.set("pending_background_hex", this.pendingState.background.productColor.hex)
+    }
+
+    Object.entries(params).forEach(([ key, value ]) => {
+      if (value !== null && value !== undefined) {
         url.searchParams.set(key, value)
       }
     })

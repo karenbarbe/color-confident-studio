@@ -1,12 +1,19 @@
-<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil, distribution: nil, palette_color_ids: [], stashed_color_ids: []) %>
+<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil, distribution: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
 
 <%# Include total count as data attribute for JS to read %>
 <div data-total-count="<%= total_count %>" 
       data-saturation-distribution="<%= (defined?(distribution) && distribution ? distribution[:saturation] : []).to_json %>"
       data-lightness-distribution="<%= (defined?(distribution) && distribution ? distribution[:lightness] : []).to_json %>">
 
-  <div class="flex gap-3 overflow-x-auto scrollbar-hide px-3 py-8 min-h-32 <%= 'bg-base-200' if type == 'fabric' %>"
-     style="<%= "background-color: ##{palette.background_color&.hex_color};" if type == "thread" && palette.background_color %>">
+  <%
+    # Determine background color: pending state > saved state > default
+    background_hex = if type == "thread"
+      pending_background_hex.presence || palette.background_color&.hex_color
+    end
+  %>
+
+  <div class="flex gap-3 overflow-x-auto scrollbar-hide px-3 py-8 min-h-32 <%= 'bg-base-200' if type == 'fabric' || background_hex.nil? %>"
+       <%= "style=\"background-color: ##{background_hex};\"".html_safe if background_hex %>>
 
     <% if colors.any? %>
       <% colors.each do |color| %>

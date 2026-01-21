@@ -1,4 +1,4 @@
-<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness: nil, palette_color_ids: [], stashed_color_ids: []) %>
+<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
 
 <turbo-frame id="panel-content">
   <div class="space-y-6"
@@ -58,15 +58,16 @@
       <%# Color swatches list %>
       <div data-palette-color-picker-target="colorList">
         <%= render "palettes/editor/palette_color_list",
-          palette: palette,
-          colors: colors,
-          total_count: total_count,
-          type: type,
-          mode: mode,
-          current_slot: current_slot,
-          current_color: current_color,
-          palette_color_ids: palette_color_ids,
-          stashed_color_ids: stashed_color_ids %>
+            palette: palette,
+            colors: colors,
+            total_count: total_count,
+            type: type,
+            mode: mode,
+            current_slot: current_slot,
+            current_color: current_color,
+            palette_color_ids: palette_color_ids,
+            stashed_color_ids: stashed_color_ids,
+            pending_background_hex: pending_background_hex %>
       </div>
 
     </section>

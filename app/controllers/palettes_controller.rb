@@ -95,6 +95,9 @@ class PalettesController < ApplicationController
     @palette_color_ids = @palette.product_colors.pluck(:id)
     @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id)
 
+    # Capture pending background hex for thread picker display (for unsaved palettes)
+    @pending_background_hex = params[:pending_background_hex].presence
+
     if @type == "fabric"
       load_fabric_picker_data
     else
@@ -114,7 +117,8 @@ class PalettesController < ApplicationController
       selected_family: @filter_params[:color_family],
       lightness: @filter_params[:lightness],
       palette_color_ids: @palette_color_ids,
-      stashed_color_ids: @stashed_color_ids
+      stashed_color_ids: @stashed_color_ids,
+      pending_background_hex: @pending_background_hex
     }
   end
 
