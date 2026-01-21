@@ -53,17 +53,12 @@ class PalettesController < ApplicationController
     if @palette.update(palette_params)
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace("palette-name-display",
-              partial: "palettes/editor/name_display",
-              locals: { palette: @palette }),
-            turbo_stream.update("flash-messages",
-              partial: "shared/flash",
-              locals: { notice: "Palette updated.", alert: nil })
-          ]
+          render turbo_stream: turbo_stream.replace(@palette,
+            partial: "palettes/palette_card",
+            locals: { palette: @palette })
         end
         format.html do
-          flash[:notice] = "Palette saved."
+          flash[:notice] = "Palette updated."
           redirect_back(fallback_location: palette_path)
         end
       end

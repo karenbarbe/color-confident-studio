@@ -5,10 +5,11 @@
 
     <%# Top row: Name + Buttons %>
     <div class="flex items-center justify-between">
-      <%# Palette name (inline editable) %>
-      <div id="palette-name-display">
-        <%= render "palettes/editor/name_display", palette: palette %>
-      </div>
+
+      <%# Palette name %>
+        <h1 class="font-bold text-3xl text-base-content">
+          <%= @palette.name.presence || "Untitled palette" %>
+        </h1>
 
       <%# Action buttons %>
       <div class="flex items-center gap-2">

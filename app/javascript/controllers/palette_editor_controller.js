@@ -14,8 +14,6 @@ import { Controller } from "@hotwired/stimulus"
  */
 export default class extends Controller {
   static targets = [
-    // Header
-    "nameContainer", "nameDisplay", "nameForm", "nameInput",
     // Background
     "backgroundLayer",
     // Pills
@@ -571,47 +569,6 @@ export default class extends Controller {
     } else {
       window.onbeforeunload = null
     }
-  }
-
-  // ===========================================================================
-  // Name editing
-  // ===========================================================================
-
-  editName(event) {
-    event.preventDefault()
-
-    if (!this.hasNameDisplayTarget || !this.hasNameFormTarget) return
-
-    this.nameDisplayTarget.classList.add("hidden")
-    this.nameDisplayTarget.nextElementSibling?.classList.add("hidden")
-    this.nameFormTarget.classList.remove("hidden")
-    this.nameFormTarget.classList.add("flex")
-
-    if (this.hasNameInputTarget) {
-      this.nameInputTarget.focus()
-      this.nameInputTarget.select()
-    }
-  }
-
-  cancelNameEdit(event) {
-    event?.preventDefault()
-    this.closeName()
-  }
-
-  handleNameKeydown(event) {
-    if (event.key === "Escape") {
-      event.preventDefault()
-      this.closeName()
-    }
-  }
-
-  closeName() {
-    if (!this.hasNameFormTarget || !this.hasNameDisplayTarget) return
-
-    this.nameFormTarget.classList.add("hidden")
-    this.nameFormTarget.classList.remove("flex")
-    this.nameDisplayTarget.classList.remove("hidden")
-    this.nameDisplayTarget.nextElementSibling?.classList.remove("hidden")
   }
 
   // ===========================================================================

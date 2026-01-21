@@ -1,47 +1,119 @@
 <%# locals: (palette:) %>
 
-<div class="bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-200">
-  <%# Color preview strip %>
-  <div class="h-32 flex">
+<div class="bg-base-100 rounded-md shadow-sm border border-base-200 group"
+     id="<%= dom_id(palette) %>"
+     data-controller="palette-card"
+     data-palette-card-palette-id-value="<%= palette.id %>"
+     data-palette-card-name-value="<%= palette.name %>">
+
+  <%# Color preview strip - clickable to show palette %>
+  <%= link_to palette_path(palette), class: "block h-32 flex overflow-hidden rounded-t-md" do %>
     <%# Background color (40% width) %>
     <% if palette.background_slots.any? %>
       <% color = palette.background_slots.first.product_color %>
       <div class="w-2/5 h-full" style="background-color: #<%= color.hex_color %>;"></div>
     <% else %>
-      <div class="w-2/5 h-full bg-base-100/20 flex items-center justify-center">
-        <span class="text-xs text-base-content/50">No fabric yet</span>
+      <div class="w-2/5 h-full bg-base-200 flex items-center justify-center">
+        <span class="text-xs text-base-content/30">No fabric</span>
       </div>
     <% end %>
 
     <%# Thread colors (60% width) %>
     <div class="w-3/5 flex">
-      <% palette.thread_slots.each do |slot| %>
-        <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
-      <% end %>
-      <% if palette.thread_slots.empty? %>
-        <div class="flex-1 h-full bg-base-100/10 flex items-center justify-center">
-          <span class="text-xs text-base-content/50">No threads yet</span>
+      <% if palette.thread_slots.any? %>
+        <% palette.thread_slots.each do |slot| %>
+          <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+        <% end %>
+      <% else %>
+        <div class="flex-1 h-full bg-base-200/50 flex items-center justify-center">
+          <span class="text-xs text-base-content/30">No threads</span>
         </div>
       <% end %>
     </div>
-  </div>
+  <% end %>
 
   <%# Card content %>
-  <div class="p-4">
-    <div class="flex justify-between items-start">
+  <div class="pl-4 pr-2 py-4">
+    <div class="flex justify-between items-start gap-2">
       <div class="min-w-0 flex-1">
-        <h3 class="font-semibold text-base-content truncate">
+        <%# Title display %>
+        <h3 class="font-semibold text-base-content truncate h-10"
+            data-palette-card-target="title">
           <%= palette.name.presence || "Untitled palette" %>
         </h3>
-        <p class="text-sm text-base-content/70">
-          <%= palette.color_slots.length %> colors
+
+        <%# Inline rename form (hidden by default) %>
+        <%= form_with model: palette,
+                      url: palette_path(palette),
+                      method: :patch,
+                      class: "hidden h-10",
+                      data: {
+                        palette_card_target: "form",
+                        action: "turbo:submit-end->palette-card#submitEnd"
+                      } do |f| %>
+          <div class="flex items-center">
+            <%= f.text_field :name,
+                             class: "input input-sm input-ghost flex-1 min-w-0 font-semibold",
+                             data: { palette_card_target: "input" },
+                             placeholder: "Palette name" %>
+            <button type="submit" class="btn btn-sm btn-ghost btn-circle text-success ml-3" title="Save">
+              <%= icon(:check_outline, css_class: "size-5") %>
+            </button>
+            <button type="button" 
+                    class="btn btn-sm btn-ghost btn-circle text-base-content/70" 
+                    title="Cancel"
+                    data-action="click->palette-card#cancelRename">
+              <%= icon(:x_mark_outline, css_class: "size-5") %>
+            </button>
+          </div>
+        <% end %>
+
+        <p class="text-sm text-base-content/70 mt-0.5">
+          <%= palette.color_slots.size %> colors
         </p>
       </div>
 
-        <%= link_to edit_palette_path(palette), title: "Open palette", class: "btn btn-sm btn-ghost" do %>
-          <%= icon(:eye_outline, css_class: "size-6") %>
-        <% end %>
+      <%# Dropdown menu %>
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" 
+             role="button" 
+             class="btn btn-ghost btn-circle"
+             title="More options">
+          <%= icon(:ellipsis_horizontal_outline, css_class: "size-5") %>
+        </div>
 
+        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box w-48 p-2 border border-base-300 shadow-lg z-10">
+          <li>
+            <%= link_to palette_path(palette), class: "flex items-center gap-2" do %>
+              <%= icon(:eye_outline, css_class: "size-4") %>
+              <span>Show colors</span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to edit_palette_path(palette), class: "flex items-center gap-2" do %>
+              <%= icon(:color_outline, css_class: "size-4") %>
+              <span>Open in editor</span>
+            <% end %>
+          </li>
+          <li>
+            <button type="button" 
+                    class="flex items-center gap-2"
+                    data-action="click->palette-card#startRename">
+              <%= icon(:pencil_square_outline, css_class: "size-4") %>
+              <span>Rename</span>
+            </button>
+          </li>
+          <li class="border-t border-base-200 mt-1 pt-1">
+            <%= button_to palette_path(palette),
+              method: :delete,
+              data: { confirm: "Delete this palette?" },
+              class: "flex items-center gap-2 text-error hover:bg-error/10 w-full" do %>
+              <%= icon(:trash_outline, css_class: "size-4") %>
+              <span>Delete</span>
+            <% end %>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
