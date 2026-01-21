@@ -25,7 +25,8 @@ export default class extends Controller {
     family: String,
     lightness: { type: Number, default: 50 },
     mode: { type: String, default: "add" },
-    slotId: Number
+    slotId: Number,
+    pendingBackgroundHex: String
   }
 
   connect() {
@@ -137,6 +138,10 @@ export default class extends Controller {
 
     if (this.slotIdValue) {
       url.searchParams.set("slot_id", this.slotIdValue)
+    }
+
+    if (this.pendingBackgroundHexValue) {
+      url.searchParams.set("pending_background_hex", this.pendingBackgroundHexValue)
     }
 
     fetch(url, {

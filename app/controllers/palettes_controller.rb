@@ -140,6 +140,7 @@ class PalettesController < ApplicationController
 
     @colors, @total_count = fetch_matching_colors
     @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id)
+    @pending_background_hex = params[:pending_background_hex].presence
 
     render partial: "palettes/editor/palette_color_list", locals: {
       palette: @palette,
@@ -150,7 +151,8 @@ class PalettesController < ApplicationController
       current_slot: @current_slot,
       current_color: @current_color,
       palette_color_ids: @palette_color_ids,
-      stashed_color_ids: @stashed_color_ids
+      stashed_color_ids: @stashed_color_ids,
+      pending_background_hex: @pending_background_hex
     }
   end
 
