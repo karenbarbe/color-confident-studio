@@ -1,0 +1,28 @@
+<%# Updated background_selector partial with data attributes for client-side state %>
+
+<button type="button"
+        id="background-selector"
+        class="w-66 flex items-center gap-2 px-4 py-2 bg-base-100 text-sm text-base-content
+               border border-base-content rounded-full hover:bg-base-200 transition-colors cursor-pointer"
+        data-action="click->palette-editor#openBackgroundPicker"
+  <% if palette.background_color %>
+    data-slot-id="<%= palette.background_slots.first&.id %>"
+    data-color-id="<%= palette.background_color.id %>"
+    data-hex="<%= palette.background_color.hex_color %>"
+    data-vendor-code="<%= palette.background_color.vendor_code %>"
+    data-name="<%= palette.background_color.name %>"
+    data-brand-name="<%= palette.background_color.brand.name %>"
+    data-color-family="<%= palette.background_color.color_family %>"
+  <% end %>>
+  <% if palette.background_color %>
+    <span class="size-4 rounded-full ring-1 ring-inset ring-white/30"
+          style="background-color: #<%= palette.background_color.hex_color %>;"></span>
+    <span class="truncate">
+      On <%= palette.background_color.vendor_code %> <%= palette.background_color.name %>
+    </span>
+  <% else %>
+    <span class="size-4 rounded-full border-2 border-dashed border-zinc-400"></span>
+    <span class="text-base-content/70">Select background fabric</span>
+  <% end %>
+  <%= icon(:chevron_down_outline, css_class: "size-4 text-base-content ml-auto") %>
+</button>

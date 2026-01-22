@@ -1,0 +1,42 @@
+<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil, distribution: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
+
+<%# Include total count as data attribute for JS to read %>
+<div data-total-count="<%= total_count %>" 
+      data-saturation-distribution="<%= (defined?(distribution) && distribution ? distribution[:saturation] : []).to_json %>"
+      data-lightness-distribution="<%= (defined?(distribution) && distribution ? distribution[:lightness] : []).to_json %>">
+
+  <%
+    # Determine background color: pending state > saved state > default
+    background_hex = if type == "thread"
+      pending_background_hex.presence || palette.background_color&.hex_color
+    end
+  %>
+
+  <div class="flex gap-3 overflow-x-auto scrollbar-hide px-3 py-8 min-h-32 <%= 'bg-base-200' if type == 'fabric' || background_hex.nil? %>"
+     <% if background_hex %>style="background-color: #<%= background_hex %>;"<% end %>>
+
+    <% if colors.any? %>
+      <% colors.each do |color| %>
+        <%= render "palettes/editor/palette_swatch",
+            color: color,
+            type: type,
+            mode: mode,
+            current_slot: current_slot,
+            is_in_palette: palette_color_ids.include?(color.id),
+            is_in_stash: stashed_color_ids.include?(color.id) %>
+      <% end %>
+
+      <% if total_count > colors.size %>
+        <div class="shrink-0 w-28 h-28 rounded-lg border-2 border-dashed border-base-content/30 flex items-center justify-center">
+          <span class="text-xs text-base-content/50 text-center px-2">
+            +<%= total_count - colors.size %> more
+          </span>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="flex-1 flex items-center justify-center text-base-content/50 text-sm">
+        <p>No matching colors found. Try adjusting filters.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

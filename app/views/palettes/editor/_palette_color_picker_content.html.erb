@@ -1,0 +1,119 @@
+<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
+
+<turbo-frame id="panel-content">
+  <div class="space-y-6"
+       data-controller="palette-color-picker"
+       data-palette-color-picker-palette-id-value="<%= palette.id %>"
+       data-palette-color-picker-type-value="<%= type %>"
+       data-palette-color-picker-brand-id-value="<%= selected_brand&.id %>"
+       data-palette-color-picker-family-value="<%= selected_family %>"
+       data-palette-color-picker-lightness-value="<%= lightness || 50 %>"
+       data-palette-color-picker-mode-value="<%= mode %>"
+       data-palette-color-picker-slot-id-value="<%= current_slot&.id %>"
+       data-palette-color-picker-pending-background-hex-value="<%= pending_background_hex %>">
+
+    <%# ================================================================== %>
+    <%# Matching colors section %>
+    <%# ================================================================== %>
+    <section class="px-4 pt-6">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Matching colors</span>
+          <span class="px-2 py-0.5 text-xs bg-base-200 text-base-content/70 rounded"
+                data-palette-color-picker-target="countBadge">
+            <%= total_count %>
+          </span>
+        </div>
+
+        <%# Brand selector dropdown %>
+        <div class="relative" data-controller="dropdown">
+          <button type="button"
+                  class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors cursor-pointer"
+                  data-action="click->dropdown#toggle">
+            <span data-palette-color-picker-target="sourceName">
+              <%= selected_brand&.name&.truncate(20) || "Select brand" %>
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-4 transition-transform" data-dropdown-target="icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="absolute right-0 top-full mt-1 w-56 bg-base-100 border border-base-300 rounded-lg shadow-lg z-10 hidden"
+               data-dropdown-target="menu">
+            <div class="py-1 max-h-60 overflow-y-auto">
+              <% brands.each do |brand| %>
+                <button type="button"
+                        class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between cursor-pointer <%= 'bg-base-200 font-medium' if brand.id == selected_brand&.id %>"
+                        data-action="click->palette-color-picker#selectBrand click->dropdown#close"
+                  data-brand-id="<%= brand.id %>"
+                  data-brand-name="<%= brand.name %>">
+                  <span><%= brand.name %></span>
+                  <span class="text-xs text-base-content/50"><%= brand.product_colors_count %></span>
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Color swatches list %>
+      <div data-palette-color-picker-target="colorList">
+        <%= render "palettes/editor/palette_color_list",
+            palette: palette,
+            colors: colors,
+            total_count: total_count,
+            type: type,
+            mode: mode,
+            current_slot: current_slot,
+            current_color: current_color,
+            palette_color_ids: palette_color_ids,
+            stashed_color_ids: stashed_color_ids,
+            pending_background_hex: pending_background_hex %>
+      </div>
+
+    </section>
+
+    <%# ================================================================== %>
+    <%# Color controls section %>
+    <%# ================================================================== %>
+    <section class="px-4 pb-16">
+      <div class="flex items-center gap-2 mb-4 pt-4">
+        <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Color controls</span>
+        <button type="button"
+                class="text-base-content/40 hover:text-base-content/60"
+                title="Filter colors by family and lightness.">
+          <%= icon(:info_circle_outline, css_class: "size-4") %>
+        </button>
+      </div>
+
+      <%# Color family pills %>
+      <%= render "palettes/editor/palette_family_pills",
+          selected_family: selected_family %>
+
+      <%# Lightness slider %>
+      <div class="mt-6 max-w-xs mx-auto">
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs text-base-content/70">
+            <span>Dark</span>
+            <span>Light</span>
+          </div>
+          <div class="relative">
+            <div class="h-3 rounded-full lightness-gradient"></div>
+            <input type="range"
+                   min="0"
+                   max="100"
+                   value="<%= lightness || 50 %>"
+                   class="absolute inset-0 w-full h-3 opacity-0 cursor-pointer"
+                   data-palette-color-picker-target="lightnessSlider"
+                   data-action="input->palette-color-picker#updateLightness change->palette-color-picker#applyFilters">
+            <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-base-100 rounded-full shadow-md border-2 border-base-content/70 pointer-events-none transition-all"
+                 data-palette-color-picker-target="lightnessThumb"
+                 style="left: calc(<%= lightness || 50 %>% - 10px);">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</turbo-frame>

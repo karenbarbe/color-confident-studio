@@ -1,0 +1,55 @@
+<%# locals: (palette:, thread_slots:) %>
+
+<%# Compare markup to renderThreadPills() in palette_editor_controller.js %>
+
+<% max_slots = Palette::SLOT_LIMITS["thread"][:max] %>
+<% is_full = thread_slots.length >= max_slots %>
+
+<div id="color-pills-container" class="flex gap-1 md:gap-2 px-4 pb-4" data-palette-editor-target="pillsContainer">
+
+  <%# Existing color pills %>
+  <% thread_slots.each_with_index do |slot, index| %>
+
+    <div class="flex flex-col flex-1 min-w-0 max-w-16 items-center gap-2">
+      <%# The pill %>
+      <button type="button"
+                class="w-full aspect-1/4 rounded-full transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 cursor-pointer"
+                style="background-color: #<%= slot.product_color.hex_color %>;"
+                data-action="click->palette-editor#editColor"
+        data-slot-id="<%= slot.id %>"
+        data-color-id="<%= slot.product_color.id %>"
+        data-hex="<%= slot.product_color.hex_color %>"
+        data-vendor-code="<%= slot.product_color.vendor_code %>"
+        data-name="<%= slot.product_color.name %>"
+        data-brand-name="<%= slot.product_color.brand.name %>"
+        data-oklch-l="<%= slot.product_color.oklch_l %>"
+        data-color-family="<%= slot.product_color.color_family %>"
+        data-palette-editor-target="colorPill"
+        title="<%= slot.product_color.vendor_code %> - <%= slot.product_color.name %>">
+      </button>
+      <%# Selection indicator (shown when this pill is selected) %>
+      <div class="h-2 w-3/4 max-w-12 rounded-full bg-base-content opacity-0 transition-opacity"
+             data-palette-editor-target="indicator"
+             data-slot-id="<%= slot.id %>">
+      </div>
+    </div>
+
+  <% end %>
+
+  <%# Render add button if not full %>
+  <% unless is_full %>
+    <div class="flex flex-col flex-1 min-w-0 max-w-16 items-center gap-2">
+      <button type="button"
+                class="w-full aspect-1/4 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus:ring-4 focus:ring-base-content/20"
+                data-action="click->palette-editor#addColor"
+        data-palette-editor-target="addButton">
+        <div class="size-12 rounded-full bg-white text-gray-900 flex items-center justify-center">
+          <%= icon(:plus_outline, css_class: "size-6") %>
+        </div>
+      </button>
+      <%# Empty indicator space for alignment %>
+      <div class="h-2 w-3/4 max-w-12"></div>
+    </div>
+  <% end %>
+
+</div>

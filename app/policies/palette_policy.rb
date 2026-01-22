@@ -19,16 +19,20 @@ class PalettePolicy < ApplicationPolicy
     owner?
   end
 
-  def studio?
+  def edit?
     owner?
   end
 
-  def pick_color?
-    owner?
+  def matching_colors?
+    edit?
   end
 
-  def publish?
-    owner?
+  def color_picker_content?
+    edit?
+  end
+
+  def batch_update?
+    edit?
   end
 
   class Scope < ApplicationPolicy::Scope

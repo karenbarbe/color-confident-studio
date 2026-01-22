@@ -1,0 +1,23 @@
+<div id="save-button">
+  <% is_new_palette = palette.color_slots.empty? %>
+  <% is_complete = palette.complete? %>
+  <% button_text = is_new_palette ? "Save palette" : "Save changes" %>
+
+  <%# New palette: enable when complete. Existing palette: always start disabled (no changes yet) %>
+  <% is_enabled = is_complete && is_new_palette %>
+
+  <% if is_enabled %>
+    <button type="button"
+            class="btn btn-neutral"
+            data-action="click->palette-editor#savePalette">
+      <%= button_text %>
+    </button>
+  <% else %>
+    <% title = is_complete ? "No changes to save" : "Add at least one background and one thread color" %>
+    <button disabled 
+            class="btn btn-disabled"
+            title="<%= title %>">
+      <%= button_text %>
+    </button>
+  <% end %>
+</div>
