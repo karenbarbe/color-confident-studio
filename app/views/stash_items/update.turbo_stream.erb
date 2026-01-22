@@ -4,3 +4,9 @@
       brand: @brand, 
       stash_item: @stash_item %>
 <% end %>
+
+<%= turbo_stream.replace dom_id(@product_color, :ownership_indicator) do %>
+  <%= render "shared/swatch_ownership_indicator", 
+      product_color: @product_color, 
+      ownership_status: @stash_item.ownership_status %>
+<% end %>
