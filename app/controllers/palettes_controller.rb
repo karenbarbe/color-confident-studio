@@ -15,6 +15,16 @@ class PalettesController < ApplicationController
     @palettes = policy_scope(Palette)
                   .includes(color_slots: :product_color)
                   .order(updated_at: :desc)
+
+    # Meta tags
+    set_meta_tags(
+      title: "Your palettes",
+      description: "Waiting for your next project",
+      og: {
+        title: "Your palettes",
+        description: "Waiting for your next project"
+        }
+    )
   end
 
   # GET /palettes/1
