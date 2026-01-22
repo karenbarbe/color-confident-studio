@@ -36,6 +36,14 @@ class StashItemsController < ApplicationController
     @total_count = @stash_items.size
     @owned_count = @owned_by_category.values.sum
     @wish_list_count = @wish_list_by_category.values.sum
+
+    set_meta_tags(
+      title: "Your stash",
+      description: "Track what you own and what's on your wish list.",
+      og: {
+        title: "Your stash",
+        description: "Track what you own and what's on your wish list." }
+    )
   end
 
   # GET /stash_items/1 or /stash_items/1.json
