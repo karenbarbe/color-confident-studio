@@ -10,7 +10,9 @@
 
   <%= link_to color_chart_color_path(color.brand.category, color.brand.slug, color.id), data: { turbo: "true", turbo_frame: "color_detail" } do %>
     <div class="w-full aspect-5/4 rounded-t-md relative <%= 'border-2 border-gray-200' if color.oklch_l >= 0.998 %>" style="background-color: #<%= color.hex_color %>;">
-      <%= render "shared/swatch_ownership_indicator", ownership_status: ownership_status %>
+      <% unless ownership_status == nil %>
+        <%= render "shared/swatch_ownership_indicator", ownership_status: ownership_status %>
+      <% end %>
     </div>
   <% end %>
 
