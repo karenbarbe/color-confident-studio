@@ -942,7 +942,7 @@ export default class extends Controller {
 
     if (!this.hasUnsavedChanges()) {
       // No changes, just navigate to show page
-      window.location.href = `/palettes/${this.paletteIdValue}`
+      window.location.href = `/palettes`
       return
     }
 
@@ -952,7 +952,7 @@ export default class extends Controller {
     if (changes.additions.length === 0 && 
         changes.updates.length === 0 && 
         changes.deletions.length === 0) {
-      window.location.href = `/palettes/${this.paletteIdValue}`
+      window.location.href = `/palettes`
       return
     }
 
@@ -983,7 +983,7 @@ export default class extends Controller {
       
       // Navigate to show page after brief delay
       setTimeout(() => {
-        window.location.href = `/palettes/${this.paletteIdValue}`
+        window.location.href = `/palettes`
       }, 500)
 
     } catch (error) {
