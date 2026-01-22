@@ -3,6 +3,16 @@ class ColorChartsController < ApplicationController
   def index
     @categories = Brand.categories.keys
     @brands_by_category = Brand.all.group_by(&:category)
+
+    # Meta tags
+    set_meta_tags(
+      title: "Embroidery threads and fabrics color charts",
+      description: "Explore the full range of colors available. Thousands of colors to choose from!",
+      og: {
+        title: "Embroidery threads and fabrics color charts",
+        description: "Explore the full range of colors available. Thousands of colors to choose from!"
+        }
+    )
   end
 
   def category
@@ -33,6 +43,16 @@ class ColorChartsController < ApplicationController
       colors = colors_grouped[family]
       [ family, colors ] if colors.present?
     end
+
+    # Meta tags
+    set_meta_tags(
+      title: "#{@brand.name} color chart",
+      description: "Explore the full range of colors available from #{@brand.name}. #{@brand.product_colors_count} colors to choose from.",
+      og: {
+        title: "#{@brand.name} color chart",
+        description: "Explore the full range of colors available from #{@brand.name}. #{@brand.product_colors_count} colors to choose from."
+        }
+    )
   end
 
   def skip_authorization?

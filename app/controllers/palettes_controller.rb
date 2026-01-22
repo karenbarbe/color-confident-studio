@@ -15,6 +15,16 @@ class PalettesController < ApplicationController
     @palettes = policy_scope(Palette)
                   .includes(color_slots: :product_color)
                   .order(updated_at: :desc)
+
+    # Meta tags
+    set_meta_tags(
+      title: "Your palettes",
+      description: "Waiting for your next project",
+      og: {
+        title: "Your palettes",
+        description: "Waiting for your next project"
+        }
+    )
   end
 
   # GET /palettes/1
@@ -33,6 +43,15 @@ class PalettesController < ApplicationController
   def edit
     authorize @palette
     load_edit_slots
+
+    # meta tags
+    set_meta_tags(
+      title: @palette.name.present? ? "Palette editor: #{@palette.name}" : "Palette editor",
+      description: "Combine colors into palettes and preview how they'll look on embroidery samples. Experiment until you find the combination that feels just right.",
+      og: {
+        title: @palette.name.present? ? "Palette editor: #{@palette.name}" : "Palette editor",
+        description: "Combine colors into palettes and preview how they'll look on embroidery samples. Experiment until you find the combination that feels just right." }
+    )
   end
 
   # POST /palettes
