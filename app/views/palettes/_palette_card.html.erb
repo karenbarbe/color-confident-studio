@@ -1,6 +1,6 @@
 <%# locals: (palette:) %>
 
-<div class="bg-base-100 rounded-md shadow-sm border border-base-200 group"
+<div class="rounded-md shadow-sm border border-base-200 group"
      id="<%= dom_id(palette) %>"
      data-controller="palette-card"
      data-palette-card-palette-id-value="<%= palette.id %>"
@@ -8,32 +8,24 @@
 
   <%# Color preview strip - clickable to show palette %>
   <%= link_to palette_path(palette), class: "block h-32 flex overflow-hidden rounded-t-md" do %>
-    <%# Background color (40% width) %>
-    <% if palette.background_slots.any? %>
-      <% color = palette.background_slots.first.product_color %>
-      <div class="w-2/5 h-full" style="background-color: #<%= color.hex_color %>;"></div>
-    <% else %>
-      <div class="w-2/5 h-full bg-base-200 flex items-center justify-center">
-        <span class="text-xs text-base-content/30">No fabric</span>
-      </div>
-    <% end %>
+    <%# Background color %>
 
-    <%# Thread colors (60% width) %>
-    <div class="w-3/5 flex">
-      <% if palette.thread_slots.any? %>
+    <% color = palette.background_slots.first.product_color %>
+    <div class="w-full h-full p-2 pl-4" style="background-color: #<%= color.hex_color %>;">
+
+      <%# Thread colors %>
+      <div class="w-2/3 h-full flex">
         <% palette.thread_slots.each do |slot| %>
-          <div class="flex-1 h-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+          <div class="flex-1 h-full max-w-14 rounded-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
         <% end %>
-      <% else %>
-        <div class="flex-1 h-full bg-base-200/50 flex items-center justify-center">
-          <span class="text-xs text-base-content/30">No threads</span>
-        </div>
-      <% end %>
+      </div>
+
     </div>
+
   <% end %>
 
   <%# Card content %>
-  <div class="pl-4 pr-2 py-4">
+  <div class="bg-base-100 pl-4 pr-2 py-4">
     <div class="flex justify-between items-start gap-2">
       <div class="min-w-0 flex-1">
         <%# Title display %>
@@ -77,7 +69,7 @@
       <div class="dropdown dropdown-end">
         <div tabindex="0" 
              role="button" 
-             class="btn btn-ghost btn-circle"
+             class="btn btn-sm btn-ghost btn-circle"
              title="More options">
           <%= icon(:ellipsis_horizontal_outline, css_class: "size-5") %>
         </div>

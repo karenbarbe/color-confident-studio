@@ -32,7 +32,7 @@
     <%# Background %>
     <% if @palette.background_color %>
       <div>
-        <h3 class="text-sm font-medium text-base-content/60 mb-2">Background</h3>
+        <h3 class="text-sm font-semibold uppercase text-base-content/70 mb-2">Background</h3>
         <ul class="divide-y divide-base-content/5">
           <%= render partial: "palettes/color_list_item", 
                      locals: { color: @palette.background_color, 
@@ -44,7 +44,7 @@
     <%# Thread colors %>
     <% if @palette.thread_slots.any? %>
       <div>
-        <h3 class="text-sm font-medium text-base-content/60 mb-2">Thread colors</h3>
+        <h3 class="text-sm font-semibold uppercase text-base-content/70 mb-2">Thread colors</h3>
         <ul class="divide-y divide-base-content/5">
           <% @palette.thread_slots.each do |slot| %>
             <%= render partial: "palettes/color_list_item", 
