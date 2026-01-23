@@ -1,7 +1,7 @@
 <%= turbo_stream.replace "color-detail-content" do %>
-  <%= render "product_colors/color_detail", 
-      product_color: @product_color, 
-      brand: @brand, 
+  <%= render "product_colors/color_detail",
+      product_color: @product_color,
+      brand: @brand,
       stash_item: nil %>
 <% end %>
 
@@ -10,7 +10,24 @@
 <% end %>
 
 <%= turbo_stream.replace dom_id(@product_color, :ownership_indicator) do %>
-  <%= render "shared/swatch_ownership_indicator", 
-      product_color: @product_color, 
+  <%= render "shared/swatch_ownership_indicator",
+      product_color: @product_color,
       ownership_status: nil %>
+<% end %>
+
+<%# Remove the swatch from stash index (grid view) %>
+<%= turbo_stream.remove dom_id(@product_color, :stash_swatch) %>
+
+<%# Remove the item from stash index (list view) %>
+<%= turbo_stream.remove dom_id(@product_color, :stash_list_item) %>
+
+<%# Update stats %>
+<%= turbo_stream.replace "stash-stats" do %>
+  <%= render "stash_stats",
+      total_count: @total_count,
+      counts_by_category: @counts_by_category,
+      owned_count: @owned_count,
+      owned_by_category: @owned_by_category,
+      wish_list_count: @wish_list_count,
+      wish_list_by_category: @wish_list_by_category %>
 <% end %>

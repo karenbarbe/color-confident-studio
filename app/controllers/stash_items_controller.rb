@@ -11,31 +11,7 @@ class StashItemsController < ApplicationController
       .order("brands.category ASC, brands.name ASC, product_colors.id ASC")
       .to_a  # Load into memory once
 
-    # Default hash with all categories set to 0
-    default_counts = Brand.categories.keys.index_with { 0 }
-
-    # Calculate all stats from the loaded data, merging with defaults
-    @counts_by_category = default_counts.merge(
-      @stash_items.group_by { |si| si.product_color.brand.category }
-                  .transform_values(&:count)
-    )
-
-    @owned_by_category = default_counts.merge(
-      @stash_items.select(&:owned?)
-                  .group_by { |si| si.product_color.brand.category }
-                  .transform_values(&:count)
-    )
-
-    @wish_list_by_category = default_counts.merge(
-      @stash_items.select(&:wish_list?)
-                  .group_by { |si| si.product_color.brand.category }
-                  .transform_values(&:count)
-    )
-
-    # Totals for the view
-    @total_count = @stash_items.size
-    @owned_count = @owned_by_category.values.sum
-    @wish_list_count = @wish_list_by_category.values.sum
+    calculate_stash_stats(@stash_items)
 
     set_meta_tags(
       title: "Your stash",
@@ -100,6 +76,7 @@ class StashItemsController < ApplicationController
     @brand = @product_color.brand
     respond_to do |format|
       if @stash_item.update(stash_item_params)
+        calculate_stash_stats
         format.turbo_stream
         format.html { redirect_back fallback_location: stash_items_path, notice: "Stash item was successfully updated." }
         format.json { render :show, status: :ok, location: @stash_item }
@@ -116,6 +93,7 @@ class StashItemsController < ApplicationController
     @product_color = @stash_item.product_color
     @brand = @product_color.brand
     @stash_item.destroy!
+    calculate_stash_stats
 
     respond_to do |format|
       format.turbo_stream
@@ -133,6 +111,36 @@ class StashItemsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def stash_item_params
     params.require(:stash_item).permit(:product_color_id, :ownership_status)
+  end
+
+  def calculate_stash_stats(stash_items = nil)
+    stash_items ||= policy_scope(StashItem)
+      .joins(product_color: :brand)
+      .includes(product_color: :brand)
+      .to_a
+
+    default_counts = Brand.categories.keys.index_with { 0 }
+
+    @counts_by_category = default_counts.merge(
+      stash_items.group_by { |si| si.product_color.brand.category }
+                .transform_values(&:count)
+    )
+
+    @owned_by_category = default_counts.merge(
+      stash_items.select(&:owned?)
+                .group_by { |si| si.product_color.brand.category }
+                .transform_values(&:count)
+    )
+
+    @wish_list_by_category = default_counts.merge(
+      stash_items.select(&:wish_list?)
+                .group_by { |si| si.product_color.brand.category }
+                .transform_values(&:count)
+    )
+
+    @total_count = stash_items.size
+    @owned_count = @owned_by_category.values.sum
+    @wish_list_count = @wish_list_by_category.values.sum
   end
 
   def skip_authorization?

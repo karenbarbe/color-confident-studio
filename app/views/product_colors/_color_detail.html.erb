@@ -2,9 +2,9 @@
 
 <div class="mx-auto max-w-sm" id="color-detail-content">
   <%# Color card %>
-  <div class="bg-base-100 rounded-2xl shadow-sm overflow-hidden">
+  <div class="bg-base-100">
 
-    <div class="aspect-3/2 w-full" style="background-color: #<%= product_color.hex_color %>"></div>
+    <div class="aspect-3/2 w-full rounded-md" style="background-color: #<%= product_color.hex_color %>"></div>
 
     <div class="p-5 space-y-4">
 
@@ -12,67 +12,112 @@
         <div class="flex justify-between items-start">
           <%# Heading %>
           <div>
-            <h1 class="text-2xl font-bold tracking-tight"><%= product_color.vendor_code %></h1>
+            <h1 class="text-2xl font-semibold tracking-tight"><%= product_color.vendor_code %></h1>
+            <p class="text-sm text-base-content/60 truncate"><%= brand.name %></p>
             <% if product_color.name.present? %>
-              <p class="text-lg text-base-content/70"><%= product_color.name %></p>
+              <p class="text-md text-base-content/70 truncate"><%= product_color.name %></p>
             <% end %>
           </div>
+
+          <%# Dropdown menu %>
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" 
+             role="button" 
+             class="btn btn-ghost btn-circle"
+             title="More options">
+              <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
+            </div>
+
+            <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-lg w-52 p-2 border border-base-300 shadow-lg z-10">
+              <% if policy(StashItem).create? %>
+                <% if stash_item %>
+                  <% if policy(stash_item).update? %>
+                    <li class="menu-title">
+                      <span class="text-xs font-medium text-base-content/50 uppercase">Stash label</span>
+                    </li>
+
+                    <% is_owned = stash_item.owned? %>
+                    <% is_wish_list = stash_item.wish_list? %>
+
+                    <%# Owned option %>
+                    <li>
+                      <%= button_to stash_item_path(stash_item),
+              method: :patch,
+              params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+              form_class: "contents",
+              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                        <% if is_owned %>
+                          <%= icon(:check_outline, css_class: "size-5") %>
+                          Owned
+                        <% else %>
+                          <%= icon(:square_outline, css_class: "size-5 text-base-content/30") %>
+                          Mark as owned
+                        <% end %>
+                      <% end %>
+                    </li>
+
+                    <%# Wish list option %>
+                    <li>
+                      <%= button_to stash_item_path(stash_item),
+              method: :patch,
+              params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
+              form_class: "contents",
+              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                        <% if is_wish_list %>
+                          <%= icon(:shopping_bag_outline, css_class: "size-5") %>
+                          Wish list
+                        <% else %>
+                          <%= icon(:square_outline, css_class: "size-5 text-base-content/30") %>
+                          Add to wish list
+                        <% end %>
+                      <% end %>
+                    </li>
+
+                    <li class="h-px divider my-1"></li>
+                  <% end %>
+
+                  <%# Remove from stash option - now at the end %>
+                  <li>
+                    <%= button_to stash_item_path(stash_item),
+            method: :delete,
+            params: { stash_item: { product_color_id: product_color.id } },
+            form_class: "contents",
+            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                      <%= icon(:x_mark_outline, css_class: "size-5") %>
+                      Remove from stash
+                    <% end %>
+                  </li>
+
+                <% else %>
+                  <%# Add to stash option %>
+                  <li>
+                    <%= button_to stash_items_path,
+            params: { stash_item: { product_color_id: product_color.id } },
+            form_class: "contents",
+            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                      <%= icon(:plus_outline, css_class: "size-5") %>
+                      Add to stash
+                    <% end %>
+                  </li>
+                <% end %>
+
+              <% else %>
+                <%# Not logged in %>
+                <li>
+                  <%= link_to login_path, 
+          data: { turbo_frame: "_top" },
+          class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors" do %>
+                    <%= icon(:log_in_outline, css_class: "size-5") %>
+                    Sign in to save
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+
+          </div>
+
         </div>
 
-      </div>
-
-      <%# Stash buttons %>
-      <div class="mt-12 flex justify-start items-center gap-2">
-        <% if policy(StashItem).create? %>
-          <% if stash_item %>
-            <%= button_to stash_item_path(stash_item),
-                method: :delete,
-                params: { stash_item: { product_color_id: product_color.id } },
-                title: "Remove from stash",
-                class: "badge badge-soft cursor-pointer flex gap-1" do %>
-              Stash
-              <%= icon(:check_outline) %>
-            <% end %>
-
-            <% is_owned = stash_item.owned? %>
-            <% is_wish_list = stash_item.wish_list? %>
-
-            <% if policy(stash_item).update? %>
-              <% unless is_wish_list %>
-                <%= button_to stash_item_path(stash_item), 
-                  method: :patch,
-                  params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
-                  class: "badge cursor-pointer flex-1 #{is_owned ? 'badge-soft badge-secondary' : 'badge-ghost text-base-content/50'}" do %>
-                  I have this
-                  <% if is_owned %>
-                    <%= icon(:check_outline) %>
-                  <% end %>
-                <% end %>
-              <% end %>
-            <% end %>
-
-            <% unless is_owned %>
-              <%= button_to stash_item_path(stash_item), 
-                  method: :patch,
-                  params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
-                  class: "badge cursor-pointer flex-1 #{is_wish_list ? 'badge-soft badge-secondary' : 'badge-ghost text-base-content/50'}" do %>
-                I want this
-                <% if is_wish_list %>
-                  <%= icon(:check_outline) %>
-                <% end %>
-              <% end %>
-            <% end %>
-
-          <% else %>
-            <%= button_to "Add to stash", stash_items_path,
-                params: { stash_item: { product_color_id: product_color.id } },
-                class: "badge cursor-pointer badge-outline", title: "Add to stash" %>
-          <% end %>
-        <% else %>
-          <%= link_to "Sign in to save", login_path, 
-              data: { turbo_frame: "_top" },
-              class: "badge cursor-pointer badge-outline" %>
-        <% end %>
       </div>
 
     </div>

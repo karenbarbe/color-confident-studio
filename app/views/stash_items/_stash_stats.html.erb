@@ -1,0 +1,22 @@
+<ul id="stash-stats"
+    class="flex flex-col lg:flex-row gap-x-12 gap-y-8 text-sm text-base-content md:pt-6 lg:pt-6.5 xl:pt-7"
+    data-card-text>
+  <%= render "stash_stat_item",
+      icon_name: :grid_outline,
+      total_count: total_count,
+      stat_label_singular: "Color",
+      stat_label_plural: "Colors",
+      counts_by_category: counts_by_category %>
+
+  <%= render "stash_stat_item",
+      icon_name: :check_outline,
+      total_count: owned_count,
+      stat_label: "Owned",
+      counts_by_category: owned_by_category %>
+
+  <%= render "stash_stat_item",
+      icon_name: :shopping_bag_outline,
+      total_count: wish_list_count,
+      stat_label: "Wish list",
+      counts_by_category: wish_list_by_category %>
+</ul>
