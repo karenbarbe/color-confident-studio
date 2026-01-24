@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
+const STITCH_PATTERN_STORAGE_KEY = "stitchPreviewPattern"
 
 export default class extends Controller {
-  static targets = ["panel", "backdrop"]
+  static targets = [ "panel", "backdrop" ]
 
   connect() {
     this.element.addEventListener("turbo:frame-load", this.open.bind(this))
@@ -24,6 +25,9 @@ export default class extends Controller {
   }
 
   close() {
+    // Clear the stitch pattern preference when panel closes
+    sessionStorage.removeItem(STITCH_PATTERN_STORAGE_KEY)
+
     this.panelTarget.classList.remove("open")
     this.backdropTarget.classList.add("hidden")
     document.body.classList.remove("overflow-hidden", "md:overflow-auto")
