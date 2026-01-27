@@ -15,10 +15,10 @@ export default class extends Controller {
   }
 
   open() {
-    this.panelTarget.classList.remove("invisible")
-    requestAnimationFrame(() => {
-      this.panelTarget.classList.add("open")
-    })
+    // Add class to container to show panel and push content
+    this.element.classList.add("panel-open")
+    
+    // Mobile backdrop
     this.backdropTarget.classList.remove("hidden")
     document.body.classList.add("overflow-hidden", "md:overflow-auto")
     document.addEventListener("keydown", this.handleEscape)
@@ -28,16 +28,10 @@ export default class extends Controller {
     // Clear the stitch pattern preference when panel closes
     sessionStorage.removeItem(STITCH_PATTERN_STORAGE_KEY)
 
-    this.panelTarget.classList.remove("open")
+    this.element.classList.remove("panel-open")
     this.backdropTarget.classList.add("hidden")
     document.body.classList.remove("overflow-hidden", "md:overflow-auto")
     document.removeEventListener("keydown", this.handleEscape)
-
-    this.panelTarget.addEventListener("transitionend", () => {
-      if (!this.panelTarget.classList.contains("open")) {
-        this.panelTarget.classList.add("invisible")
-      }
-    }, { once: true })
   }
 
   handleEscape(event) {
