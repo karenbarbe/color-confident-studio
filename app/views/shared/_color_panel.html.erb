@@ -4,7 +4,7 @@
 
   <!-- Backdrop (mobile only) -->
   <div data-color-panel-target="backdrop" 
-      data-action="click->color-panel#close"
+       data-action="click->color-panel#close"
     class="hidden fixed inset-0 bg-black/50 z-40 md:hidden">
   </div>
 
@@ -14,13 +14,11 @@
 
     <!-- Close button -->
     <button data-action="click->color-panel#close" 
-      class="absolute top-4 right-4 btn btn-circle btn-ghost text-base-content/70 hover:text-base-content cursor-pointer">
+      class="absolute top-4 right-4 z-10 btn btn-circle btn-ghost text-base-content/70 hover:text-base-content cursor-pointer">
       <%= icon(:x_mark_outline, css_class: "size-6") %>
     </button>
 
     <!-- Turbo Frame for content -->
-    <div class="h-full overflow-y-auto p-6 pt-14">
-      <%= turbo_frame_tag "color_detail" %>
-    </div>
+    <%= turbo_frame_tag "color_detail", class: "flex flex-col flex-1 min-h-0 pt-14" %>
   </aside>
 </div>
