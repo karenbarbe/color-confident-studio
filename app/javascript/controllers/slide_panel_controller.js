@@ -29,15 +29,24 @@ export default class extends Controller {
   connect() {
     this.handleEscape = this.handleEscape.bind(this)
     this.handleFrameLoad = this.handleFrameLoad.bind(this)
+    this.handleTransitionEnd = this.handleTransitionEnd.bind(this)
     
     if (this.autoOpenValue) {
       this.element.addEventListener("turbo:frame-load", this.handleFrameLoad)
+    }
+
+    if (this.hasPanelTarget) {
+      this.panelTarget.addEventListener("transitionend", this.handleTransitionEnd)
     }
   }
 
   disconnect() {
     this.element.removeEventListener("turbo:frame-load", this.handleFrameLoad)
     document.removeEventListener("keydown", this.handleEscape)
+
+    if (this.hasPanelTarget) {
+      this.panelTarget.removeEventListener("transitionend", this.handleTransitionEnd)
+    }
   }
 
   handleFrameLoad(event) {
@@ -48,6 +57,9 @@ export default class extends Controller {
   }
 
   open() {
+    this.element.classList.add("panel-transitioning")
+    // Force reflow to ensure the transitioning class is applied before adding panel-open
+    this.panelTarget.offsetHeight
     this.element.classList.add("panel-open")
     
     if (this.hasBackdropTarget) {
@@ -61,6 +73,7 @@ export default class extends Controller {
   }
 
   close() {
+    this.element.classList.add("panel-transitioning")
     this.element.classList.remove("panel-open")
     
     if (this.hasBackdropTarget) {
@@ -71,6 +84,13 @@ export default class extends Controller {
     document.removeEventListener("keydown", this.handleEscape)
     
     this.dispatch("closed")
+  }
+
+  handleTransitionEnd(event) {
+    // Only respond to transform transitions on the panel itself
+    if (event.target === this.panelTarget && event.propertyName === "transform") {
+      this.element.classList.remove("panel-transitioning")
+    }
   }
 
   handleEscape(event) {

@@ -1,0 +1,91 @@
+<%# 
+  Palette show content for slide panel
+  Expects: palette, stash_items_by_color_id
+%>
+
+<div id="palette-detail-content" class="px-4 pb-6">
+  <%# Header %>
+  <div class="flex justify-between items-start mb-4">
+    <div class="min-w-0 flex-1">
+      <h1 class="font-bold text-2xl text-base-content truncate">
+        <%= palette.name.presence || "Untitled palette" %>
+      </h1>
+      <% if palette.description.present? %>
+        <p class="text-base-content/70 mt-1"><%= palette.description %></p>
+      <% end %>
+    </div>
+
+    <%# Dropdown menu %>
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" 
+           role="button" 
+           class="btn btn-ghost btn-circle"
+           title="More options">
+        <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
+      </div>
+
+      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-lg w-48 p-2 border border-base-300 shadow-lg z-10">
+        <li>
+          <%= link_to edit_palette_path(palette), 
+                      data: { turbo_frame: "_top" },
+                      class: "flex items-center gap-2" do %>
+            <%= icon(:color_outline, css_class: "size-4") %>
+            <span>Open in editor</span>
+          <% end %>
+        </li>
+        <li class="border-t border-base-200 mt-1 pt-1">
+          <%= button_to palette_path(palette),
+                        method: :delete,
+                        data: { turbo_frame: "_top", confirm: "Delete this palette?" },
+                        class: "flex items-center gap-2 text-error hover:bg-error/10 w-full" do %>
+            <%= icon(:trash_outline, css_class: "size-4") %>
+            <span>Delete</span>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <%# Palette preview %>
+  <div class="rounded-lg overflow-hidden mb-6">
+    <div class="p-4" style="background-color: #<%= palette.background_color&.hex_color || 'f5f5f5' %>;">
+      <div class="flex gap-1">
+        <% palette.thread_slots.each do |slot| %>
+          <div class="w-full aspect-1/4 min-w-0 max-w-12 rounded-full"
+               style="background-color: #<%= slot.product_color.hex_color %>;"
+               title="<%= slot.product_color.vendor_code %>">
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# Color list %>
+  <div class="space-y-6">
+    <%# Background %>
+    <% if palette.background_color %>
+      <div>
+        <h3 class="text-xs font-semibold uppercase text-base-content/50 mb-2">Background</h3>
+        <ul class="divide-y divide-base-content/5">
+          <%= render partial: "palettes/color_list_item_panel", 
+                     locals: { color: palette.background_color, 
+                               stash_item: stash_items_by_color_id[palette.background_color.id] } %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%# Thread colors %>
+    <% if palette.thread_slots.any? %>
+      <div>
+        <h3 class="text-xs font-semibold uppercase text-base-content/50 mb-2">Thread colors</h3>
+        <ul class="divide-y divide-base-content/5">
+          <% palette.thread_slots.each do |slot| %>
+            <%= render partial: "palettes/color_list_item_panel", 
+                       locals: { color: slot.product_color, 
+                                 stash_item: stash_items_by_color_id[slot.product_color.id] } %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<%# Expects: color, stash_item (can be nil) %>
+
+<li class="py-3 flex items-center gap-3">
+  <%# Color swatch %>
+  <div class="size-10 rounded-lg shrink-0 <%= 'ring-1 ring-base-content/10' if color.oklch_l >= 0.95 %>"
+       style="background-color: #<%= color.hex_color %>;"></div>
+
+  <%# Color info %>
+  <div class="min-w-0 flex-1">
+    <div class="flex items-center gap-2">
+      <span class="text-base font-semibold text-base-content"><%= color.vendor_code %></span>
+      <span class="text-sm text-base-content/60 truncate"><%= color.brand.name %></span>
+    </div>
+    <p class="text-sm text-base-content/60 truncate"><%= color.name %></p>
+  </div>
+
+  <%# Stash indicator %>
+  <% if stash_item %>
+    <div class="shrink-0">
+
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary">
+        <%= icon(:heart_solid, css_class: "size-4") %>
+        <span class="text-xs font-medium">In stash</span>
+      </div>
+
+    </div>
+  <% end %>
+</li>

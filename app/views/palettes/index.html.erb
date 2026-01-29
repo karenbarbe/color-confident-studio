@@ -15,12 +15,14 @@
     <% end %>
   </div>
 
-  <%# Palettes grid %>
+  <%# Palettes grid with container queries %>
   <% if @palettes.any? %>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <% @palettes.each do |palette| %>
-        <%= render "palette_card", palette: palette %>
-      <% end %>
+    <div class="@container">
+      <div class="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 gap-4">
+        <% @palettes.each do |palette| %>
+          <%= render "palette_card", palette: palette %>
+        <% end %>
+      </div>
     </div>
   <% else %>
     <div class="text-center py-16">

@@ -32,8 +32,13 @@
   width: 100%;
   border-radius: 1rem 1rem 0 0;
   transform: translateY(100%);
-  transition: transform 0.3s ease-out;
+  /* Transition only applied via .panel-transitioning to prevent resize flash */
   z-index: 50;
+}
+
+/* Only animate during intentional open/close actions */
+.panel-transitioning .slide-panel {
+  transition: transform 0.3s ease-out;
 }
 
 .panel-open .slide-panel {

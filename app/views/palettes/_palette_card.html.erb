@@ -7,7 +7,7 @@
      data-palette-card-name-value="<%= palette.name %>">
 
   <%# Color preview strip - clickable to show palette %>
-  <%= link_to palette_path(palette), class: "block h-32 flex overflow-hidden rounded-t-md" do %>
+  <%= link_to palette_path(palette), data: { turbo: "true", turbo_frame: "color_detail" }, class: "block h-32 flex overflow-hidden rounded-t-md" do %>
     <%# Background color %>
 
     <% color = palette.background_slots.first.product_color %>
@@ -76,7 +76,7 @@
 
         <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box w-48 p-2 border border-base-300 shadow-lg z-10">
           <li>
-            <%= link_to palette_path(palette), class: "flex items-center gap-2" do %>
+            <%= link_to palette_path(palette), data: { turbo: "true", turbo_frame: "color_detail" }, class: "flex items-center gap-2" do %>
               <%= icon(:eye_outline, css_class: "size-4") %>
               <span>Show colors</span>
             <% end %>
