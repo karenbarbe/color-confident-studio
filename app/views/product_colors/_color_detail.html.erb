@@ -16,9 +16,9 @@
     <%# Dropdown menu %>
     <div class="dropdown dropdown-end">
       <div tabindex="0" 
-             role="button" 
-             class="btn btn-ghost btn-circle"
-             title="More options">
+           role="button" 
+           class="btn btn-ghost btn-circle"
+           title="More options">
         <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
       </div>
 
@@ -36,10 +36,11 @@
               <%# Owned option %>
               <li>
                 <%= button_to stash_item_path(stash_item),
-              method: :patch,
-              params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
-              form_class: "contents",
-              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                              method: :patch,
+                              params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+                              form_class: "contents",
+                              data: { turbo_frame: "_top" },
+                              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
                   <% if is_owned %>
                     <%= icon(:check_outline, css_class: "size-5") %>
                     Owned
@@ -53,10 +54,11 @@
               <%# Wish list option %>
               <li>
                 <%= button_to stash_item_path(stash_item),
-              method: :patch,
-              params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
-              form_class: "contents",
-              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                              method: :patch,
+                              params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
+                              form_class: "contents",
+                              data: { turbo_frame: "_top" },
+                              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
                   <% if is_wish_list %>
                     <%= icon(:shopping_bag_outline, css_class: "size-5") %>
                     Wish list
@@ -70,13 +72,14 @@
               <li class="h-px divider my-1"></li>
             <% end %>
 
-            <%# Remove from stash option - now at the end %>
+            <%# Remove from stash option %>
             <li>
               <%= button_to stash_item_path(stash_item),
-            method: :delete,
-            params: { stash_item: { product_color_id: product_color.id } },
-            form_class: "contents",
-            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                            method: :delete,
+                            params: { stash_item: { product_color_id: product_color.id } },
+                            form_class: "contents",
+                            data: { turbo_frame: "_top" },
+                            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
                 <%= icon(:x_mark_outline, css_class: "size-5") %>
                 Remove from stash
               <% end %>
@@ -86,9 +89,10 @@
             <%# Add to stash option %>
             <li>
               <%= button_to stash_items_path,
-            params: { stash_item: { product_color_id: product_color.id } },
-            form_class: "contents",
-            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                            params: { stash_item: { product_color_id: product_color.id } },
+                            form_class: "contents",
+                            data: { turbo_frame: "_top" },
+                            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
                 <%= icon(:plus_outline, css_class: "size-5") %>
                 Add to stash
               <% end %>
@@ -99,8 +103,8 @@
           <%# Not logged in %>
           <li>
             <%= link_to login_path, 
-          data: { turbo_frame: "_top" },
-          class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors" do %>
+                        data: { turbo_frame: "_top" },
+                        class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors" do %>
               <%= icon(:log_in_outline, css_class: "size-5") %>
               Sign in to save
             <% end %>
@@ -112,70 +116,70 @@
 
   </div>
 
-</div>
-
-<%# Stitch preview area with tabs %>
-<div data-controller="stitch-preview fabric-background"
-         data-stitch-preview-color-value="<%= product_color.hex_color %>">
-
-  <% if brand.thread? %>
-    <%# Tab buttons - only shown for thread %>
-    <div role="tablist" 
-             aria-label="Stitch texture preview"
-             class="flex rounded-full bg-base-content/10 p-1 text-xs font-medium">
-      <button type="button"
-                  role="tab"
-                  aria-selected="true"
-                  aria-controls="stitch-preview-panel"
-                  data-stitch-preview-target="tabButton"
-                  data-pattern="solid"
-                  data-action="click->stitch-preview#switchPattern"
-        class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
-        Solid
-      </button>
-      <button type="button"
-                  role="tab"
-                  aria-selected="false"
-                  aria-controls="stitch-preview-panel"
-                  data-stitch-preview-target="tabButton"
-                  data-pattern="seed"
-                  data-action="click->stitch-preview#switchPattern"
-        class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
-        Seed
-      </button>
-      <button type="button"
-                  role="tab"
-                  aria-selected="false"
-                  aria-controls="stitch-preview-panel"
-                  data-stitch-preview-target="tabButton"
-                  data-pattern="longshort"
-                  data-action="click->stitch-preview#switchPattern"
-        class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
-        Long and Short
-      </button>
-    </div>
-  <% end %>
-
-  <%# Preview area %>
-  <div id="stitch-preview-panel"
-          role="tabpanel"
-          class="px-8 py-16 rounded-md transition-colors duration-300"
-          data-action="fabric-picker:styleChanged@window->fabric-background#update">
-
-    <%# Solid color swatch - always present %>
-    <svg class="aspect-1 w-full rounded-md" 
-            data-stitch-preview-target="solidSwatch"
-            viewBox="0 0 240 240" 
-            preserveAspectRatio="xMidYMid slice"
-            aria-hidden="true">
-      <rect x="0" y="0" width="100%" height="100%" 
-                rx="16"
-                fill="#<%= product_color.hex_color %>"/>
-    </svg>
+  <%# Stitch preview area with tabs - NOW INSIDE THE WRAPPER %>
+  <div data-controller="stitch-preview fabric-background"
+       data-stitch-preview-color-value="<%= product_color.hex_color %>">
 
     <% if brand.thread? %>
-      <%= render "product_colors/stitch_patterns/seed_stitch", hex_color: product_color.hex_color %>
-      <%= render "product_colors/stitch_patterns/longshort_stitch", hex_color: product_color.hex_color %>
+      <%# Tab buttons - only shown for thread %>
+      <div role="tablist" 
+           aria-label="Stitch texture preview"
+           class="flex rounded-full bg-base-content/10 p-1 text-xs font-medium">
+        <button type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="stitch-preview-panel"
+                data-stitch-preview-target="tabButton"
+                data-pattern="solid"
+                data-action="click->stitch-preview#switchPattern"
+          class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
+          Solid
+        </button>
+        <button type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="stitch-preview-panel"
+                data-stitch-preview-target="tabButton"
+                data-pattern="seed"
+                data-action="click->stitch-preview#switchPattern"
+          class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
+          Seed
+        </button>
+        <button type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="stitch-preview-panel"
+                data-stitch-preview-target="tabButton"
+                data-pattern="longshort"
+                data-action="click->stitch-preview#switchPattern"
+          class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
+          Long and Short
+        </button>
+      </div>
     <% end %>
-  </div>
+
+    <%# Preview area %>
+    <div id="stitch-preview-panel"
+         role="tabpanel"
+         class="px-8 py-16 rounded-md transition-colors duration-300"
+         data-action="fabric-picker:styleChanged@window->fabric-background#update">
+
+      <%# Solid color swatch - always present %>
+      <svg class="aspect-1 w-full rounded-md" 
+           data-stitch-preview-target="solidSwatch"
+           viewBox="0 0 240 240" 
+           preserveAspectRatio="xMidYMid slice"
+           aria-hidden="true">
+        <rect x="0" y="0" width="100%" height="100%" 
+              rx="16"
+              fill="#<%= product_color.hex_color %>"/>
+      </svg>
+
+      <% if brand.thread? %>
+        <%= render "product_colors/stitch_patterns/seed_stitch", hex_color: product_color.hex_color %>
+        <%= render "product_colors/stitch_patterns/longshort_stitch", hex_color: product_color.hex_color %>
+      <% end %>
+    </div>
+        </div>
+
       </div>

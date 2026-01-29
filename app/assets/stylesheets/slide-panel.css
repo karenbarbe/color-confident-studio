@@ -1,0 +1,92 @@
+/* =============================================================================
+   Slide Panel Component
+   
+   A responsive panel that:
+   - Mobile: slides up from bottom as a sheet (85vh height)
+   - Desktop (md+): slides in from right, pushing main content
+   
+   Usage:
+   - Container: .slide-panel-container (add .panel-open to show)
+   - Panel: .slide-panel
+   
+   Customization via CSS custom properties:
+   --slide-panel-width-md: 24rem (default, at md breakpoint)
+   --slide-panel-width-xl: 28rem (default, at xl breakpoint)
+   ============================================================================= */
+
+
+/* Panel - the actual sliding element */
+.slide-panel {
+  background-color: var(--color-base-100);
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* Mobile: Full-width bottom sheet */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 85vh;
+  width: 100%;
+  border-radius: 1rem 1rem 0 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+  z-index: 50;
+}
+
+.panel-open .slide-panel {
+  transform: translateY(0);
+}
+
+/* Ensure turbo frames participate in flex layout and handle overflow */
+.slide-panel > turbo-frame {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Desktop: Side panel that pushes content */
+@media (min-width: 768px) {
+  .slide-panel-container {
+    flex-shrink: 0;
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease-out;
+  }
+
+  .slide-panel-container.panel-open {
+    width: var(--slide-panel-width-md, 24rem);
+  }
+
+  .slide-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    height: 100vh;
+    width: var(--slide-panel-width-md, 24rem);
+    border-radius: 0;
+    transform: translateX(100%);
+    border-left: 1px solid var(--color-base-300);
+  }
+
+  .panel-open .slide-panel {
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 1280px) {
+  .slide-panel-container.panel-open {
+    width: var(--slide-panel-width-xl, 28rem);
+  }
+
+  .slide-panel {
+    width: var(--slide-panel-width-xl, 28rem);
+  }
+}
