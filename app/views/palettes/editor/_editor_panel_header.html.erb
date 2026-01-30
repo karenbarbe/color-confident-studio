@@ -1,0 +1,69 @@
+<%# locals: (close_callback: nil) %>
+
+<%# 
+  Editor Panel Header
+  
+  Dynamic header for the palette editor slide panel.
+  Shows different content based on mode (add/edit) and type (thread/fabric).
+  All targets are controlled by palette_editor_controller.js
+%>
+
+<div class="sticky top-0 left-0 right-0 flex items-center justify-between px-4 py-3 border-b border-base-300 bg-base-100 z-20"
+     data-palette-editor-target="panelHeader">
+
+  <%# Left side: Mode-specific headers %>
+  <div class="flex items-center min-w-0">
+
+    <%# "Add thread" mode header %>
+    <div data-palette-editor-target="addThreadHeader">
+      <h2 class="text-lg font-semibold text-base-content">Add thread color</h2>
+    </div>
+
+    <%# "Edit thread" mode header (hidden by default) %>
+    <div class="hidden items-center gap-3" data-palette-editor-target="editThreadHeader">
+      <span class="size-8 rounded-full ring-1 ring-inset ring-black/10 shrink-0"
+            data-palette-editor-target="editColorSwatch"></span>
+      <div class="min-w-0">
+        <span class="font-semibold text-base-content" data-palette-editor-target="editColorCode"></span>
+        <span class="text-base-content/70 truncate" data-palette-editor-target="editColorName"></span>
+      </div>
+    </div>
+
+    <%# "Add background" mode header (hidden by default) %>
+    <div class="hidden" data-palette-editor-target="addBackgroundHeader">
+      <h2 class="text-lg font-semibold text-base-content">Add background color</h2>
+    </div>
+
+    <%# "Edit background" mode header (hidden by default) %>
+    <div class="hidden items-center gap-3" data-palette-editor-target="editBackgroundHeader">
+      <span class="size-8 rounded-full ring-1 ring-inset ring-black/10 shrink-0"
+            data-palette-editor-target="editBackgroundSwatch"></span>
+      <div class="min-w-0">
+        <span class="font-semibold text-base-content" data-palette-editor-target="editBackgroundCode"></span>
+        <span class="text-base-content/70 truncate" data-palette-editor-target="editBackgroundName"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <%# Right side: actions %>
+  <div class="flex items-center gap-1 shrink-0">
+    <%# Delete button (shown in edit modes) %>
+    <div class="hidden" data-palette-editor-target="deleteButtonContainer">
+      <button type="button"
+              class="p-2.5 rounded-full text-base-content/50 hover:text-error hover:bg-base-content/10 transition-colors cursor-pointer"
+              data-action="click->palette-editor#deleteColor"
+        title="Remove color">
+        <%= icon(:trash_outline, css_class: "size-6") %>
+      </button>
+    </div>
+
+    <%# Close button %>
+    <button type="button"
+            class="btn btn-circle btn-ghost btn-sm text-base-content/70 hover:text-base-content cursor-pointer"
+            data-action="click->slide-panel#close <%= close_callback %>"
+      title="Close panel">
+      <%= icon(:x_mark_outline, css_class: "size-6") %>
+    </button>
+  </div>
+</div>

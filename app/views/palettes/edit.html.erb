@@ -19,23 +19,36 @@
       <%= render "shared/flash", notice: notice, alert: alert %>
     </div>
 
-    <%# Constrained content wrapper %>
-    <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+    <%# Flex wrapper for main content + slide panel %>
+    <div class="flex flex-1 min-h-0">
 
-      <%# Header card %>
-      <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
+      <%# Main editor content %>
+      <div class="flex-1 min-w-0 transition-all duration-300">
+        <%# Constrained content wrapper %>
+        <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
 
-      <%# Color pills area %>
-      <div class="mt-8">
-        <%= render "palettes/editor/color_pills_container",
-        palette: @palette,
-        thread_slots: @thread_slots %>
+          <%# Header card %>
+          <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
+
+          <%# Color pills area %>
+          <div class="mt-8">
+            <%= render "palettes/editor/color_pills_container",
+                       palette: @palette,
+                       thread_slots: @thread_slots %>
+          </div>
+
+        </div>
       </div>
 
-    </div>
+      <%# Slide panel for color picker %>
+      <%= render "shared/slide_panel",
+                 frame_id: "editor_panel",
+                 panel_id: "editor-panel-container",
+                 auto_open: false,
+                 header_partial: "palettes/editor/editor_panel_header",
+                 close_callback: "palette-editor#onPanelClose" %>
 
-    <%# Control panel (slide-up drawer) %>
-    <%= render "palettes/editor/control_panel", palette: @palette %>
+    </div>
 
   </div>
 <% end %>

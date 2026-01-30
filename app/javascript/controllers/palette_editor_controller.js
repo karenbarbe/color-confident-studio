@@ -11,6 +11,10 @@ import { Controller } from "@hotwired/stimulus"
  * - pendingState: Current working state (what user sees)
  * - Changes are tracked by comparing pendingState to initialState
  * - Only "Save palette" triggers server sync via batch update
+ * 
+ * Panel Integration:
+ * - Uses the shared slide-panel controller for the color picker panel
+ * - Communicates via events and direct controller references
  */
 export default class extends Controller {
   static targets = [
@@ -18,9 +22,8 @@ export default class extends Controller {
     "backgroundLayer",
     // Pills
     "pillsContainer", "colorPill", "addButton", "indicator",
-    // Panel
-    "backdrop", "panel", "panelHeader", "panelContent",
-    // Panel headers
+    // Panel header elements (inside slide panel)
+    "panelHeader",
     "addThreadHeader", "editThreadHeader", 
     "addBackgroundHeader", "editBackgroundHeader",
     "editColorSwatch", "editColorCode", "editColorName",
@@ -30,9 +33,8 @@ export default class extends Controller {
     "saveButton", "unsavedIndicator"
   ]
 
-    static values = {
+  static values = {
     paletteId: Number,
-    panelOpen: { type: Boolean, default: false },
     mode: { type: String, default: "add" },        // "add" or "edit"
     colorType: { type: String, default: "thread" }, // "thread" or "fabric"
     selectedSlotId: { type: Number, default: 0 },
@@ -41,7 +43,6 @@ export default class extends Controller {
   }
 
   connect() {
-    this.handleEscape = this.handleEscape.bind(this)
     this.handleFrameLoad = this.handleFrameLoad.bind(this)
     
     // Initialize state management
@@ -52,11 +53,58 @@ export default class extends Controller {
     
     // Listen for turbo frame loads to mark pending colors
     document.addEventListener("turbo:frame-load", this.handleFrameLoad)
+
+    // Cache reference to the slide panel element
+    this.slidePanelElement = document.getElementById("editor-panel-container")
   }
 
   disconnect() {
-    document.removeEventListener("keydown", this.handleEscape)
     document.removeEventListener("turbo:frame-load", this.handleFrameLoad)
+  }
+
+  // ===========================================================================
+  // Slide Panel Integration
+  // ===========================================================================
+
+  /**
+   * Get the slide panel controller instance
+   */
+  get slidePanelController() {
+    if (!this.slidePanelElement) return null
+    return this.application.getControllerForElementAndIdentifier(
+      this.slidePanelElement,
+      "slide-panel"
+    )
+  }
+
+  /**
+   * Open the slide panel
+   */
+  openPanel() {
+    const panel = this.slidePanelController
+    if (panel) {
+      panel.open()
+    }
+  }
+
+  /**
+   * Close the slide panel
+   */
+  closePanel() {
+    const panel = this.slidePanelController
+    if (panel) {
+      panel.close()
+    }
+    this.clearSelectionIndicators()
+    this.selectedSlotIdValue = 0
+  }
+
+  /**
+   * Called when the slide panel closes (via close_callback)
+   */
+  onPanelClose() {
+    this.clearSelectionIndicators()
+    this.selectedSlotIdValue = 0
   }
 
   // ===========================================================================
@@ -148,10 +196,10 @@ export default class extends Controller {
 
     // Build lookup maps
     const initialThreadMap = new Map(
-      this.initialState.threadSlots.map(s => [s.id, s])
+      this.initialState.threadSlots.map(s => [ s.id, s ])
     )
     const pendingThreadMap = new Map(
-      this.pendingState.threadSlots.map(s => [s.id, s])
+      this.pendingState.threadSlots.map(s => [ s.id, s ])
     )
 
     // Find additions and updates in thread slots
@@ -497,7 +545,7 @@ export default class extends Controller {
     }
   }
 
-    /**
+  /**
    * Update the background layer color
    */
   renderBackgroundLayer() {
@@ -568,65 +616,6 @@ export default class extends Controller {
       window.onbeforeunload = () => true
     } else {
       window.onbeforeunload = null
-    }
-  }
-
-  // ===========================================================================
-  // Panel management (unchanged from original)
-  // ===========================================================================
-
-  openPanel() {
-    this.panelOpenValue = true
-
-    if (this.hasBackdropTarget) {
-      this.backdropTarget.classList.remove("hidden")
-    }
-
-    document.addEventListener("keydown", this.handleEscape)
-
-    requestAnimationFrame(() => {
-      if (this.hasBackdropTarget) {
-        this.backdropTarget.classList.remove("opacity-0")
-        this.backdropTarget.classList.add("opacity-100")
-      }
-      if (this.hasPanelTarget) {
-        this.panelTarget.classList.remove("translate-y-full")
-      }
-    })
-
-    document.body.classList.add("overflow-hidden", "md:overflow-auto")
-  }
-
-  closePanel() {
-    if (!this.panelOpenValue) return
-
-    this.panelOpenValue = false
-
-    if (this.hasBackdropTarget) {
-      this.backdropTarget.classList.remove("opacity-100")
-      this.backdropTarget.classList.add("opacity-0")
-    }
-
-    if (this.hasPanelTarget) {
-      this.panelTarget.classList.add("translate-y-full")
-    }
-
-    document.removeEventListener("keydown", this.handleEscape)
-    this.clearSelectionIndicators()
-    this.selectedSlotIdValue = 0
-
-    setTimeout(() => {
-      if (this.hasBackdropTarget) {
-        this.backdropTarget.classList.add("hidden")
-      }
-    }, 300)
-
-    document.body.classList.remove("overflow-hidden", "md:overflow-auto")
-  }
-
-  handleEscape(event) {
-    if (event.key === "Escape") {
-      this.closePanel()
     }
   }
 
@@ -774,20 +763,18 @@ export default class extends Controller {
   // Panel content
   // ===========================================================================
 
-    updatePanelMode() {
+  updatePanelMode() {
     // Hide all headers first
     const headers = [
-      this.addThreadHeaderTarget,
-      this.editThreadHeaderTarget,
-      this.addBackgroundHeaderTarget,
-      this.editBackgroundHeaderTarget
-    ]
+      this.hasAddThreadHeaderTarget ? this.addThreadHeaderTarget : null,
+      this.hasEditThreadHeaderTarget ? this.editThreadHeaderTarget : null,
+      this.hasAddBackgroundHeaderTarget ? this.addBackgroundHeaderTarget : null,
+      this.hasEditBackgroundHeaderTarget ? this.editBackgroundHeaderTarget : null
+    ].filter(Boolean)
     
     headers.forEach(header => {
-      if (header) {
-        header.classList.add("hidden")
-        header.classList.remove("flex")
-      }
+      header.classList.add("hidden")
+      header.classList.remove("flex")
     })
 
     // Hide delete button by default
@@ -834,8 +821,10 @@ export default class extends Controller {
       }
     })
 
-    if (this.hasPanelContentTarget) {
-      this.panelContentTarget.src = url.toString()
+    // Load content into the slide panel's turbo frame
+    const frame = document.getElementById("editor_panel")
+    if (frame) {
+      frame.src = url.toString()
     }
   }
 
@@ -864,11 +853,11 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-// Pending state indicators for color list
-// ===========================================================================
+  // Pending state indicators for color list
+  // ===========================================================================
 
   handleFrameLoad(event) {
-    if (event.target.id === "panel-content") {
+    if (event.target.id === "editor_panel") {
       requestAnimationFrame(() => {
         this.markPendingColorsInList()
       })
@@ -886,9 +875,9 @@ export default class extends Controller {
     }
 
     // Find all swatches in the panel content
-    if (!this.hasPanelContentTarget) return
+    const frame = document.getElementById("editor_panel")
+    if (!frame) return
 
-    const frame = this.panelContentTarget.querySelector("turbo-frame") || this.panelContentTarget
     const swatchButtons = frame.querySelectorAll("button[data-color-id]")
 
     swatchButtons.forEach(button => {

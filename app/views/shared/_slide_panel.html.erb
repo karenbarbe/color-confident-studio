@@ -10,13 +10,20 @@
     panel_id: String - Container ID (default: "#{frame_id}-container")
     panel_class: String - Additional CSS classes for the panel
     close_callback: String - Stimulus action to call on close (e.g., "some-controller#onPanelClose")
+    header_partial: String - Custom header partial path (e.g., "palettes/editor/panel_header")
+    header_locals: Hash - Locals to pass to the custom header partial
+    auto_open: Boolean - Whether to auto-open on turbo frame load (default: true)
 %>
 
 <% panel_id ||= "#{frame_id}-container" %>
 <% panel_class ||= "" %>
 <% close_callback ||= nil %>
+<% header_partial ||= nil %>
+<% header_locals ||= {} %>
+<% auto_open = true if local_assigns[:auto_open].nil? %>
 
 <div data-controller="slide-panel"
+     data-slide-panel-auto-open-value="<%= auto_open %>"
      class="slide-panel-container"
      id="<%= panel_id %>">
 
@@ -30,15 +37,20 @@
   <aside data-slide-panel-target="panel"
          class="slide-panel <%= panel_class %>">
 
-    <div class="fixed top-0 left-0 right-0 flex items-center justify-end px-2 py-3 border-b border-base-300 bg-base-100 z-20">
-      <%# Close button %>
-      <button data-action="click->slide-panel#close <%= close_callback %>"
-        class="btn btn-circle btn-ghost text-base-content/70 hover:text-base-content cursor-pointer">
-        <%= icon(:x_mark_outline, css_class: "size-6") %>
-      </button>
-    </div>
+    <% if header_partial %>
+      <%# Custom header (for complex panels like palette editor) %>
+      <%= render header_partial, **header_locals.merge(close_callback: close_callback) %>
+    <% else %>
+      <%# Default header with close button %>
+      <div class="fixed top-0 left-0 right-0 flex items-center justify-end px-2 py-3 border-b border-base-300 bg-base-100 z-20">
+        <button data-action="click->slide-panel#close <%= close_callback %>"
+          class="btn btn-circle btn-ghost text-base-content/70 hover:text-base-content cursor-pointer">
+          <%= icon(:x_mark_outline, css_class: "size-6") %>
+        </button>
+      </div>
+    <% end %>
 
     <%# Turbo Frame for content %>
-    <%= turbo_frame_tag frame_id, class: "flex flex-col flex-1 min-h-0 pt-22" %>
+    <%= turbo_frame_tag frame_id, class: "flex flex-col flex-1 min-h-0 #{'pt-22' unless header_partial}" %>
   </aside>
 </div>

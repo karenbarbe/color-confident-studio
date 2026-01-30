@@ -1,7 +1,7 @@
 <%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
 
-<turbo-frame id="panel-content">
-  <div class="flex flex-col flex-1 min-h-0"
+<turbo-frame id="editor_panel">
+  <div class="flex flex-col flex-1 min-h-0 pt-16"
        data-controller="palette-color-picker"
        data-palette-color-picker-palette-id-value="<%= palette.id %>"
        data-palette-color-picker-type-value="<%= type %>"

@@ -4,7 +4,8 @@ import { Controller } from "@hotwired/stimulus"
  * SlidePanelController
  * 
  * A generic slide panel that:
- * - Opens automatically when its Turbo Frame loads content
+ * - Opens automatically when its Turbo Frame loads content (if autoOpen is true)
+ * - Can be opened programmatically via open() method or "slide-panel:open" event
  * - Closes on backdrop click, close button, or Escape key
  * - Manages body scroll lock on mobile
  * 
@@ -19,6 +20,10 @@ import { Controller } from "@hotwired/stimulus"
  * 
  * The panel opens automatically when the turbo frame receives content.
  * Add `data-slide-panel-auto-open-value="false"` to disable auto-open.
+ * 
+ * Programmatic control:
+ *   - Call open() / close() methods directly
+ *   - Dispatch "slide-panel:request-open" event on the controller element
  */
 export default class extends Controller {
   static targets = [ "panel", "backdrop" ]
@@ -30,6 +35,7 @@ export default class extends Controller {
     this.handleEscape = this.handleEscape.bind(this)
     this.handleFrameLoad = this.handleFrameLoad.bind(this)
     this.handleTransitionEnd = this.handleTransitionEnd.bind(this)
+    this.handleRequestOpen = this.handleRequestOpen.bind(this)
     
     if (this.autoOpenValue) {
       this.element.addEventListener("turbo:frame-load", this.handleFrameLoad)
@@ -38,10 +44,14 @@ export default class extends Controller {
     if (this.hasPanelTarget) {
       this.panelTarget.addEventListener("transitionend", this.handleTransitionEnd)
     }
+
+    // Listen for programmatic open requests
+    this.element.addEventListener("slide-panel:request-open", this.handleRequestOpen)
   }
 
   disconnect() {
     this.element.removeEventListener("turbo:frame-load", this.handleFrameLoad)
+    this.element.removeEventListener("slide-panel:request-open", this.handleRequestOpen)
     document.removeEventListener("keydown", this.handleEscape)
 
     if (this.hasPanelTarget) {
@@ -54,6 +64,10 @@ export default class extends Controller {
     if (this.element.contains(event.target)) {
       this.open()
     }
+  }
+
+  handleRequestOpen(event) {
+    this.open()
   }
 
   open() {
