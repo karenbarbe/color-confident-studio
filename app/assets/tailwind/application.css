@@ -3,7 +3,7 @@
 
 /* Import custom stylesheets */
 @import "../stylesheets/floating-cards.css";
-@import "../stylesheets/color-detail-panel.css";
+@import "../stylesheets/slide-panel.css";
 
 /* ============================================
    NAVBAR SCROLL BEHAVIOR
