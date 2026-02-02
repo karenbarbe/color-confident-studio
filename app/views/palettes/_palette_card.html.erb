@@ -7,16 +7,16 @@
      data-palette-card-name-value="<%= palette.name %>">
 
   <%# Color preview strip - clickable to show palette %>
-  <%= link_to palette_path(palette), data: { turbo: "true", turbo_frame: "color_detail" }, class: "block h-32 flex overflow-hidden rounded-t-md" do %>
+  <%= link_to palette_path(palette), data: { turbo: "true", turbo_frame: "color_detail" }, class: "block h-40 flex overflow-hidden rounded-t-md" do %>
     <%# Background color %>
 
     <% color = palette.background_slots.first.product_color %>
-    <div class="w-full h-full p-2 pl-4" style="background-color: #<%= color.hex_color %>;">
+    <div class="w-full h-full" style="background-color: #<%= color.hex_color %>;">
 
       <%# Thread colors %>
       <div class="w-2/3 h-full flex">
         <% palette.thread_slots.each do |slot| %>
-          <div class="flex-1 h-full max-w-14 rounded-full" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
+          <div class="flex-1 h-full max-w-14" style="background-color: #<%= slot.product_color.hex_color %>;"></div>
         <% end %>
       </div>
 
