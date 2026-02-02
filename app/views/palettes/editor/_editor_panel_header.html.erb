@@ -1,8 +1,9 @@
+<%# app/views/palettes/editor/_editor_panel_header.html.erb %>
 <%# locals: (close_callback: nil) %>
 
-<%# 
+<%#
   Editor Panel Header
-  
+
   Dynamic header for the palette editor slide panel.
   Shows different content based on mode (add/edit) and type (thread/fabric).
   All targets are controlled by palette_editor_controller.js
@@ -14,33 +15,22 @@
   <%# Left side: Mode-specific headers %>
   <div class="flex items-center min-w-0">
 
-    <%# "Add thread" mode header %>
-    <div data-palette-editor-target="addThreadHeader">
-      <h2 class="text-lg font-semibold text-base-content">Add thread color</h2>
+    <%# "Add" mode header (for both thread and background) %>
+    <div data-palette-editor-target="addHeader">
+      <h2 class="text-lg font-semibold text-base-content"
+          data-palette-editor-target="addHeaderTitle">Add thread color</h2>
     </div>
 
-    <%# "Edit thread" mode header (hidden by default) %>
-    <div class="hidden items-center gap-3" data-palette-editor-target="editThreadHeader">
+    <%# "Edit" mode header (for both thread and background) %>
+    <div class="hidden items-center gap-3" data-palette-editor-target="editHeader">
       <span class="size-8 rounded-full ring-1 ring-inset ring-black/10 shrink-0"
-            data-palette-editor-target="editColorSwatch"></span>
+            data-palette-editor-target="editSwatch"></span>
       <div class="min-w-0">
-        <span class="font-semibold text-base-content" data-palette-editor-target="editColorCode"></span>
-        <span class="text-base-content/70 truncate" data-palette-editor-target="editColorName"></span>
-      </div>
-    </div>
-
-    <%# "Add background" mode header (hidden by default) %>
-    <div class="hidden" data-palette-editor-target="addBackgroundHeader">
-      <h2 class="text-lg font-semibold text-base-content">Add background color</h2>
-    </div>
-
-    <%# "Edit background" mode header (hidden by default) %>
-    <div class="hidden items-center gap-3" data-palette-editor-target="editBackgroundHeader">
-      <span class="size-8 rounded-full ring-1 ring-inset ring-black/10 shrink-0"
-            data-palette-editor-target="editBackgroundSwatch"></span>
-      <div class="min-w-0">
-        <span class="font-semibold text-base-content" data-palette-editor-target="editBackgroundCode"></span>
-        <span class="text-base-content/70 truncate" data-palette-editor-target="editBackgroundName"></span>
+        <div>
+          <span class="font-semibold text-base-content" data-palette-editor-target="editCode"></span>
+          <span class="text-base-content/70 truncate" data-palette-editor-target="editBrand"></span>
+        </div>
+        <p class="text-base-content/70 truncate" data-palette-editor-target="editName"></p>
       </div>
     </div>
 

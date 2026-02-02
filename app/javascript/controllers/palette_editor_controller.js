@@ -1,17 +1,19 @@
+// app/javascript/controllers/palette_editor_controller.js
+
 import { Controller } from "@hotwired/stimulus"
 
 /**
  * PaletteEditorController
- * 
+ *
  * Manages client-side state for palette editing, allowing users to experiment
  * with color combinations before persisting changes to the server.
- * 
+ *
  * Architecture:
  * - initialState: Snapshot of server state when editing begins
  * - pendingState: Current working state (what user sees)
  * - Changes are tracked by comparing pendingState to initialState
  * - Only "Save palette" triggers server sync via batch update
- * 
+ *
  * Panel Integration:
  * - Uses the shared slide-panel controller for the color picker panel
  * - Communicates via events and direct controller references
@@ -24,10 +26,8 @@ export default class extends Controller {
     "pillsContainer", "colorPill", "addButton", "indicator",
     // Panel header elements (inside slide panel)
     "panelHeader",
-    "addThreadHeader", "editThreadHeader", 
-    "addBackgroundHeader", "editBackgroundHeader",
-    "editColorSwatch", "editColorCode", "editColorName",
-    "editBackgroundSwatch", "editBackgroundCode", "editBackgroundName",
+    "addHeader", "addHeaderTitle",
+    "editHeader", "editSwatch", "editCode", "editBrand", "editName",
     "deleteButtonContainer",
     // Save/status
     "saveButton", "unsavedIndicator"
@@ -44,13 +44,13 @@ export default class extends Controller {
 
   connect() {
     this.handleFrameLoad = this.handleFrameLoad.bind(this)
-    
+
     // Initialize state management
     this.initializeState()
-    
+
     // Generate unique IDs for new slots (negative to distinguish from server IDs)
     this.nextTempId = -1
-    
+
     // Listen for turbo frame loads to mark pending colors
     document.addEventListener("turbo:frame-load", this.handleFrameLoad)
 
@@ -118,10 +118,10 @@ export default class extends Controller {
   initializeState() {
     // Capture initial state from DOM
     this.initialState = this.captureStateFromDOM()
-    
+
     // Working state starts as a copy of initial
     this.pendingState = JSON.parse(JSON.stringify(this.initialState))
-    
+
     this.updateUnsavedIndicator()
   }
 
@@ -130,42 +130,27 @@ export default class extends Controller {
    */
   captureStateFromDOM() {
     const threadSlots = []
-    
+
     this.colorPillTargets.forEach((pill, index) => {
       threadSlots.push({
         id: parseInt(pill.dataset.slotId, 10),
         position: index,
         slotType: "thread",
-        productColor: {
-          id: parseInt(pill.dataset.colorId, 10),
-          hex: pill.dataset.hex,
-          vendorCode: pill.dataset.vendorCode,
-          name: pill.dataset.name,
-          brandName: pill.dataset.brandName,
-          oklchL: parseFloat(pill.dataset.oklchL) || null,
-          colorFamily: pill.dataset.colorFamily || null
-        }
+        productColor: this.extractColorDataFromElement(pill)
       })
     })
 
     // Capture background from the background selector
     const backgroundSelector = document.getElementById("background-selector")
     let background = null
-    
+
     if (backgroundSelector) {
       const colorSwatch = backgroundSelector.querySelector("[style*='background-color']")
       if (colorSwatch && backgroundSelector.dataset.slotId) {
         background = {
           id: parseInt(backgroundSelector.dataset.slotId, 10),
           slotType: "background",
-          productColor: {
-            id: parseInt(backgroundSelector.dataset.colorId, 10),
-            hex: backgroundSelector.dataset.hex,
-            vendorCode: backgroundSelector.dataset.vendorCode,
-            name: backgroundSelector.dataset.name,
-            brandName: backgroundSelector.dataset.brandName,
-            colorFamily: backgroundSelector.dataset.colorFamily || null
-          }
+          productColor: this.extractColorDataFromElement(backgroundSelector)
         }
       }
     }
@@ -341,7 +326,7 @@ export default class extends Controller {
     }
 
     this.renderThreadPills()
-    this.updateSaveButton() 
+    this.updateSaveButton()
     this.updateUnsavedIndicator()
     this.closePanel()
 
@@ -356,7 +341,7 @@ export default class extends Controller {
     if (index === -1) return false
 
     this.pendingState.threadSlots.splice(index, 1)
-    
+
     // Update positions
     this.pendingState.threadSlots.forEach((slot, i) => {
       slot.position = i
@@ -494,11 +479,12 @@ export default class extends Controller {
     if (!statsEl) return
 
     const count = this.pendingState.threadSlots.length
+    const label = count === 1 ? "color thread" : "color threads"
     statsEl.innerHTML = `
       <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
       </svg>
-      <span>${count}/${this.maxThreadSlotsValue} colors</span>
+      <span>${count}/${this.maxThreadSlotsValue} ${label}</span>
     `
   }
 
@@ -573,7 +559,7 @@ export default class extends Controller {
 
     const isComplete = this.pendingState.background && this.pendingState.threadSlots.length > 0
     const hasChanges = this.hasUnsavedChanges()
-    
+
     // Determine button text based on palette state
     const buttonText = this.isNewPaletteValue ? "Save palette" : "Save changes"
 
@@ -592,12 +578,12 @@ export default class extends Controller {
       `
     } else {
       // Disabled state - either incomplete OR existing palette with no changes
-      const title = isComplete 
-        ? "No changes to save" 
+      const title = isComplete
+        ? "No changes to save"
         : "Add at least one background and one thread color"
-      
+
       saveButtonContainer.innerHTML = `
-        <button disabled 
+        <button disabled
                 class="btn btn-disabled"
                 title="${title}">
           ${buttonText}
@@ -611,7 +597,7 @@ export default class extends Controller {
    */
   updateUnsavedIndicator() {
     const hasChanges = this.hasUnsavedChanges()
-    
+
     if (hasChanges) {
       window.onbeforeunload = () => true
     } else {
@@ -641,15 +627,8 @@ export default class extends Controller {
     this.colorTypeValue = "thread"
     this.selectedSlotIdValue = parseInt(button.dataset.slotId, 10)
 
-    if (this.hasEditColorSwatchTarget) {
-      this.editColorSwatchTarget.style.backgroundColor = `#${button.dataset.hex}`
-    }
-    if (this.hasEditColorCodeTarget) {
-      this.editColorCodeTarget.textContent = button.dataset.vendorCode
-    }
-    if (this.hasEditColorNameTarget) {
-      this.editColorNameTarget.textContent = `${button.dataset.name} · ${button.dataset.brandName}`
-    }
+    const colorData = this.extractColorDataFromElement(button)
+    this.populateEditHeader(colorData)
 
     this.updatePanelMode()
     this.updateSelectionIndicator(this.selectedSlotIdValue)
@@ -676,17 +655,8 @@ export default class extends Controller {
   selectThreadColor(event) {
     event.preventDefault()
     const button = event.currentTarget
-    
-    const colorData = {
-      id: parseInt(button.dataset.colorId, 10),
-      hex: button.dataset.hex,
-      vendorCode: button.dataset.vendorCode,
-      name: button.dataset.name,
-      brandName: button.dataset.brandName,
-      oklchL: parseFloat(button.dataset.oklchL) || null,
-      colorFamily: button.dataset.colorFamily || null
-    }
 
+    const colorData = this.extractColorDataFromElement(button)
     const mode = button.dataset.mode
     // Use the controller's selectedSlotIdValue for edit mode
     // This handles temp IDs (negative) that don't exist in the database
@@ -706,18 +676,10 @@ export default class extends Controller {
   selectBackgroundColor(event) {
     event.preventDefault()
     const button = event.currentTarget
-    
-    if (button.disabled) return
-    
-    const colorData = {
-      id: parseInt(button.dataset.colorId, 10),
-      hex: button.dataset.hex,
-      vendorCode: button.dataset.vendorCode,
-      name: button.dataset.name,
-      brandName: button.dataset.brandName,
-      colorFamily: button.dataset.colorFamily || null
-    }
 
+    if (button.disabled) return
+
+    const colorData = this.extractColorDataFromElement(button)
     this.setBackgroundColor(colorData)
   }
 
@@ -727,34 +689,27 @@ export default class extends Controller {
 
   openBackgroundPicker(event) {
     event.preventDefault()
-    
+
     const selector = document.getElementById("background-selector")
     const hasBackground = selector?.dataset.slotId
-    
+
     this.modeValue = hasBackground ? "edit" : "add"
     this.colorTypeValue = "fabric"
     this.selectedSlotIdValue = hasBackground ? parseInt(selector.dataset.slotId, 10) : 0
 
     // Populate edit header if editing existing background
     if (hasBackground) {
-      if (this.hasEditBackgroundSwatchTarget) {
-        this.editBackgroundSwatchTarget.style.backgroundColor = `#${selector.dataset.hex}`
-      }
-      if (this.hasEditBackgroundCodeTarget) {
-        this.editBackgroundCodeTarget.textContent = selector.dataset.vendorCode
-      }
-      if (this.hasEditBackgroundNameTarget) {
-        this.editBackgroundNameTarget.textContent = `${selector.dataset.name} · ${selector.dataset.brandName}`
-      }
+      const colorData = this.extractColorDataFromElement(selector)
+      this.populateEditHeader(colorData)
     }
 
     this.updatePanelMode()
-    
+
     // Pass color_family when editing existing background
     const params = hasBackground && selector.dataset.colorFamily
       ? { color_family: selector.dataset.colorFamily }
       : {}
-    
+
     this.loadPanelContent(this.modeValue, "fabric", params)
     this.openPanel()
   }
@@ -764,44 +719,60 @@ export default class extends Controller {
   // ===========================================================================
 
   updatePanelMode() {
-    // Hide all headers first
-    const headers = [
-      this.hasAddThreadHeaderTarget ? this.addThreadHeaderTarget : null,
-      this.hasEditThreadHeaderTarget ? this.editThreadHeaderTarget : null,
-      this.hasAddBackgroundHeaderTarget ? this.addBackgroundHeaderTarget : null,
-      this.hasEditBackgroundHeaderTarget ? this.editBackgroundHeaderTarget : null
-    ].filter(Boolean)
-    
-    headers.forEach(header => {
-      header.classList.add("hidden")
-      header.classList.remove("flex")
-    })
+    const isEdit = this.modeValue === "edit"
+    const isFabric = this.colorTypeValue === "fabric"
+
+    // Hide both headers first
+    if (this.hasAddHeaderTarget) {
+      this.addHeaderTarget.classList.add("hidden")
+    }
+    if (this.hasEditHeaderTarget) {
+      this.editHeaderTarget.classList.add("hidden")
+      this.editHeaderTarget.classList.remove("flex")
+    }
 
     // Hide delete button by default
     if (this.hasDeleteButtonContainerTarget) {
       this.deleteButtonContainerTarget.classList.add("hidden")
     }
 
-    // Show appropriate header based on mode and colorType
-    const isEdit = this.modeValue === "edit"
-    const isFabric = this.colorTypeValue === "fabric"
-
-    if (isFabric) {
-      if (isEdit && this.hasEditBackgroundHeaderTarget) {
-        this.editBackgroundHeaderTarget.classList.remove("hidden")
-        this.editBackgroundHeaderTarget.classList.add("flex")
-        this.deleteButtonContainerTarget?.classList.remove("hidden")
-      } else if (this.hasAddBackgroundHeaderTarget) {
-        this.addBackgroundHeaderTarget.classList.remove("hidden")
+    if (isEdit) {
+      // Show edit header
+      if (this.hasEditHeaderTarget) {
+        this.editHeaderTarget.classList.remove("hidden")
+        this.editHeaderTarget.classList.add("flex")
+      }
+      if (this.hasDeleteButtonContainerTarget) {
+        this.deleteButtonContainerTarget.classList.remove("hidden")
       }
     } else {
-      if (isEdit && this.hasEditThreadHeaderTarget) {
-        this.editThreadHeaderTarget.classList.remove("hidden")
-        this.editThreadHeaderTarget.classList.add("flex")
-        this.deleteButtonContainerTarget?.classList.remove("hidden")
-      } else if (this.hasAddThreadHeaderTarget) {
-        this.addThreadHeaderTarget.classList.remove("hidden")
+      // Show add header with appropriate title
+      if (this.hasAddHeaderTarget) {
+        this.addHeaderTarget.classList.remove("hidden")
       }
+      if (this.hasAddHeaderTitleTarget) {
+        this.addHeaderTitleTarget.textContent = isFabric
+          ? "Add background color"
+          : "Add thread color"
+      }
+    }
+  }
+
+  /**
+   * Populate the edit header with color data
+   */
+  populateEditHeader(colorData) {
+    if (this.hasEditSwatchTarget) {
+      this.editSwatchTarget.style.backgroundColor = `#${colorData.hex}`
+    }
+    if (this.hasEditCodeTarget) {
+      this.editCodeTarget.textContent = colorData.vendorCode
+    }
+    if (this.hasEditBrandTarget) {
+      this.editBrandTarget.textContent = colorData.brandName
+    }
+    if (this.hasEditNameTarget) {
+      this.editNameTarget.textContent = colorData.name
     }
   }
 
@@ -936,10 +907,10 @@ export default class extends Controller {
     }
 
     const changes = this.calculateChanges()
-    
+
     // If no actual data changes, just navigate
-    if (changes.additions.length === 0 && 
-        changes.updates.length === 0 && 
+    if (changes.additions.length === 0 &&
+        changes.updates.length === 0 &&
         changes.deletions.length === 0) {
       window.location.href = `/palettes`
       return
@@ -967,9 +938,9 @@ export default class extends Controller {
       // Success - update initial state and navigate or show success
       this.initialState = JSON.parse(JSON.stringify(this.pendingState))
       this.updateUnsavedIndicator()
-      
+
       this.showFlash("Palette saved successfully!", "notice")
-      
+
       // Navigate to show page after brief delay
       setTimeout(() => {
         window.location.href = `/palettes`
@@ -1005,6 +976,21 @@ export default class extends Controller {
   // Utilities
   // ===========================================================================
 
+  /**
+   * Extract color data from a DOM element's data attributes
+   */
+  extractColorDataFromElement(element) {
+    return {
+      id: parseInt(element.dataset.colorId, 10),
+      hex: element.dataset.hex,
+      vendorCode: element.dataset.vendorCode,
+      name: element.dataset.name,
+      brandName: element.dataset.brandName,
+      oklchL: parseFloat(element.dataset.oklchL) || null,
+      colorFamily: element.dataset.colorFamily || null
+    }
+  }
+
   getCSRFToken() {
     return document.querySelector('meta[name="csrf-token"]')?.content || ""
   }
@@ -1014,7 +1000,7 @@ export default class extends Controller {
     if (!flashContainer) return
 
     const alertClass = type === "alert" ? "alert-error" : "alert-success"
-    const iconPath = type === "alert" 
+    const iconPath = type === "alert"
       ? "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
       : "M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
 
