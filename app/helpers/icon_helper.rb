@@ -11,6 +11,7 @@ module IconHelper
       check_circle_solid: '<path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />',
       check_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />',
       chevron_down_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />',
+      chevron_left_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />',
       chevron_right_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />',
       create_outline: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />',
       color_outline: '<path stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" d="M19.65 15.85a.18.18 0 0 0-.29 0c-.49.58-2.11 2.18-2.11 3.64 0 1.27 1.01 2.29 2.25 2.29s2.25-1.03 2.25-2.29c0-1.46-1.61-3.06-2.1-3.64zM18.14 13.5 7.3 2.74a1.69 1.69 0 0 0-2.39 0l-.24.24a1.69 1.69 0 0 0 0 2.39l2.48 2.48 2.67-2.67L2.64 12.34a1.31 1.31 0 0 0 .01 1.88l6.15 5.91a1.32 1.32 0 0 0 1.82 0c1.77-1.72 5.55-5.37 5.94-5.76.27-.27.85-.33 1.35-.33h.01a.31.31 0 0 0 .21-.53z" />',
