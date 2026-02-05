@@ -255,9 +255,9 @@ class PalettesController < ApplicationController
     return unless @mode == "edit"
 
     @current_slot = if @type == "fabric"
-                      @palette.background_slots.first
+                      @palette.color_slots.includes(:product_color).where(slot_type: "background").first
     elsif params[:slot_id].present?
-      @palette.color_slots.find_by(id: params[:slot_id])
+      @palette.color_slots.includes(:product_color).find_by(id: params[:slot_id])
     end
 
     @current_color = @current_slot&.product_color
