@@ -28,6 +28,12 @@ const MODE_STYLES = {
     mid: "btn-ghost text-white hover:bg-white/10",
     dark: "btn-ghost text-white hover:bg-white/10"
   },
+  saveButton: {
+    default: "btn-neutral",
+    light: "bg-gray-900 text-white border-gray-900 hover:bg-gray-800",
+    mid: "bg-white text-gray-900 border-white hover:bg-gray-100",
+    dark: "bg-white text-gray-900 border-white hover:bg-gray-100"
+  },
   indicator: {
     default: "bg-base-content",
     light: "bg-gray-900",
@@ -70,7 +76,7 @@ const ALL_VARIANTS = Object.fromEntries(
 
 export default class extends Controller {
   static targets = [
-    "card", "text", "textMuted", "buttonGhost",
+    "card", "text", "textMuted", "buttonGhost", "saveButton",
     "indicator", "selectorButton", "selectorTextMuted", "selectorIcon", "addButtonBorder"
   ]
 
@@ -129,6 +135,7 @@ export default class extends Controller {
     this.textTargets.forEach(el => this.applyStyle(el, "headerText", mode))
     this.textMutedTargets.forEach(el => this.applyStyle(el, "headerTextMuted", mode))
     this.buttonGhostTargets.forEach(el => this.applyStyle(el, "buttonGhost", mode))
+    this.saveButtonTargets.forEach(el => this.applyStyle(el, "saveButton", mode))
 
     // Pill indicators
     this.indicatorTargets.forEach(el => this.applyStyle(el, "indicator", mode))

@@ -1,15 +1,15 @@
 <%# locals: (palette:, thread_slots:) %>
 
 <div class="mt-6">
-  <div class="rounded-2xl shadow-sm p-6 bg-base-100 transition-colors duration-300"
+  <div class="rounded-2xl p-6 bg-base-100 transition-colors duration-300"
        data-palette-header-contrast-target="card">
 
     <%# Top row: Name + Buttons %>
     <div class="flex flex-wrap items-center gap-2">
 
-      <div class="flex gap-1">
+      <div class="flex items-center gap-1">
         <%= link_to palettes_path, title: "Back to palettes",
-              class: "btn btn-circle btn-ghost transition-colors duration-300",
+              class: "btn btn-circle transition-colors duration-300",
               data: { palette_header_contrast_target: "buttonGhost" } do %>
           <%= icon(:chevron_left_outline, css_class: "size-5") %>
         <% end %>

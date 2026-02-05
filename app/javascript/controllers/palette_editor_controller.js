@@ -431,13 +431,12 @@ export default class extends Controller {
     let html = ""
 
     // Render existing pills
-    // Compare markup to _color_pills_container.html.erb
     this.pendingState.threadSlots.forEach(slot => {
 
       html += `
-        <div class="flex flex-col flex-1 min-w-0 max-w-16 items-center gap-2">
+        <div class="flex flex-col items-center gap-2 w-16 md:w-18">
           <button type="button"
-                  class="w-full aspect-1/4 rounded-full transition-all hover:scale-105 focus:outline-none focus:ring-4 focus:ring-base-content/20 cursor-pointer"
+                  class="w-full aspect-1/3 rounded-full transition-all hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/40 cursor-pointer"
                   style="background-color: #${slot.productColor.hex};"
                   data-action="click->palette-editor#editColor"
                   data-slot-id="${slot.id}"
@@ -451,7 +450,7 @@ export default class extends Controller {
                   data-palette-editor-target="colorPill"
                   title="${slot.productColor.vendorCode} - ${slot.productColor.name}">
           </button>
-          <div class="h-2 w-3/4 max-w-12 rounded-full bg-base-content opacity-0 transition-opacity"
+          <div class="h-2 w-3/4 rounded-full bg-base-content opacity-0 transition-all duration-300"
               data-palette-editor-target="indicator"
               data-palette-header-contrast-target="indicator"
               data-slot-id="${slot.id}">
@@ -463,19 +462,19 @@ export default class extends Controller {
     // Render add button if not full
     if (!isFull) {
       html += `
-        <div class="flex flex-col flex-1 min-w-0 max-w-16 items-center gap-2">
+        <div class="flex flex-col items-center gap-2 w-16 md:w-18">
           <button type="button"
-                  class="w-full aspect-1/4 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus:ring-4 focus:ring-base-content/20"
+                  class="w-full aspect-1/3 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/60"
                   data-action="click->palette-editor#addColor"
                   data-palette-editor-target="addButton"
                   data-palette-header-contrast-target="addButtonBorder">
-            <div class="size-12 rounded-full bg-white text-gray-900 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="size-8 md:size-10 rounded-full bg-white text-gray-900 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="size-4 md:size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </div>
           </button>
-          <div class="h-2 w-3/4 max-w-12"></div>
+          <div class="h-2 w-3/4"></div>
         </div>
       `
     }
@@ -493,9 +492,6 @@ export default class extends Controller {
     const count = this.pendingState.threadSlots.length
     const label = count === 1 ? "color thread" : "color threads"
     statsEl.innerHTML = `
-      <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-      </svg>
       <span>${count}/${this.maxThreadSlotsValue} ${label}</span>
     `
   }
@@ -568,7 +564,7 @@ export default class extends Controller {
     }))
   }
 
-  /**
+ /**
    * Update the save button state
    */
   updateSaveButton() {
@@ -581,33 +577,39 @@ export default class extends Controller {
     // Determine button text based on palette state
     const buttonText = this.isNewPaletteValue ? "Save palette" : "Save changes"
 
-    // Determine if button should be enabled:
-    // - New palette: enabled when complete (needs initial save)
-    // - Existing palette: enabled only when there are unsaved changes AND complete
-    const isEnabled = isComplete && (this.isNewPaletteValue || hasChanges)
+    // Show button when:
+    // - New palette: when complete (needs initial save)
+    // - Existing palette: when there are unsaved changes AND complete
+    const showButton = isComplete && (this.isNewPaletteValue || hasChanges)
 
-    if (isEnabled) {
+    if (showButton) {
       saveButtonContainer.innerHTML = `
-        <button type="button"
-                class="btn ${hasChanges ? 'btn-neutral' : 'btn-neutral btn-outline'}"
-                data-action="click->palette-editor#savePalette">
-          ${buttonText}
-        </button>
+        <div>
+          <button type="button"
+                  class="btn btn-neutral transition-colors duration-300"
+                  data-action="click->palette-editor#savePalette"
+                  data-palette-header-contrast-target="saveButton">
+            ${buttonText}
+          </button>
+        </div>
       `
+      // Re-apply contrast styles to the new button
+      this.reapplyContrastStyles()
     } else {
-      // Disabled state - either incomplete OR existing palette with no changes
-      const title = isComplete
-        ? "No changes to save"
-        : "Add at least one background and one thread color"
-
-      saveButtonContainer.innerHTML = `
-        <button disabled
-                class="btn btn-disabled"
-                title="${title}">
-          ${buttonText}
-        </button>
-      `
+      // Hide button when no action is available
+      saveButtonContainer.innerHTML = `<div class="hidden"></div>`
     }
+  }
+
+  /**
+   * Trigger contrast controller to re-apply styles after DOM updates
+   */
+  reapplyContrastStyles() {
+    // Dispatch the current background state to update any new elements
+    const bg = this.pendingState.background
+    window.dispatchEvent(new CustomEvent("palette-editor:backgroundChanged", {
+      detail: { hex: bg?.productColor.hex || null }
+    }))
   }
 
   /**
