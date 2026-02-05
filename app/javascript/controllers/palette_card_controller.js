@@ -26,7 +26,7 @@ export default class extends Controller {
     
     this.titleTarget.classList.add("hidden")
     this.formTarget.classList.remove("hidden")
-    this.inputTarget.value = this.nameValue || "Untitled palette"
+    this.inputTarget.value = this.nameValue || "New palette"
     this.inputTarget.focus()
     this.inputTarget.select()
     
