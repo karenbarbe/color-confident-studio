@@ -1,6 +1,3 @@
-<div id="header-stats" class="flex items-center gap-1 sm:gap-1.5 text-base-content/70 text-sm">
-  <%= icon(:grid_outline, class: "size-4") %>
-  <span>
+<p id="header-stats" class="text-base-content/70 text-sm">
     <%= thread_slots.length %>/<%= Palette::SLOT_LIMITS["thread"][:max] %> <%= "color thread".pluralize(thread_slots.length) %>
-  </span>
-</div>
+</p>

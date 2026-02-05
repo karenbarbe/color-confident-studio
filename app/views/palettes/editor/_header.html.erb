@@ -1,33 +1,28 @@
 <%# locals: (palette:, thread_slots:) %>
 
 <div class="mt-6">
-  <div class="bg-base-100 rounded-2xl shadow-sm p-6 space-y-5">
+  <div class="bg-base-100 rounded-2xl shadow-sm p-6">
 
     <%# Top row: Name + Buttons %>
-    <div class="flex flex-col">
+    <div class="flex flex-wrap items-center gap-2">
 
-      <%# Palette name %>
-        <h1 class="font-bold text-3xl text-base-content">
-          <%= @palette.name.presence || "Untitled palette" %>
-        </h1>
-
-      <%# Action buttons %>
-      <div class="flex items-center gap-2">
-
-        <%= link_to "Cancel", palettes_path,
-            class: "btn btn-outline" %>
-
-        <%= render "palettes/editor/save_button", palette: palette, thread_slots: thread_slots %>
+      <div class="flex gap-1">
+        <%= link_to palettes_path, title: "Back to palettes",
+              class: "btn btn-circle btn-ghost" do %>
+          <%= icon(:chevron_left_outline, css_class: "size-5") %>
+        <% end %>
+        <div>
+          <h1 class="font-bold text-xl text-base-content">
+            <%= @palette.name.presence || "New palette" %>
+          </h1>
+          <%# Stats row %>
+          <%= render "palettes/editor/header_stats", palette: palette, thread_slots: thread_slots %>
+        </div>
 
       </div>
-    </div>
 
-    <%# Stats row %>
-    <%= render "palettes/editor/header_stats", palette: palette, thread_slots: thread_slots %>
+      <%= render "palettes/editor/save_button", palette: palette, thread_slots: thread_slots %>
 
-    <%# Background selector row %>
-    <div class="flex items-center justify-between">
-      <%= render "palettes/editor/background_selector", palette: palette %>
     </div>
 
   </div>

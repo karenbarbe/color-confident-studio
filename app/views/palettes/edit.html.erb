@@ -31,10 +31,17 @@
           <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
 
           <%# Color pills area %>
-          <div class="mt-8">
+          <div>
             <%= render "palettes/editor/color_pills_container",
                        palette: @palette,
                        thread_slots: @thread_slots %>
+          </div>
+
+          <%# Background selector %>
+          <div class="flex justify-center">
+            <div class="flex items-center justify-between">
+              <%= render "palettes/editor/background_selector", palette: @palette %>
+            </div>
           </div>
 
         </div>
