@@ -1,3 +1,5 @@
-<p id="header-stats" class="text-base-content/70 text-sm">
-    <%= thread_slots.length %>/<%= Palette::SLOT_LIMITS["thread"][:max] %> <%= "color thread".pluralize(thread_slots.length) %>
+<p id="header-stats" 
+   class="text-base-content/70 text-sm transition-colors duration-300"
+   data-palette-header-contrast-target="textMuted">
+  <%= thread_slots.length %>/<%= Palette::SLOT_LIMITS["thread"][:max] %> <%= "color thread".pluralize(thread_slots.length) %>
 </p>

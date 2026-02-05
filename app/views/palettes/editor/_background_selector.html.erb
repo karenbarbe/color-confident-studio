@@ -3,8 +3,9 @@
 <button type="button"
         id="background-selector"
         class="w-66 flex items-center gap-2 px-4 py-2 bg-base-100 text-sm text-base-content
-               border border-base-content rounded-full hover:bg-base-200 transition-colors cursor-pointer"
+               border border-base-content rounded-full hover:bg-base-200 transition-all duration-300 cursor-pointer"
         data-action="click->palette-editor#openBackgroundPicker"
+  data-palette-header-contrast-target="selectorButton"
   <% if palette.background_color %>
     data-slot-id="<%= palette.background_slots.first&.id %>"
     data-color-id="<%= palette.background_color.id %>"
@@ -22,7 +23,8 @@
     </span>
   <% else %>
     <span class="size-4 rounded-full border-2 border-dashed border-zinc-400"></span>
-    <span class="text-base-content/70">Select background fabric</span>
+    <span class="text-base-content/70 transition-colors duration-300"
+          data-palette-header-contrast-target="selectorTextMuted">Select background fabric</span>
   <% end %>
-  <%= icon(:chevron_down_outline, css_class: "size-4 text-base-content ml-auto") %>
+  <%= icon(:chevron_down_outline, css_class: "size-4 ml-auto transition-colors duration-300", data: { palette_header_contrast_target: "selectorIcon" }) %>
 </button>

@@ -56,6 +56,16 @@ export default class extends Controller {
 
     // Cache reference to the slide panel element
     this.slidePanelElement = document.getElementById("editor-panel-container")
+
+    // After initializeState(), dispatch initial background state
+    // Use setTimeout to ensure other controllers have connected
+    if (this.pendingState.background) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("palette-editor:backgroundChanged", {
+          detail: { hex: this.pendingState.background.productColor.hex }
+        }))
+      }, 0)
+    }
   }
 
   disconnect() {
@@ -443,6 +453,7 @@ export default class extends Controller {
           </button>
           <div class="h-2 w-3/4 max-w-12 rounded-full bg-base-content opacity-0 transition-opacity"
               data-palette-editor-target="indicator"
+              data-palette-header-contrast-target="indicator"
               data-slot-id="${slot.id}">
           </div>
         </div>
@@ -456,7 +467,8 @@ export default class extends Controller {
           <button type="button"
                   class="w-full aspect-1/4 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus:ring-4 focus:ring-base-content/20"
                   data-action="click->palette-editor#addColor"
-                  data-palette-editor-target="addButton">
+                  data-palette-editor-target="addButton"
+                  data-palette-header-contrast-target="addButtonBorder">
             <div class="size-12 rounded-full bg-white text-gray-900 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -534,6 +546,7 @@ export default class extends Controller {
   /**
    * Update the background layer color
    */
+
   renderBackgroundLayer() {
     const styleEl = document.getElementById("background-layer-style")
     if (!styleEl) return
@@ -548,6 +561,11 @@ export default class extends Controller {
         }
       </style>
     `
+
+    // Dispatch event for header contrast controller
+    window.dispatchEvent(new CustomEvent("palette-editor:backgroundChanged", {
+      detail: { hex: bg?.productColor.hex || null }
+    }))
   }
 
   /**
