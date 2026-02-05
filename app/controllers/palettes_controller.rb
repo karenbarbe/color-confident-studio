@@ -1,8 +1,8 @@
 class PalettesController < ApplicationController
   # Only palette record
-  before_action :set_palette, only: %i[update destroy batch_update]
+  before_action :set_palette, only: %i[update destroy batch_update matching_colors]
   # Palette + slots + product_colors for color picker actions
-  before_action :set_palette_with_slots, only: %i[color_picker_content matching_colors]
+  before_action :set_palette_with_slots, only: %i[color_picker_content]
   # Palette + slots + product_colors + brands - for views that display palette details
   before_action :set_palette_with_colors, only: %i[show edit]
   before_action :set_color_picker_context, only: %i[matching_colors]
@@ -134,7 +134,7 @@ class PalettesController < ApplicationController
       brands: @brands,
       selected_brand: @selected_brand,
       selected_family: @filter_params[:color_family],
-      lightness: @filter_params[:lightness],
+      lightness_category: @filter_params[:lightness_category],
       palette_color_ids: @palette_color_ids,
       stashed_color_ids: @stashed_color_ids,
       pending_background_hex: @pending_background_hex
@@ -244,7 +244,7 @@ class PalettesController < ApplicationController
   def extract_filter_params
     {
       color_family: params[:color_family].presence,
-      lightness: params[:lightness].present? ? params[:lightness].to_i : nil
+      lightness_category: params[:lightness_category].presence || "all"
     }
   end
 
@@ -265,7 +265,7 @@ class PalettesController < ApplicationController
 
   def fetch_matching_colors
     matcher = build_color_matcher
-    [ matcher.matching_colors.limit(45), matcher.count ]
+    [ matcher.matching_colors.limit(120), matcher.count ]
   end
 
   def build_color_matcher
@@ -275,7 +275,8 @@ class PalettesController < ApplicationController
 
     ColorMatcher.new(
       brand: selected_brand,
-      **@filter_params
+      color_family: @filter_params[:color_family],
+      lightness_category: @filter_params[:lightness_category]
     )
   end
 
@@ -303,7 +304,7 @@ class PalettesController < ApplicationController
       **@filter_params
     )
 
-    @colors = matcher.matching_colors.limit(45)
+    @colors = matcher.matching_colors.limit(120)
     @total_count = matcher.count
   end
 
@@ -327,7 +328,7 @@ class PalettesController < ApplicationController
       **@filter_params
     )
 
-    @colors = matcher.matching_colors.limit(45)
+    @colors = matcher.matching_colors.limit(120)
     @total_count = matcher.count
   end
 

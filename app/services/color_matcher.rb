@@ -3,34 +3,22 @@
 class ColorMatcher
   include ColorSliderConversion
 
-  BASE_TOLERANCE = 8
-  MIN_RESULTS = 6
-  MAX_TOLERANCE = 25
-  TOLERANCE_STEP = 5
-
-  attr_reader :effective_tolerance
+  attr_reader :lightness_category
 
   def initialize(
     brand:,
     exclude_color_ids: [],
     color_family: nil,
-    lightness: nil,
-    adaptive: true
+    lightness_category: nil
   )
     @brand = brand
     @exclude_color_ids = exclude_color_ids
     @color_family = color_family
-    @lightness = lightness
-    @adaptive = adaptive
-    @effective_tolerance = BASE_TOLERANCE
+    @lightness_category = lightness_category
   end
 
   def matching_colors
-    @matching_colors ||= if @adaptive && filtering_active?
-                           adaptive_matching_colors
-    else
-      basic_matching_colors(BASE_TOLERANCE)
-    end
+    @matching_colors ||= build_query
   end
 
   def count
@@ -39,30 +27,10 @@ class ColorMatcher
 
   private
 
-  def filtering_active?
-    @lightness.present?
-  end
-
-  def adaptive_matching_colors
-    tolerance = BASE_TOLERANCE
-
-    loop do
-      results = basic_matching_colors(tolerance)
-      result_count = results.count
-
-      if result_count >= MIN_RESULTS || tolerance >= MAX_TOLERANCE
-        @effective_tolerance = tolerance
-        return results
-      end
-
-      tolerance += TOLERANCE_STEP
-    end
-  end
-
-  def basic_matching_colors(tolerance)
+  def build_query
     scope = base_scope
     scope = apply_color_family_filter(scope)
-    scope = apply_lightness_filter(scope, tolerance)
+    scope = apply_lightness_filter(scope)
     scope.order(oklch_l: :asc)
   end
 
@@ -78,9 +46,10 @@ class ColorMatcher
     scope.where(color_family: @color_family)
   end
 
-  def apply_lightness_filter(scope, tolerance)
-    return scope if @lightness.nil?
+  def apply_lightness_filter(scope)
+    range = lightness_range_for_category(@lightness_category)
+    return scope if range.nil?
 
-    scope.where(oklch_l: lightness_range(@lightness, tolerance))
+    scope.where(oklch_l: range)
   end
 end

@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus"
  * 
  * Unified controller for selecting colors in the palette editor.
  * Handles both thread and fabric (background) color selection with
- * filtering by color family and lightness.
+ * filtering by color family and lightness category.
  */
 export default class extends Controller {
   static targets = [
@@ -14,8 +14,8 @@ export default class extends Controller {
     "sourceName",
     "familyPills",
     "familyPill",
-    "lightnessSlider",
-    "lightnessThumb"
+    "lightnessTabs",
+    "lightnessTab"
   ]
 
   static values = {
@@ -23,7 +23,7 @@ export default class extends Controller {
     type: { type: String, default: "thread" },
     brandId: Number,
     family: String,
-    lightness: { type: Number, default: 50 },
+    lightnessCategory: { type: String, default: "all" },
     mode: { type: String, default: "add" },
     slotId: Number,
     pendingBackgroundHex: String
@@ -31,7 +31,6 @@ export default class extends Controller {
 
   connect() {
     this.debounceTimer = null
-    this.updateThumbPosition()
   }
 
   // ===========================================================================
@@ -82,24 +81,31 @@ export default class extends Controller {
   }
 
   // ===========================================================================
-  // Slider controls
+  // Lightness category selection
   // ===========================================================================
 
-  updateLightness(event) {
-    const value = parseInt(event.target.value, 10)
-    this.lightnessValue = value
-    this.updateThumbPosition()
-  }
+  selectLightnessCategory(event) {
+    const category = event.currentTarget.dataset.category
 
-  updateThumbPosition() {
-    if (!this.hasLightnessThumbTarget || !this.hasLightnessSliderTarget) return
-    
-    const thumb = this.lightnessThumbTarget
-    const value = this.lightnessSliderTarget.value
-    const thumbWidth = 20
-    const trackWidth = thumb.parentElement.offsetWidth - thumbWidth
-    const position = (value / 100) * trackWidth
-    thumb.style.left = `${position}px`
+    this.lightnessCategoryValue = category
+
+    // Update tab styling
+    this.lightnessTabTargets.forEach(tab => {
+      const tabCategory = tab.dataset.category
+      const isSelected = tabCategory === category
+
+      tab.dataset.selected = isSelected.toString()
+
+      if (isSelected) {
+        tab.classList.remove("bg-base-200", "hover:bg-base-300", "text-base-content")
+        tab.classList.add("bg-base-content", "text-base-100")
+      } else {
+        tab.classList.add("bg-base-200", "hover:bg-base-300", "text-base-content")
+        tab.classList.remove("bg-base-content", "text-base-100")
+      }
+    })
+
+    this.applyFilters()
   }
 
   // ===========================================================================
@@ -128,8 +134,8 @@ export default class extends Controller {
       url.searchParams.set("color_family", this.familyValue)
     }
 
-    if (this.hasLightnessSliderTarget) {
-      url.searchParams.set("lightness", this.lightnessSliderTarget.value)
+    if (this.lightnessCategoryValue && this.lightnessCategoryValue !== "all") {
+      url.searchParams.set("lightness_category", this.lightnessCategoryValue)
     }
 
     if (this.modeValue) {

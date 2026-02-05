@@ -1,4 +1,4 @@
-<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
+<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness_category: "all", palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
 
 <turbo-frame id="editor_panel">
   <div class="flex flex-col flex-1 min-h-0 pt-16"
@@ -7,7 +7,7 @@
        data-palette-color-picker-type-value="<%= type %>"
        data-palette-color-picker-brand-id-value="<%= selected_brand&.id %>"
        data-palette-color-picker-family-value="<%= selected_family %>"
-       data-palette-color-picker-lightness-value="<%= lightness || 50 %>"
+       data-palette-color-picker-lightness-category-value="<%= lightness_category %>"
        data-palette-color-picker-mode-value="<%= mode %>"
        data-palette-color-picker-slot-id-value="<%= current_slot&.id %>"
        data-palette-color-picker-pending-background-hex-value="<%= pending_background_hex %>">
@@ -17,9 +17,9 @@
     <%# ================================================================== %>
     <section class="shrink-0 px-4 pt-2 pb-4">
 
-      <%# 1. Brand selector %>
+      <%# Brand selector %>
       <div class="flex items-center gap-2 mb-4">
-        <p class="shrink-0 text-sm font-medium text-base-content">1. Brand</p>
+        <p class="shrink-0 text-sm font-medium text-base-content">Brand</p>
 
         <div class="relative" data-controller="dropdown">
           <button type="button"
@@ -51,38 +51,29 @@
         </div>
       </div>
 
-      <%# 2. Color family pills %>
+      <%# Color family pills %>
       <div class="flex items-center gap-2 mb-4">
-        <p class="shrink-0 text-sm font-medium text-base-content">2. Color family</p>
+        <p class="shrink-0 text-sm font-medium text-base-content">Color family</p>
 
         <%= render "palettes/editor/palette_family_pills",
             selected_family: selected_family %>
       </div>
 
-      <%# 3. Lightness slider %>
+      <%# Lightness filter tabs %>
       <div class="flex items-center gap-2">
-        <p class="shrink-0 text-sm font-medium text-base-content">3. Lightness</p>
-        <div class="flex-1 max-w-xs mx-auto">
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs text-base-content/70">
-              <span>Dark</span>
-              <span>Light</span>
-            </div>
-            <div class="relative">
-              <div class="h-3 rounded-full lightness-gradient"></div>
-              <input type="range"
-                     min="0"
-                     max="100"
-                     value="<%= lightness || 50 %>"
-                     class="absolute inset-0 w-full h-3 opacity-0 cursor-pointer"
-                     data-palette-color-picker-target="lightnessSlider"
-                     data-action="input->palette-color-picker#updateLightness change->palette-color-picker#applyFilters">
-              <div class="absolute top-1/2 -translate-y-1/2 size-5 bg-base-100 rounded-full shadow-md border-2 border-base-content/70 pointer-events-none transition-all"
-                   data-palette-color-picker-target="lightnessThumb"
-                   style="left: calc(<%= lightness || 50 %>% - 10px);">
-              </div>
-            </div>
-          </div>
+        <p class="shrink-0 text-sm font-medium text-base-content">Lightness</p>
+        <div class="flex gap-2" data-palette-color-picker-target="lightnessTabs">
+          <% [ "all", "dark", "medium", "light" ].each do |category| %>
+            <% is_selected = lightness_category == category %>
+            <button type="button"
+                          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer <%= is_selected ? 'bg-base-content text-base-100' : 'bg-base-200 hover:bg-base-300 text-base-content' %>"
+                          data-action="click->palette-color-picker#selectLightnessCategory"
+              data-palette-color-picker-target="lightnessTab"
+              data-category="<%= category %>"
+              data-selected="<%= is_selected %>">
+              <%= category.capitalize %>
+            </button>
+          <% end %>
         </div>
       </div>
 
