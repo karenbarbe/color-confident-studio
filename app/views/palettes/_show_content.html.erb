@@ -39,26 +39,13 @@
                         data: { turbo_frame: "_top", confirm: "Delete this palette?" },
                         class: "flex items-center gap-2 text-error hover:bg-error/10 w-full" do %>
             <%= icon(:trash_outline, css_class: "size-4") %>
-            <span>Delete</span>
+            <span>Delete palette</span>
           <% end %>
         </li>
       </ul>
     </div>
   </div>
 
-  <%# Palette preview %>
-  <div class="rounded-lg overflow-hidden mb-6">
-    <div class="p-4" style="background-color: #<%= palette.background_color&.hex_color || 'f5f5f5' %>;">
-      <div class="flex gap-1">
-        <% palette.thread_slots.each do |slot| %>
-          <div class="w-full aspect-1/4 min-w-0 max-w-12 rounded-full"
-               style="background-color: #<%= slot.product_color.hex_color %>;"
-               title="<%= slot.product_color.vendor_code %>">
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
 
   <%# Color list %>
   <div class="space-y-6">
