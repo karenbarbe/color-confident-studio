@@ -3,13 +3,13 @@
 <%
   # Determine the action based on type
   action = type == "fabric" ? "palette-editor#selectBackgroundColor" : "palette-editor#selectThreadColor"
-  
-  card_width = "w-28"
+
+  card_width = "w-full"
   color_height = "h-20"
 %>
 
 <button type="button"
-        class="shrink-0 group text-left <%= is_in_palette ? 'cursor-default' : 'cursor-pointer' %>"
+        class="group text-left w-full <%= is_in_palette ? 'cursor-default' : 'cursor-pointer' %>"
         data-action="click-><%= action %>"
   data-color-id="<%= color.id %>"
   data-hex="<%= color.hex_color %>"

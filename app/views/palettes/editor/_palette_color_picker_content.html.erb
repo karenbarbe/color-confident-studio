@@ -1,7 +1,7 @@
 <%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness_category: "all", palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
 
 <turbo-frame id="editor_panel">
-  <div class="flex flex-col flex-1 min-h-0 pt-8"
+  <div class="flex flex-col flex-1 min-h-0 pt-4"
        data-controller="palette-color-picker"
        data-palette-color-picker-palette-id-value="<%= palette.id %>"
        data-palette-color-picker-type-value="<%= type %>"
@@ -13,14 +13,12 @@
        data-palette-color-picker-pending-background-hex-value="<%= pending_background_hex %>">
 
     <%# ================================================================== %>
-    <%# Color controls section %>
+    <%# Color controls section — single row: brand + hue dropdowns       %>
     <%# ================================================================== %>
-    <section class="shrink-0 px-4 pt-2 pb-4">
+    <section class="shrink-0 px-4 pt-2 pb-3">
+      <div class="relative flex items-center gap-2 flex-wrap">
 
-      <%# Brand selector %>
-      <div class="flex items-center gap-2 mb-4">
-        <p class="shrink-0 text-sm font-medium text-base-content">Brand</p>
-
+        <%# Brand selector dropdown %>
         <div class="relative" data-controller="dropdown">
           <button type="button"
                   class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors cursor-pointer"
@@ -28,22 +26,18 @@
             <span data-palette-color-picker-target="sourceName">
               <%= selected_brand&.name&.truncate(20) || "Select brand" %>
             </span>
-
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 transition-transform">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-
+            <%= icon(:chevron_down_outline, css_class: "size-4 opacity-60") %>
           </button>
 
-          <div class="absolute right-0 top-full mt-1 w-56 bg-base-100 border border-base-300 rounded-lg shadow-lg z-10 hidden"
+          <div class="absolute left-0 top-full mt-1 w-56 bg-base-100 border border-base-300 rounded-lg shadow-lg z-20 hidden"
                data-dropdown-target="menu">
             <div class="py-1 max-h-60 overflow-y-auto">
               <% brands.each do |brand| %>
                 <button type="button"
                         class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between cursor-pointer <%= 'bg-base-200 font-medium' if brand.id == selected_brand&.id %>"
                         data-action="click->palette-color-picker#selectBrand click->dropdown#close"
-                  data-brand-id="<%= brand.id %>"
-                  data-brand-name="<%= brand.name %>">
+                        data-brand-id="<%= brand.id %>"
+                        data-brand-name="<%= brand.name %>">
                   <span><%= brand.name %></span>
                   <span class="text-xs text-base-content/50"><%= brand.product_colors_count %></span>
                 </button>
@@ -51,46 +45,82 @@
             </div>
           </div>
         </div>
+
+        <%# Hue (color family) dropdown %>
+        <% selected_family_tag = color_family_tags.find { |f| f[:name] == selected_family } %>
+        <div class="static" data-controller="dropdown">
+
+          <%# Button: shows selected family or "Hue" placeholder %>
+          <% if selected_family_tag %>
+            <%# Selected state: filled pill with dot + name + clear button %>
+            <div class="inline-flex items-center rounded-full bg-base-content text-base-100"
+                 data-palette-color-picker-target="familyButton">
+              <button type="button"
+                      class="inline-flex items-center gap-2 pl-3 pr-1 py-2 text-sm font-medium cursor-pointer"
+                      data-action="click->dropdown#toggle">
+                <span class="shrink-0 size-2.5 rounded-full <%= selected_family_tag[:color] %> ring-1 ring-inset ring-white/30"></span>
+                <span data-palette-color-picker-target="familyButtonLabel"><%= selected_family %></span>
+              </button>
+              <button type="button"
+                      class="inline-flex items-center justify-center size-7 mr-0.5 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
+                      data-action="click->palette-color-picker#clearFamily"
+                title="Clear hue filter">
+                <%= icon(:x_mark_outline, css_class: "size-3.5") %>
+              </button>
+            </div>
+          <% else %>
+            <%# Empty state: plain button matching brand dropdown style %>
+            <button type="button"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors cursor-pointer"
+                    data-action="click->dropdown#toggle"
+                    data-palette-color-picker-target="familyButton">
+              <span data-palette-color-picker-target="familyButtonLabel">Hue</span>
+              <%= icon(:chevron_down_outline, css_class: "size-4 opacity-60") %>
+            </button>
+          <% end %>
+
+          <%# Dropdown menu with family pills - always full width of section %>
+          <div class="absolute left-0 right-0 top-full mt-1 bg-base-100 border border-base-300 rounded-lg shadow-lg z-20 hidden p-3"
+               data-dropdown-target="menu">
+            <%= render "palettes/editor/palette_family_pills",
+                selected_family: selected_family %>
+          </div>
+        </div>
+
       </div>
+    </section>
 
-      <%# Color family pills %>
-      <div class="flex items-center gap-2 mb-4">
-        <p class="shrink-0 text-sm font-medium text-base-content">Color family</p>
-
-        <%= render "palettes/editor/palette_family_pills",
-            selected_family: selected_family %>
-      </div>
-
-      <%# Lightness filter tabs %>
-      <div class="flex gap-2" data-palette-color-picker-target="lightnessTabs">
+    <%# ================================================================== %>
+    <%# Sticky filter bar — lightness tabs + count                        %>
+    <%# ================================================================== %>
+    <div class="sticky top-0 z-10 flex items-center gap-2 px-4 py-2 bg-base-100"
+         data-palette-color-picker-target="lightnessTabs">
+      <div class="flex gap-1.5 flex-1">
         <% [ "all", "dark", "medium", "light" ].each do |category| %>
           <% is_selected = lightness_category == category %>
           <button type="button"
-                          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer <%= is_selected ? 'bg-base-content text-base-100' : 'bg-base-200 hover:bg-base-300 text-base-content' %>"
-                          data-action="click->palette-color-picker#selectLightnessCategory"
-            data-palette-color-picker-target="lightnessTab"
-            data-category="<%= category %>"
-            data-selected="<%= is_selected %>">
+                  class="px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer
+                         <%= is_selected ? 'bg-base-content text-base-100' : 'bg-base-200 hover:bg-base-300 text-base-content' %>"
+                  data-action="click->palette-color-picker#selectLightnessCategory"
+                  data-palette-color-picker-target="lightnessTab"
+                  data-category="<%= category %>"
+                  data-selected="<%= is_selected %>">
             <%= category.capitalize %>
           </button>
         <% end %>
       </div>
 
-    </section>
+      <span class="px-2 py-0.5 text-xs bg-base-200 text-base-content/70 rounded-full"
+            data-palette-color-picker-target="countBadge">
+        <%= total_count %>
+      </span>
+    </div>
 
     <%# ================================================================== %>
-    <%# Matching colors section (scrollable) %>
+    <%# Matching colors section                                        %>
     <%# ================================================================== %>
     <section class="flex-1 min-h-0 overflow-y-auto">
       <div class="px-4 py-3">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="text-sm font-medium text-base-content/70 uppercase tracking-wide">Matching colors</span>
-          <span class="px-2 py-0.5 text-xs bg-base-200 text-base-content/70 rounded-full"
-                data-palette-color-picker-target="countBadge">
-            <%= total_count %>
-          </span>
-        </div>
-
         <%# Color swatches list %>
         <div data-palette-color-picker-target="colorList">
           <%= render "palettes/editor/palette_color_list",
