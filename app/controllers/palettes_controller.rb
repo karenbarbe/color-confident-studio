@@ -1,8 +1,6 @@
 class PalettesController < ApplicationController
   # Only palette record
-  before_action :set_palette, only: %i[update destroy batch_update matching_colors]
-  # Palette + slots + product_colors for color picker actions
-  before_action :set_palette_with_slots, only: %i[color_picker_content]
+  before_action :set_palette, only: %i[update destroy batch_update matching_colors color_picker_content]
   # Palette + slots + product_colors + brands - for views that display palette details
   before_action :set_palette_with_colors, only: %i[show edit]
   before_action :set_color_picker_context, only: %i[matching_colors]
@@ -116,6 +114,7 @@ class PalettesController < ApplicationController
 
     # Capture pending background hex for thread picker display (for unsaved palettes)
     @pending_background_hex = params[:pending_background_hex].presence
+    @pending_background_oklch_l = params[:pending_background_oklch_l].presence
 
     if @type == "fabric"
       load_fabric_picker_data
@@ -137,7 +136,8 @@ class PalettesController < ApplicationController
       lightness_category: @filter_params[:lightness_category],
       palette_color_ids: @palette_color_ids,
       stashed_color_ids: @stashed_color_ids,
-      pending_background_hex: @pending_background_hex
+      pending_background_hex: @pending_background_hex,
+      pending_background_oklch_l: @pending_background_oklch_l
     }
   end
 
@@ -160,6 +160,7 @@ class PalettesController < ApplicationController
     @colors, @total_count = fetch_matching_colors
     @stashed_color_ids = Current.user.stash_items.pluck(:product_color_id)
     @pending_background_hex = params[:pending_background_hex].presence
+    @pending_background_oklch_l = params[:pending_background_oklch_l].presence
 
     render partial: "palettes/editor/palette_color_list", locals: {
       palette: @palette,
@@ -171,7 +172,8 @@ class PalettesController < ApplicationController
       current_color: @current_color,
       palette_color_ids: @palette_color_ids,
       stashed_color_ids: @stashed_color_ids,
-      pending_background_hex: @pending_background_hex
+      pending_background_hex: @pending_background_hex,
+      pending_background_oklch_l: @pending_background_oklch_l
     }
   end
 
@@ -221,10 +223,6 @@ class PalettesController < ApplicationController
 
   def set_palette
     @palette = Palette.find(params[:id])
-  end
-
-  def set_palette_with_slots
-    @palette = Palette.includes(color_slots: :product_color).find(params[:id])
   end
 
   def set_palette_with_colors
@@ -287,9 +285,11 @@ class PalettesController < ApplicationController
   def load_thread_picker_data
     @filter_params = extract_filter_params
     @brands = Brand.where(category: "thread").order(:name)
-    @selected_brand = find_selected_brand(@brands)
 
     set_thread_edit_mode_slot
+
+    @selected_brand = find_selected_brand(@brands)
+
 
     if @mode == "add" && @filter_params[:color_family].blank?
       @filter_params[:color_family] = "Red"
@@ -311,9 +311,10 @@ class PalettesController < ApplicationController
   def load_fabric_picker_data
     @filter_params = extract_filter_params
     @brands = Brand.where(category: "fabric").order(:name)
-    @selected_brand = find_selected_brand(@brands)
 
     set_fabric_edit_mode_slot
+
+    @selected_brand = find_selected_brand(@brands)
 
     if @mode == "add" && @filter_params[:color_family].blank?
       @filter_params[:color_family] = "Red"
@@ -335,6 +336,8 @@ class PalettesController < ApplicationController
   def find_selected_brand(brands)
     if params[:brand_id].present?
       brands.find_by(id: params[:brand_id]) || brands.first
+    elsif @current_color&.brand
+      @current_color.brand
     else
       brands.first
     end
@@ -355,7 +358,7 @@ class PalettesController < ApplicationController
     @current_color = nil
 
     if @mode == "edit"
-      @current_slot = @palette.background_slots.first
+      @current_slot = @palette.color_slots.includes(:product_color).find_by(slot_type: "background")
       @current_color = @current_slot&.product_color
     end
   end

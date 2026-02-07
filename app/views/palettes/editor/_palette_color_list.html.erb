@@ -1,4 +1,4 @@
-<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil, distribution: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
+<%# locals: (palette:, colors:, total_count:, type:, mode: "add", current_slot: nil, current_color: nil, distribution: nil, palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil, pending_background_oklch_l: nil) %>
 
 <%# Include total count as data attribute for JS to read %>
 <div data-total-count="<%= total_count %>"
@@ -10,13 +10,21 @@
     background_hex = if type == "thread"
       pending_background_hex.presence || palette.background_color&.hex_color
     end
+
+    # Get oklchL: pending state > saved state > nil
+    background_oklch_l = if type == "thread"
+      pending_background_oklch_l.presence || palette.background_color&.oklch_l
+    end
   %>
 
   <div class="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-3 px-3 py-8 rounded-md
               min-h-72 sm:min-h-0
               <%= 'bg-base-200' if type == 'fabric' || background_hex.nil? %>"
-       data-controller="color-grid-scroll"
+       data-controller="color-grid-scroll swatch-contrast"
        data-color-grid-scroll-current-color-id-value="<%= current_color&.id %>"
+       data-swatch-contrast-hex-value="<%= background_hex %>"
+       data-swatch-contrast-oklch-l-value="<%= background_oklch_l %>"
+       data-swatch-contrast-type-value="<%= type %>"
        <% if background_hex %>style="background-color: #<%= background_hex %>;"<% end %>>
 
     <% if colors.any? %>
@@ -40,7 +48,8 @@
         </div>
       <% end %>
     <% else %>
-      <div class="col-span-full flex items-center justify-center text-base-content/50 text-md min-h-32">
+      <div class="col-span-full flex items-center justify-center text-sm min-h-32"
+           data-swatch-contrast-target="emptyMessage">
         <p>No matching colors found.</p>
       </div>
     <% end %>

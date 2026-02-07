@@ -28,7 +28,8 @@ export default class extends Controller {
     lightnessCategory: { type: String, default: "all" },
     mode: { type: String, default: "add" },
     slotId: Number,
-    pendingBackgroundHex: String
+    pendingBackgroundHex: String,
+    pendingBackgroundOklchL: String
   }
 
   connect() {
@@ -244,6 +245,10 @@ export default class extends Controller {
       url.searchParams.set("pending_background_hex", this.pendingBackgroundHexValue)
     }
 
+    if (this.pendingBackgroundOklchLValue) {
+      url.searchParams.set("pending_background_oklch_l", this.pendingBackgroundOklchLValue)
+    }
+
     fetch(url, {
       headers: {
         "Accept": "text/vnd.turbo-stream.html, text/html, application/json",
@@ -256,6 +261,9 @@ export default class extends Controller {
           this.colorListTarget.innerHTML = html
         }
         this.updateCountBadge(html)
+
+        // Notify the palette editor to reconcile pending state indicators
+        this.dispatch("colorsUpdated", { bubbles: true })
       })
       .catch(error => {
         console.error(`Error fetching ${this.typeValue} colors:`, error)

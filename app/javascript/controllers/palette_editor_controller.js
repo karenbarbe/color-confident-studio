@@ -28,9 +28,11 @@ export default class extends Controller {
     "panelHeader",
     "addHeader", "addHeaderTitle",
     "editHeader", "editSwatch", "editCode", "editBrand", "editName",
-    "deleteButtonContainer",
     // Save/status
-    "saveButton", "unsavedIndicator"
+    "saveButton", "unsavedIndicator",
+    "editColorInfo",
+    "editHeaderTitle", 
+    "panelFooter"    
   ]
 
   static values = {
@@ -54,6 +56,9 @@ export default class extends Controller {
     // Listen for turbo frame loads to mark pending colors
     document.addEventListener("turbo:frame-load", this.handleFrameLoad)
 
+    this.handleColorsUpdated = this.handleColorsUpdated.bind(this)
+    document.addEventListener("palette-color-picker:colorsUpdated", this.handleColorsUpdated)
+
     // Cache reference to the slide panel element
     this.slidePanelElement = document.getElementById("editor-panel-container")
 
@@ -62,7 +67,9 @@ export default class extends Controller {
     if (this.pendingState.background) {
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent("palette-editor:backgroundChanged", {
-          detail: { hex: this.pendingState.background.productColor.hex }
+          detail: { 
+            hex: this.pendingState.background.productColor.hex,
+            oklchL: this.pendingState.background.productColor.oklchL || null }
         }))
       }, 0)
     }
@@ -70,6 +77,7 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener("turbo:frame-load", this.handleFrameLoad)
+    document.removeEventListener("palette-color-picker:colorsUpdated", this.handleColorsUpdated)
   }
 
   // ===========================================================================
@@ -389,6 +397,7 @@ export default class extends Controller {
         vendorCode: colorData.vendorCode,
         name: colorData.name,
         brandName: colorData.brandName,
+        oklchL: colorData.oklchL,
         colorFamily: colorData.colorFamily
       }
     }
@@ -510,7 +519,8 @@ export default class extends Controller {
         <span class="size-4 rounded-full ring-1 ring-inset ring-white/30"
               style="background-color: #${bg.productColor.hex};"></span>
         <span class="truncate">On ${bg.productColor.vendorCode} ${bg.productColor.name}</span>
-        <svg class="size-4 text-base-content ml-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <svg class="size-4 ml-auto transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             data-palette-header-contrast-target="selectorIcon">
           <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
         </svg>
       `
@@ -521,6 +531,7 @@ export default class extends Controller {
       selector.dataset.name = bg.productColor.name
       selector.dataset.brandName = bg.productColor.brandName
       selector.dataset.colorFamily = bg.productColor.colorFamily || ''
+      selector.dataset.oklchL = bg.productColor.oklchL || ''
     } else {
       selector.innerHTML = `
         <span class="size-4 rounded-full border-2 border-dashed border-zinc-400"></span>
@@ -558,9 +569,12 @@ export default class extends Controller {
       </style>
     `
 
-    // Dispatch event for header contrast controller
+    // Dispatch event for contrast controllers - include oklchL
     window.dispatchEvent(new CustomEvent("palette-editor:backgroundChanged", {
-      detail: { hex: bg?.productColor.hex || null }
+      detail: {
+        hex: bg?.productColor.hex || null,
+        oklchL: bg?.productColor.oklchL || null
+      }
     }))
   }
 
@@ -605,10 +619,12 @@ export default class extends Controller {
    * Trigger contrast controller to re-apply styles after DOM updates
    */
   reapplyContrastStyles() {
-    // Dispatch the current background state to update any new elements
     const bg = this.pendingState.background
     window.dispatchEvent(new CustomEvent("palette-editor:backgroundChanged", {
-      detail: { hex: bg?.productColor.hex || null }
+        detail: {
+            hex: bg?.productColor.hex || null,
+            oklchL: bg?.productColor.oklchL || null
+        }
     }))
   }
 
@@ -634,7 +650,7 @@ export default class extends Controller {
     this.modeValue = "add"
     this.colorTypeValue = "thread"
     this.selectedSlotIdValue = 0
-    this.updatePanelMode()
+    this.pendingEditColorData = null  // Clear any pending edit data
     this.loadPanelContent("add", "thread")
     this.openPanel()
   }
@@ -647,10 +663,9 @@ export default class extends Controller {
     this.colorTypeValue = "thread"
     this.selectedSlotIdValue = parseInt(button.dataset.slotId, 10)
 
-    const colorData = this.extractColorDataFromElement(button)
-    this.populateEditHeader(colorData)
+    // Store color data for populating after frame load
+    this.pendingEditColorData = this.extractColorDataFromElement(button)
 
-    this.updatePanelMode()
     this.updateSelectionIndicator(this.selectedSlotIdValue)
     this.loadPanelContent("edit", "thread", {
       slot_id: this.selectedSlotIdValue,
@@ -717,13 +732,12 @@ export default class extends Controller {
     this.colorTypeValue = "fabric"
     this.selectedSlotIdValue = hasBackground ? parseInt(selector.dataset.slotId, 10) : 0
 
-    // Populate edit header if editing existing background
+    // Store color data for populating after frame load
     if (hasBackground) {
-      const colorData = this.extractColorDataFromElement(selector)
-      this.populateEditHeader(colorData)
+      this.pendingEditColorData = this.extractColorDataFromElement(selector)
+    } else {
+      this.pendingEditColorData = null
     }
-
-    this.updatePanelMode()
 
     // Pass color_family when editing existing background
     const params = hasBackground && selector.dataset.colorFamily
@@ -748,22 +762,33 @@ export default class extends Controller {
     }
     if (this.hasEditHeaderTarget) {
       this.editHeaderTarget.classList.add("hidden")
-      this.editHeaderTarget.classList.remove("flex")
     }
 
-    // Hide delete button by default
-    if (this.hasDeleteButtonContainerTarget) {
-      this.deleteButtonContainerTarget.classList.add("hidden")
+    // Hide color info and footer by default
+    if (this.hasEditColorInfoTarget) {
+      this.editColorInfoTarget.classList.add("hidden")
+    }
+    if (this.hasPanelFooterTarget) {
+      this.panelFooterTarget.classList.add("hidden")
     }
 
     if (isEdit) {
-      // Show edit header
+      // Show edit header with appropriate title
       if (this.hasEditHeaderTarget) {
         this.editHeaderTarget.classList.remove("hidden")
-        this.editHeaderTarget.classList.add("flex")
       }
-      if (this.hasDeleteButtonContainerTarget) {
-        this.deleteButtonContainerTarget.classList.remove("hidden")
+      if (this.hasEditHeaderTitleTarget) {
+        this.editHeaderTitleTarget.textContent = isFabric
+          ? "Edit background color"
+          : "Edit color"
+      }
+      // Show color info card
+      if (this.hasEditColorInfoTarget) {
+        this.editColorInfoTarget.classList.remove("hidden")
+      }
+      // Show footer with delete button
+      if (this.hasPanelFooterTarget) {
+        this.panelFooterTarget.classList.remove("hidden")
       }
     } else {
       // Show add header with appropriate title
@@ -782,9 +807,14 @@ export default class extends Controller {
    * Populate the edit header with color data
    */
   populateEditHeader(colorData) {
-    if (this.hasEditSwatchTarget) {
-      this.editSwatchTarget.style.backgroundColor = `#${colorData.hex}`
+    if (this.hasEditColorInfoTarget) {
+      this.editColorInfoTarget.style.backgroundColor = `#${colorData.hex}`
+      
+      // Apply contrast text colors
+      const mode = this.calculateContrastMode(colorData.oklchL)
+      this.applyEditInfoContrast(mode)
     }
+    
     if (this.hasEditCodeTarget) {
       this.editCodeTarget.textContent = colorData.vendorCode
     }
@@ -796,14 +826,55 @@ export default class extends Controller {
     }
   }
 
+  calculateContrastMode(oklchL = null) {
+    if (oklchL !== null && !isNaN(oklchL)) {
+      if (oklchL > 0.62) return "light"
+      if (oklchL > 0.35) return "mid"
+      return "dark"
+    }
+  }
+
+  applyEditInfoContrast(mode) {
+    const textClasses = {
+      light: "text-gray-900",
+      mid: "text-white",
+      dark: "text-white"
+    }
+    const mutedClasses = {
+      light: "text-gray-900/70",
+      mid: "text-white/90",
+      dark: "text-white/90"
+    }
+
+    const allTextClasses = [ "text-gray-900", "text-white", "text-base-content" ]
+    const allMutedClasses = [ "text-gray-900/70", "text-white/70", "text-base-content/70" ]
+
+    if (this.hasEditCodeTarget) {
+      this.editCodeTarget.classList.remove(...allTextClasses)
+      this.editCodeTarget.classList.add(textClasses[ mode ])
+    }
+    if (this.hasEditBrandTarget) {
+      this.editBrandTarget.classList.remove(...allMutedClasses)
+      this.editBrandTarget.classList.add(mutedClasses[ mode ])
+    }
+    if (this.hasEditNameTarget) {
+      this.editNameTarget.classList.remove(...allMutedClasses)
+      this.editNameTarget.classList.add(mutedClasses[ mode ])
+    }
+  }
+
   loadPanelContent(mode, type, params = {}) {
     const url = new URL(`/palettes/${this.paletteIdValue}/color_picker_content`, window.location.origin)
     url.searchParams.set("mode", mode)
     url.searchParams.set("type", type)
 
-    // Pass pending background hex for thread color picker display
+    // Pass pending background data for thread color picker display
     if (type === "thread" && this.pendingState.background) {
       url.searchParams.set("pending_background_hex", this.pendingState.background.productColor.hex)
+      const oklchL = this.pendingState.background.productColor.oklchL
+      if (oklchL !== null && oklchL !== undefined) {
+        url.searchParams.set("pending_background_oklch_l", oklchL)
+      }
     }
 
     Object.entries(params).forEach(([ key, value ]) => {
@@ -851,8 +922,20 @@ export default class extends Controller {
     if (event.target.id === "editor_panel") {
       requestAnimationFrame(() => {
         this.markPendingColorsInList()
+        this.updatePanelMode()
+        
+        // Populate edit header if we have pending data
+        if (this.pendingEditColorData && this.modeValue === "edit") {
+          this.populateEditHeader(this.pendingEditColorData)
+        }
       })
     }
+  }
+
+  handleColorsUpdated() {
+    requestAnimationFrame(() => {
+      this.markPendingColorsInList()
+    })
   }
 
   markPendingColorsInList() {
@@ -873,9 +956,14 @@ export default class extends Controller {
 
     swatchButtons.forEach(button => {
       const colorId = parseInt(button.dataset.colorId, 10)
-      // Only mark if in pending state but not already marked by server
-      if (pendingColorIds.has(colorId) && !button.disabled) {
+      const isInPending = pendingColorIds.has(colorId)
+
+      if (isInPending && !button.disabled) {
+        // Color is in pending state but not marked by server — mark it
         this.markSwatchAsInPalette(button)
+      } else if (!isInPending && button.disabled) {
+        // Color was marked by server (stale state) but is no longer in pending state — un-mark it
+        this.unmarkSwatchFromPalette(button)
       }
     })
   }
@@ -911,6 +999,44 @@ export default class extends Controller {
       </svg>
     `
     colorPreview.appendChild(indicator)
+  }
+
+  unmarkSwatchFromPalette(button) {
+    // Re-enable the button
+    button.disabled = false
+    button.classList.remove("cursor-default")
+    button.classList.add("cursor-pointer")
+
+    // Remove ring from the card
+    const card = button.querySelector("div.rounded-md")
+    if (card) {
+      card.classList.remove("ring-1", "ring-base-content/30")
+    }
+
+    // Find the color preview area
+    const colorPreview = button.querySelector("div.relative")
+    if (!colorPreview) return
+
+    // Remove the palette indicator icon
+    const paletteIndicator = colorPreview.querySelector(".absolute.top-1\\.5.right-1\\.5")
+    if (paletteIndicator) {
+      paletteIndicator.remove()
+    }
+
+    // Re-add the hover action icon based on current mode
+    const mode = this.modeValue
+    const iconSvg = mode === "edit"
+      ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>`
+
+    const hoverDiv = document.createElement("div")
+    hoverDiv.className = "absolute top-1.5 right-1.5 size-6 bg-white/50 text-gray-900 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+    hoverDiv.innerHTML = iconSvg
+    colorPreview.appendChild(hoverDiv)
   }
 
   // ===========================================================================

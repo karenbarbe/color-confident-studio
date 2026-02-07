@@ -1,7 +1,7 @@
-<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness_category: "all", palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil) %>
+<%# locals: (palette:, type:, mode:, current_slot: nil, current_color: nil, colors:, total_count:, brands:, selected_brand:, selected_family: nil, lightness_category: "all", palette_color_ids: [], stashed_color_ids: [], pending_background_hex: nil, pending_background_oklch_l: nil) %>
 
 <turbo-frame id="editor_panel">
-  <div class="flex flex-col flex-1 min-h-0 pt-4"
+  <div class="flex flex-col flex-1 min-h-0"
        data-controller="palette-color-picker"
        data-palette-color-picker-palette-id-value="<%= palette.id %>"
        data-palette-color-picker-type-value="<%= type %>"
@@ -10,12 +10,35 @@
        data-palette-color-picker-lightness-category-value="<%= lightness_category %>"
        data-palette-color-picker-mode-value="<%= mode %>"
        data-palette-color-picker-slot-id-value="<%= current_slot&.id %>"
-       data-palette-color-picker-pending-background-hex-value="<%= pending_background_hex %>">
+       data-palette-color-picker-pending-background-hex-value="<%= pending_background_hex %>"
+       data-palette-color-picker-pending-background-oklch-l-value="<%= pending_background_oklch_l %>">
 
     <%# ================================================================== %>
-    <%# Color controls section — single row: brand + hue dropdowns       %>
+    <%# Edit mode: Current color info                            %>
     <%# ================================================================== %>
-    <section class="shrink-0 px-4 pt-2 pb-3">
+    <section class="shrink-0 hidden"
+            data-palette-editor-target="editColorInfo"
+            data-palette-header-contrast-target="editInfoBg"
+            style="background-color: var(--edit-info-bg, #ccc);">
+      <div class="px-4 py-4">
+        <div class="flex items-baseline gap-1.5">
+          <span class="text-xl font-semibold uppercase"
+                data-palette-editor-target="editCode"
+                data-palette-header-contrast-target="editInfoText"></span>
+          <span class="text-sm font-semibold truncate"
+                data-palette-editor-target="editBrand"
+                data-palette-header-contrast-target="editInfoTextMuted"></span>
+        </div>
+        <p class="text-sm truncate"
+          data-palette-editor-target="editName"
+          data-palette-header-contrast-target="editInfoTextMuted"></p>
+      </div>
+    </section>
+
+    <%# ================================================================== %>
+    <%# Color controls section - single row: brand + hue dropdowns       %>
+    <%# ================================================================== %>
+    <section class="shrink-0 px-4 pt-6 pb-4">
       <div class="relative flex items-center gap-2 flex-wrap">
 
         <%# Brand selector dropdown %>
@@ -36,8 +59,8 @@
                 <button type="button"
                         class="w-full px-4 py-2 text-left text-sm hover:bg-base-200 flex items-center justify-between cursor-pointer <%= 'bg-base-200 font-medium' if brand.id == selected_brand&.id %>"
                         data-action="click->palette-color-picker#selectBrand click->dropdown#close"
-                        data-brand-id="<%= brand.id %>"
-                        data-brand-name="<%= brand.name %>">
+                  data-brand-id="<%= brand.id %>"
+                  data-brand-name="<%= brand.name %>">
                   <span><%= brand.name %></span>
                   <span class="text-xs text-base-content/50"><%= brand.product_colors_count %></span>
                 </button>
@@ -73,7 +96,7 @@
             <button type="button"
                     class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors cursor-pointer"
                     data-action="click->dropdown#toggle"
-                    data-palette-color-picker-target="familyButton">
+              data-palette-color-picker-target="familyButton">
               <span data-palette-color-picker-target="familyButtonLabel">Hue</span>
               <%= icon(:chevron_down_outline, css_class: "size-4 opacity-60") %>
             </button>
@@ -91,7 +114,7 @@
     </section>
 
     <%# ================================================================== %>
-    <%# Sticky filter bar — lightness tabs + count                        %>
+    <%# Sticky filter bar - lightness tabs + count                        %>
     <%# ================================================================== %>
     <div class="sticky top-0 z-10 flex items-center gap-2 px-4 py-2 bg-base-100"
          data-palette-color-picker-target="lightnessTabs">
@@ -99,12 +122,12 @@
         <% [ "all", "dark", "medium", "light" ].each do |category| %>
           <% is_selected = lightness_category == category %>
           <button type="button"
-                  class="px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap transition-all cursor-pointer
+                  class="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer
                          <%= is_selected ? 'bg-base-content text-base-100' : 'bg-base-200 hover:bg-base-300 text-base-content' %>"
                   data-action="click->palette-color-picker#selectLightnessCategory"
-                  data-palette-color-picker-target="lightnessTab"
-                  data-category="<%= category %>"
-                  data-selected="<%= is_selected %>">
+            data-palette-color-picker-target="lightnessTab"
+            data-category="<%= category %>"
+            data-selected="<%= is_selected %>">
             <%= category.capitalize %>
           </button>
         <% end %>
@@ -117,9 +140,9 @@
     </div>
 
     <%# ================================================================== %>
-    <%# Matching colors section                                        %>
+    <%# Matching colors section                                           %>
     <%# ================================================================== %>
-    <section class="flex-1 min-h-0 overflow-y-auto">
+    <section class="flex-1 min-h-0 overflow-y-auto pb-20">
       <div class="px-4 py-3">
         <%# Color swatches list %>
         <div data-palette-color-picker-target="colorList">
@@ -133,10 +156,24 @@
               current_color: current_color,
               palette_color_ids: palette_color_ids,
               stashed_color_ids: stashed_color_ids,
-              pending_background_hex: pending_background_hex %>
+              pending_background_hex: pending_background_hex,
+              pending_background_oklch_l: pending_background_oklch_l %>
         </div>
       </div>
     </section>
+
+    <%# ================================================================== %>
+    <%# Fixed footer with delete button (edit mode only)                  %>
+    <%# ================================================================== %>
+    <footer class="absolute bottom-0 left-0 right-0 px-4 py-3 bg-base-100 border-t border-base-300 hidden"
+            data-palette-editor-target="panelFooter">
+      <button type="button"
+              class="w-full btn btn-outline btn-error gap-2"
+              data-action="click->palette-editor#deleteColor">
+        <%= icon(:trash_outline, css_class: "size-5") %>
+        <span>Remove from palette</span>
+      </button>
+    </footer>
 
   </div>
 </turbo-frame>
