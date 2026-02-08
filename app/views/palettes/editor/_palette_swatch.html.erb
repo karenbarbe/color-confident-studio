@@ -3,13 +3,13 @@
 <%
   # Determine the action based on type
   action = type == "fabric" ? "palette-editor#selectBackgroundColor" : "palette-editor#selectThreadColor"
-  
-  card_width = "w-28"
+
+  card_width = "w-full"
   color_height = "h-20"
 %>
 
 <button type="button"
-        class="shrink-0 group text-left <%= is_in_palette ? 'cursor-default' : 'cursor-pointer' %>"
+        class="group text-left w-full <%= is_in_palette ? 'cursor-default' : 'cursor-pointer' %>"
         data-action="click-><%= action %>"
   data-color-id="<%= color.id %>"
   data-hex="<%= color.hex_color %>"
@@ -17,12 +17,13 @@
   data-name="<%= color.name %>"
   data-brand-name="<%= color.brand.name %>"
   data-color-family="<%= color.color_family %>"
-  <% if type == "thread" %>data-oklch-l="<%= color.oklch_l %>"<% end %>
+  data-oklch-l="<%= color.oklch_l %>"
   data-mode="<%= mode %>"
   data-slot-id="<%= current_slot&.id %>"
   <%= "disabled" if is_in_palette %>>
-  <div class="<%= card_width %> rounded-md overflow-hidden bg-base-100
-              <%= is_in_palette ? 'ring-1 ring-base-content/30' : '' %>">
+  <div class="<%= card_width %> rounded-md overflow-hidden border border-gray-300
+              <%= is_in_palette ? 'ring-1 ring-base-content/30' : '' %>"
+       data-swatch-contrast-target="swatchCard">
 
     <%# Color preview area %>
     <div class="<%= color_height %> relative"
@@ -58,8 +59,10 @@
 
     <%# Color info %>
     <div class="p-2">
-      <p class="font-bold text-xs text-base-content truncate"><%= color.vendor_code %></p>
-      <p class="text-xs text-base-content/70 truncate"><%= color.name %></p>
+      <p class="font-bold text-xs text-base-content truncate"
+         data-swatch-contrast-target="swatchCode"><%= color.vendor_code %></p>
+      <p class="text-xs text-base-content/70 truncate"
+         data-swatch-contrast-target="swatchName"><%= color.name %></p>
     </div>
   </div>
 </button>

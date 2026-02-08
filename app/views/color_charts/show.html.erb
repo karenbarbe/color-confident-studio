@@ -36,8 +36,8 @@
         </div>
       </div>
 
-      <%# Color grid %>
-      <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2 pt-3">
+      <%# Color grid with container queries %>
+      <div class="@container mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2 pt-3">
         <% @colors_by_family.each do |family, colors| %>
           <section id="<%= family.parameterize %>"
                    class="scroll-mt-28 space-y-2 pt-12"

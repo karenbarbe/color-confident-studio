@@ -1,40 +1,31 @@
 <%# locals: (palette:, thread_slots:) %>
 
 <div class="mt-6">
-  <div class="bg-base-100 rounded-2xl shadow-sm p-6 space-y-5">
+  <div class="rounded-md p-6 bg-base-100 transition-colors duration-300"
+       data-palette-header-contrast-target="card">
 
     <%# Top row: Name + Buttons %>
-    <div class="flex items-center justify-between">
+    <div class="flex flex-wrap items-center gap-2">
 
-      <%# Palette name %>
-        <h1 class="font-bold text-3xl text-base-content">
-          <%= @palette.name.presence || "Untitled palette" %>
-        </h1>
-
-      <%# Action buttons %>
-      <div class="flex items-center gap-2">
-        <% if policy(@palette).destroy? %>
-          <%= button_to "Delete palette",
-          palette_path(@palette),
-          method: :delete,
-          class: "btn btn-ghost text-red-600",
-          data: { turbo_confirm: "Are you sure you want to delete this palette?" } %>
+      <div class="flex items-center gap-1">
+        <%= link_to palettes_path, title: "Back to palettes",
+              class: "btn btn-circle transition-colors duration-300",
+              data: { palette_header_contrast_target: "buttonGhost" } do %>
+          <%= icon(:chevron_left_outline, css_class: "size-5") %>
         <% end %>
-
-        <%= link_to "Cancel", palettes_path,
-            class: "btn btn-outline" %>
-
-        <%= render "palettes/editor/save_button", palette: palette, thread_slots: thread_slots %>
+        <div>
+          <h1 class="font-bold text-xl text-base-content transition-colors duration-300"
+              data-palette-header-contrast-target="text">
+            <%= @palette.name.presence || "New palette" %>
+          </h1>
+          <%# Stats row %>
+          <%= render "palettes/editor/header_stats", palette: palette, thread_slots: thread_slots %>
+        </div>
 
       </div>
-    </div>
 
-    <%# Stats row %>
-    <%= render "palettes/editor/header_stats", palette: palette, thread_slots: thread_slots %>
+      <%= render "palettes/editor/save_button", palette: palette, thread_slots: thread_slots %>
 
-    <%# Background selector row %>
-    <div class="flex items-center justify-between">
-      <%= render "palettes/editor/background_selector", palette: palette %>
     </div>
 
   </div>

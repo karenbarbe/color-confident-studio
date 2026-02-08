@@ -66,14 +66,14 @@ const MODE_STYLES = {
 
 // Pre-compute all variant classes for each category (for efficient removal)
 const ALL_VARIANTS = Object.fromEntries(
-  Object.entries(MODE_STYLES).map(([category, modes]) => [
+  Object.entries(MODE_STYLES).map(([ category, modes ]) => [
     category,
-    [...new Set(Object.values(modes).flatMap(v => v.split(" ")))]
+    [ ...new Set(Object.values(modes).flatMap(v => v.split(" "))) ]
   ])
 )
 
 export default class extends Controller {
-  static targets = ["swatch", "emptyState", "card", "pillContainer"]
+  static targets = [ "swatch", "emptyState", "card", "pillContainer" ]
 
   connect() {
     // Track the fabric picker's current mode (for restoring when switching back to grid)
@@ -100,6 +100,10 @@ export default class extends Controller {
     // Listen for scroll-spy active pill changes
     this.pillActiveHandler = this.handlePillActiveChange.bind(this)
     window.addEventListener("scroll-spy:activeChanged", this.pillActiveHandler)
+
+    // Re-apply styles when Turbo Stream updates the DOM
+    this.turboStreamHandler = this.handleTurboStream.bind(this)
+    document.addEventListener("turbo:before-stream-render", this.turboStreamHandler)
   }
 
   disconnect() {
@@ -107,6 +111,7 @@ export default class extends Controller {
     window.removeEventListener("stash-view:changed", this.viewHandler)
     window.removeEventListener("sticky-nav:stuckChanged", this.stuckHandler)
     window.removeEventListener("scroll-spy:activeChanged", this.pillActiveHandler)
+    document.removeEventListener("turbo:before-stream-render", this.turboStreamHandler)
   }
 
   handleStyleChange(event) {
@@ -160,6 +165,18 @@ export default class extends Controller {
     this.updatePills(mode)
   }
 
+  handleTurboStream(event) {
+    const fallbackToDefaultRender = event.detail.render
+
+    event.detail.render = (streamElement) => {
+      fallbackToDefaultRender(streamElement)
+
+      // After the default render completes, re-apply styles
+      const mode = this.currentView === "grid" ? this.fabricPickerMode : "default"
+      this.applyMode(mode)
+    }
+  }
+
   applyMode(mode) {
     this.updateSwatches(mode)
     this.updateEmptyStates(mode)
@@ -173,10 +190,10 @@ export default class extends Controller {
       const isInStickyNav = card.closest(".sticky-nav") !== null
       if (!isInStickyNav) return
 
-      const background = card.hasAttribute("data-card-background") 
-        ? card 
+      const background = card.hasAttribute("data-card-background")
+        ? card
         : card.querySelector("[data-card-background]")
-      
+
       if (!background) return
 
       if (isStuck && this.fabricPickerHex) {
@@ -195,11 +212,11 @@ export default class extends Controller {
       if (!label) return
 
       this.applyStyle(label, "swatchLabel", mode)
-      
+
       const vendorCode = label.querySelector("[data-vendor-code]")
       const brandName = label.querySelector("[data-brand-name]")
       const colorName = label.querySelector("[data-color-name]")
-      
+
       if (vendorCode) this.applyStyle(vendorCode, "vendorCode", mode)
       if (brandName) this.applyStyle(brandName, "brandName", mode)
       if (colorName) this.applyStyle(colorName, "colorName", mode)
@@ -214,8 +231,8 @@ export default class extends Controller {
 
   updateCards(mode) {
     this.cardTargets.forEach(card => {
-      const background = card.hasAttribute("data-card-background") 
-        ? card 
+      const background = card.hasAttribute("data-card-background")
+        ? card
         : card.querySelector("[data-card-background]")
       const line = card.querySelector("[data-card-line]")
       const texts = card.querySelectorAll("[data-card-text]")
@@ -229,13 +246,13 @@ export default class extends Controller {
   updatePills(mode) {
     this.pillContainerTargets.forEach(container => {
       const pills = container.querySelectorAll("[data-fabric-contrast-pill]")
-      
+
       pills.forEach(pill => {
         const isActive = pill.dataset.active === "true"
-        
+
         // Remove all pill variant classes (both inactive and active)
         pill.classList.remove(...ALL_VARIANTS.pill, ...ALL_VARIANTS.pillActive)
-        
+
         if (isActive) {
           // Active pills get the pillActive styles
           pill.classList.add(...MODE_STYLES.pillActive[mode].split(" "))

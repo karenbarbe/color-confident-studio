@@ -1,14 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["nav"]
-  static classes = ["stuck"]
+  static targets = [ "nav" ]
+  static classes = [ "stuck" ]
 
   connect() {
-    this.navTop = this.navTarget.getBoundingClientRect().top + window.scrollY
     this.isStuck = false
     this.boundOnScroll = this.onScroll.bind(this)
+    
+    this.navTop = this.calculateInitialNavTop()
+    
     window.addEventListener("scroll", this.boundOnScroll, { passive: true })
+    
     this.onScroll() // Check initial state
   }
 
@@ -16,9 +19,15 @@ export default class extends Controller {
     window.removeEventListener("scroll", this.boundOnScroll)
   }
 
+  calculateInitialNavTop() {
+
+    const wrapperRect = this.element.getBoundingClientRect()
+    return wrapperRect.top + window.scrollY
+  }
+
   onScroll() {
     const isStuck = window.scrollY >= this.navTop
-    
+
     // Only dispatch if state changed
     if (isStuck !== this.isStuck) {
       this.isStuck = isStuck
@@ -34,6 +43,6 @@ export default class extends Controller {
   }
 
   get stuckClass() {
-    return this.hasStuckClass ? this.stuckClasses[0] : "is-stuck"
+    return this.hasStuckClass ? this.stuckClasses[ 0 ] : "is-stuck"
   }
 }

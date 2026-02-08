@@ -1,23 +1,17 @@
-<div id="save-button">
+<div id="save-button" class="ml-auto">
   <% is_new_palette = palette.color_slots.empty? %>
   <% is_complete = palette.complete? %>
   <% button_text = is_new_palette ? "Save palette" : "Save changes" %>
 
-  <%# New palette: enable when complete. Existing palette: always start disabled (no changes yet) %>
-  <% is_enabled = is_complete && is_new_palette %>
+  <%# New palette: show when complete. Existing palette: hidden initially (shown by JS when changes exist) %>
+  <% show_button = is_complete && is_new_palette %>
 
-  <% if is_enabled %>
+  <div class="<%= show_button ? '' : 'hidden' %>">
     <button type="button"
-            class="btn btn-neutral"
-            data-action="click->palette-editor#savePalette">
+            class="btn btn-neutral transition-colors duration-300"
+            data-action="click->palette-editor#savePalette"
+      data-palette-header-contrast-target="saveButton">
       <%= button_text %>
     </button>
-  <% else %>
-    <% title = is_complete ? "No changes to save" : "Add at least one background and one thread color" %>
-    <button disabled 
-            class="btn btn-disabled"
-            title="<%= title %>">
-      <%= button_text %>
-    </button>
-  <% end %>
+  </div>
 </div>

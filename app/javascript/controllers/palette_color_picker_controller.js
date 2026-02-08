@@ -2,10 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 /**
  * PaletteColorPickerController
- * 
+ *
  * Unified controller for selecting colors in the palette editor.
  * Handles both thread and fabric (background) color selection with
- * filtering by color family and lightness.
+ * filtering by color family and lightness category.
  */
 export default class extends Controller {
   static targets = [
@@ -14,8 +14,10 @@ export default class extends Controller {
     "sourceName",
     "familyPills",
     "familyPill",
-    "lightnessSlider",
-    "lightnessThumb"
+    "familyButton",
+    "familyButtonLabel",
+    "lightnessTabs",
+    "lightnessTab"
   ]
 
   static values = {
@@ -23,15 +25,15 @@ export default class extends Controller {
     type: { type: String, default: "thread" },
     brandId: Number,
     family: String,
-    lightness: { type: Number, default: 50 },
+    lightnessCategory: { type: String, default: "all" },
     mode: { type: String, default: "add" },
     slotId: Number,
-    pendingBackgroundHex: String
+    pendingBackgroundHex: String,
+    pendingBackgroundOklchL: String
   }
 
   connect() {
     this.debounceTimer = null
-    this.updateThumbPosition()
   }
 
   // ===========================================================================
@@ -63,6 +65,7 @@ export default class extends Controller {
 
     this.familyValue = isCurrentlySelected ? "" : family
 
+    // Update pill styling within the dropdown
     this.familyPillTargets.forEach(pill => {
       const pillFamily = pill.dataset.family
       const isSelected = pillFamily === this.familyValue
@@ -73,33 +76,131 @@ export default class extends Controller {
         pill.classList.remove("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-200")
         pill.classList.add("bg-base-content", "hover:bg-base-content/80", "text-base-100")
       } else {
-        pill.classList.add("bg-base-100", "border", "border-base-content", "text-base-content/70", "hover:bg-base-200")
+        pill.classList.add("bg-base-100", "text-base-content/70", "hover:bg-base-200")
         pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
       }
     })
 
+    // Update the family dropdown button appearance
+    this.updateFamilyButton()
+
     this.applyFilters()
   }
 
-  // ===========================================================================
-  // Slider controls
-  // ===========================================================================
+  clearFamily(event) {
+    event.stopPropagation()
 
-  updateLightness(event) {
-    const value = parseInt(event.target.value, 10)
-    this.lightnessValue = value
-    this.updateThumbPosition()
+    this.familyValue = ""
+
+    // Reset all pill styling
+    this.familyPillTargets.forEach(pill => {
+      pill.dataset.selected = "false"
+      pill.classList.add("bg-base-100", "text-base-content/70", "hover:bg-base-200")
+      pill.classList.remove("bg-base-content", "hover:bg-base-content/80", "text-base-100")
+    })
+
+    // Update the family dropdown button appearance
+    this.updateFamilyButton()
+
+    this.applyFilters()
   }
 
-  updateThumbPosition() {
-    if (!this.hasLightnessThumbTarget || !this.hasLightnessSliderTarget) return
-    
-    const thumb = this.lightnessThumbTarget
-    const value = this.lightnessSliderTarget.value
-    const thumbWidth = 20
-    const trackWidth = thumb.parentElement.offsetWidth - thumbWidth
-    const position = (value / 100) * trackWidth
-    thumb.style.left = `${position}px`
+  /**
+   * Rebuilds the family dropdown button to reflect the current selection.
+   *
+   * When a family is selected: dark filled pill with dot + name + ✕ clear button.
+   * When no family is selected: plain "Hue ▾" button matching the brand dropdown.
+   */
+  updateFamilyButton() {
+    if (!this.hasFamilyButtonTarget) return
+
+    const buttonContainer = this.familyButtonTarget
+    // Walk up to the dropdown controller wrapper
+    const dropdownWrap = buttonContainer.closest("[data-controller='dropdown']")
+    if (!dropdownWrap) return
+
+    // Find the selected pill to grab its dot color class
+    const selectedPill = this.familyPillTargets.find(
+      pill => pill.dataset.selected === "true"
+    )
+
+    if (this.familyValue && selectedPill) {
+      // Extract the color class from the dot inside the selected pill
+      const dot = selectedPill.querySelector(".rounded-full")
+      const colorClasses = dot
+        ? [ ...dot.classList ].filter(c => c.startsWith("bg-")).join(" ")
+        : ""
+
+      // Build selected state: filled pill with dot + name + ✕
+      const html = `
+        <div class="inline-flex items-center rounded-full bg-base-content text-base-100"
+             data-palette-color-picker-target="familyButton">
+          <button type="button"
+                  class="inline-flex items-center gap-2 pl-3 pr-1 py-2 text-sm font-medium cursor-pointer"
+                  data-action="click->dropdown#toggle">
+            <span class="shrink-0 size-2.5 rounded-full ${colorClasses} ring-1 ring-inset ring-white/30"></span>
+            <span data-palette-color-picker-target="familyButtonLabel">${this.familyValue}</span>
+          </button>
+          <button type="button"
+                  class="inline-flex items-center justify-center size-7 mr-0.5 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
+                  data-action="click->palette-color-picker#clearFamily"
+                  title="Clear hue filter">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      `
+
+      buttonContainer.replaceWith(
+        document.createRange().createContextualFragment(html.trim())
+      )
+    } else {
+      // Build empty state: plain "Hue ▾" button
+      const html = `
+        <button type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 text-sm bg-base-200 border border-base-content rounded-full hover:bg-base-300 transition-colors cursor-pointer"
+                data-action="click->dropdown#toggle"
+                data-palette-color-picker-target="familyButton">
+          <span data-palette-color-picker-target="familyButtonLabel">Hue</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4 opacity-60">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+      `
+
+      buttonContainer.replaceWith(
+        document.createRange().createContextualFragment(html.trim())
+      )
+    }
+  }
+
+  // ===========================================================================
+  // Lightness category selection
+  // ===========================================================================
+
+  selectLightnessCategory(event) {
+    const category = event.currentTarget.dataset.category
+
+    this.lightnessCategoryValue = category
+
+    // Update tab styling
+    this.lightnessTabTargets.forEach(tab => {
+      const tabCategory = tab.dataset.category
+      const isSelected = tabCategory === category
+
+      tab.dataset.selected = isSelected.toString()
+
+      if (isSelected) {
+        tab.classList.remove("bg-base-200", "hover:bg-base-300", "text-base-content")
+        tab.classList.add("bg-base-content", "text-base-100")
+      } else {
+        tab.classList.add("bg-base-200", "hover:bg-base-300", "text-base-content")
+        tab.classList.remove("bg-base-content", "text-base-100")
+      }
+    })
+
+    this.applyFilters()
   }
 
   // ===========================================================================
@@ -114,10 +215,10 @@ export default class extends Controller {
   }
 
   fetchColors() {
-    const endpoint = this.typeValue === "fabric" 
-      ? "matching_colors?type=fabric" 
+    const endpoint = this.typeValue === "fabric"
+      ? "matching_colors?type=fabric"
       : "matching_colors?type=thread"
-    
+
     const url = new URL(`/palettes/${this.paletteIdValue}/${endpoint}`, window.location.origin)
 
     if (this.brandIdValue) {
@@ -128,8 +229,8 @@ export default class extends Controller {
       url.searchParams.set("color_family", this.familyValue)
     }
 
-    if (this.hasLightnessSliderTarget) {
-      url.searchParams.set("lightness", this.lightnessSliderTarget.value)
+    if (this.lightnessCategoryValue && this.lightnessCategoryValue !== "all") {
+      url.searchParams.set("lightness_category", this.lightnessCategoryValue)
     }
 
     if (this.modeValue) {
@@ -144,6 +245,10 @@ export default class extends Controller {
       url.searchParams.set("pending_background_hex", this.pendingBackgroundHexValue)
     }
 
+    if (this.pendingBackgroundOklchLValue) {
+      url.searchParams.set("pending_background_oklch_l", this.pendingBackgroundOklchLValue)
+    }
+
     fetch(url, {
       headers: {
         "Accept": "text/vnd.turbo-stream.html, text/html, application/json",
@@ -156,6 +261,9 @@ export default class extends Controller {
           this.colorListTarget.innerHTML = html
         }
         this.updateCountBadge(html)
+
+        // Notify the palette editor to reconcile pending state indicators
+        this.dispatch("colorsUpdated", { bubbles: true })
       })
       .catch(error => {
         console.error(`Error fetching ${this.typeValue} colors:`, error)
@@ -168,7 +276,7 @@ export default class extends Controller {
     const parser = new DOMParser()
     const doc = parser.parseFromString(html, "text/html")
     const countEl = doc.querySelector("[data-total-count]")
-    
+
     if (countEl) {
       this.countBadgeTarget.textContent = countEl.dataset.totalCount
     }

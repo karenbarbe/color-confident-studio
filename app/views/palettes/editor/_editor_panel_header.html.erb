@@ -1,0 +1,42 @@
+<%# app/views/palettes/editor/_editor_panel_header.html.erb %>
+<%# locals: (close_callback: nil) %>
+
+<%#
+  Editor Panel Header
+
+  Dynamic header for the palette editor slide panel.
+  Shows different content based on mode (add/edit) and type (thread/fabric).
+  All targets are controlled by palette_editor_controller.js
+
+%>
+
+<div class="sticky top-0 left-0 right-0 flex items-center justify-between px-4 py-3 min-h-14 border-b border-base-300 bg-base-100 z-20"
+     data-palette-editor-target="panelHeader">
+
+  <%# Left side: Mode-specific headers %>
+  <div class="flex items-center min-w-0">
+
+    <%# "Add" mode header (for both thread and background) %>
+    <div data-palette-editor-target="addHeader">
+      <h2 class="text-lg font-semibold text-base-content"
+          data-palette-editor-target="addHeaderTitle">Add thread color</h2>
+    </div>
+
+    <%# "Edit" mode header (for both thread and background) %>
+    <div class="hidden" data-palette-editor-target="editHeader">
+      <h2 class="text-lg font-semibold text-base-content"
+          data-palette-editor-target="editHeaderTitle">Edit color</h2>
+    </div>
+
+  </div>
+
+  <%# Right side: close button only %>
+  <div class="flex items-center shrink-0">
+    <button type="button"
+            class="btn btn-circle btn-ghost btn-sm text-base-content/70 hover:text-base-content cursor-pointer"
+            data-action="click->slide-panel#close <%= close_callback %>"
+      title="Close panel">
+      <%= icon(:x_mark_outline, css_class: "size-6") %>
+    </button>
+  </div>
+</div>

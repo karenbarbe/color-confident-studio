@@ -3,7 +3,7 @@
 
 /* Import custom stylesheets */
 @import "../stylesheets/floating-cards.css";
-@import "../stylesheets/color-detail-panel.css";
+@import "../stylesheets/slide-panel.css";
 
 /* ============================================
    NAVBAR SCROLL BEHAVIOR
@@ -171,52 +171,6 @@
   @apply hover:bg-base-content/15;
 }
 
-/* ============================================
-   SLIDERS
-   ============================================ */
-
-
-/* Saturation gradient (muted gray to vivid color) */
-.saturation-gradient {
-  background: linear-gradient(to right, 
-    hsl(180, 10%, 70%) 0%, 
-    hsl(180, 50%, 60%) 50%, 
-    hsl(180, 100%, 45%) 100%
-  );
-}
-
-/* Lightness gradient (dark to light) */
-.lightness-gradient {
-  background: linear-gradient(to right, 
-    hsl(0, 0%, 15%) 0%, 
-    hsl(0, 0%, 50%) 50%, 
-    hsl(0, 0%, 95%) 100%
-  );
-}
-
-/* Custom range input styling for better cross-browser support */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  opacity: 0;
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  opacity: 0;
-  border: none;
-}
 
 /* ============================================
    FLASH MESSAGE ANIMATIONS

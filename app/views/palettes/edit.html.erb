@@ -8,8 +8,8 @@
     </style>
   </div>
 
-  <div class="w-full -mt-16 md:-mt-8 -mb-16 min-h-screen pt-16 md:pt-8 pb-32 transition-colors duration-300" 
-       data-controller="palette-editor" 
+  <div class="w-full -mt-16 md:-mt-8 -mb-16 min-h-screen pt-16 md:pt-8 pb-8 transition-colors duration-300 flex flex-col"
+       data-controller="palette-editor palette-header-contrast"
        data-palette-editor-palette-id-value="<%= @palette.id %>"
        data-palette-editor-is-new-palette-value="<%= @palette.color_slots.empty? %>"
        data-palette-editor-target="backgroundLayer">
@@ -19,23 +19,43 @@
       <%= render "shared/flash", notice: notice, alert: alert %>
     </div>
 
-    <%# Constrained content wrapper %>
-    <div class="mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+    <%# Flex wrapper for main content + slide panel %>
+    <div class="flex flex-1 min-h-0">
 
-      <%# Header card %>
-      <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
+      <%# Main editor content %>
+      <div class="flex-1 min-w-0 transition-all duration-300 flex flex-col">
+        <%# Constrained content wrapper with vertical distribution %>
+        <div class="mx-auto px-4 w-full flex-1 flex flex-col justify-between">
 
-      <%# Color pills area %>
-      <div class="mt-8">
-        <%= render "palettes/editor/color_pills_container",
-        palette: @palette,
-        thread_slots: @thread_slots %>
+          <%# Header card - constrained width %>
+          <div class="w-full max-w-2xl mx-auto">
+            <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
+          </div>
+
+          <%# Color pills area - centered vertically %>
+          <div class="flex-1 flex items-center justify-center">
+            <%= render "palettes/editor/color_pills_container",
+                       palette: @palette,
+                       thread_slots: @thread_slots %>
+          </div>
+
+          <%# Background selector - anchored to bottom %>
+          <div class="flex justify-center pb-8">
+            <%= render "palettes/editor/background_selector", palette: @palette %>
+          </div>
+
+        </div>
       </div>
 
-    </div>
+      <%# Slide panel for color picker %>
+      <%= render "shared/slide_panel",
+                 frame_id: "editor_panel",
+                 panel_id: "editor-panel-container",
+                 auto_open: false,
+                 header_partial: "palettes/editor/editor_panel_header",
+                 close_callback: "palette-editor#onPanelClose" %>
 
-    <%# Control panel (slide-up drawer) %>
-    <%= render "palettes/editor/control_panel", palette: @palette %>
+    </div>
 
   </div>
 <% end %>
