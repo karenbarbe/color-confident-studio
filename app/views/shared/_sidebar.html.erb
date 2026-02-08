@@ -43,30 +43,6 @@
         <% end %>
       </li>
 
-      <%# Browse %>
-      <li>
-        <%= link_to color_charts_path, 
-            class: sidebar_nav_classes(:browse), 
-            title: "Browse" do %>
-          <span class="sidebar-icon">
-            <%= icon(:swatch_outline, css_class: "size-6") %>
-          </span>
-          <span class="sidebar-label">Browse</span>
-        <% end %>
-      </li>
-
-      <%# Stash %>
-      <li>
-        <%= link_to stash_items_path, 
-            class: sidebar_nav_classes(:stash), 
-            title: "Stash" do %>
-          <span class="sidebar-icon">
-            <%= icon(:heart_outline, css_class: "size-6") %>
-          </span>
-          <span class="sidebar-label">Stash</span>
-        <% end %>
-      </li>
-
       <%# Create  %>
       <li>
         <% if policy(Palette).create? %>
@@ -96,31 +72,30 @@
         <% end %>
       </li>
 
-      <%# More %>
-      <li class="dropdown dropdown-right" data-sidebar-target="dropdown">
-        <div tabindex="0" 
-             role="button" 
-             class="flex items-center gap-3 h-10 px-3 rounded-lg cursor-pointer transition-colors text-base-content/70 hover:bg-base-content/5 hover:text-base-content" 
-             title="More">
+      <%# Browse %>
+      <li>
+        <%= link_to color_charts_path, 
+            class: sidebar_nav_classes(:browse), 
+            title: "Browse" do %>
           <span class="sidebar-icon">
-            <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
+            <%= icon(:swatch_outline, css_class: "size-6") %>
           </span>
-          <span class="sidebar-label">More</span>
-        </div>
-        <ul tabindex="0" class="dropdown-content z-50 w-48 p-2 ml-2 bg-base-100 rounded-lg shadow-lg border border-base-300">
-          <li class="px-3 py-1.5 text-xs uppercase tracking-wider text-base-content/50 font-medium">Coming soon</li>
-          <li>
-            <span class="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/40 cursor-not-allowed">
-              Settings
-            </span>
-          </li>
-          <li>
-            <span class="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/40 cursor-not-allowed">
-              Help
-            </span>
-          </li>
-        </ul>
+          <span class="sidebar-label">Browse</span>
+        <% end %>
       </li>
+
+      <%# Stash %>
+      <li>
+        <%= link_to stash_items_path, 
+            class: sidebar_nav_classes(:stash), 
+            title: "Stash" do %>
+          <span class="sidebar-icon">
+            <%= icon(:heart_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Stash</span>
+        <% end %>
+      </li>
+
     </ul>
 
     <%# User profile %>

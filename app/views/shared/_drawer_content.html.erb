@@ -36,31 +36,6 @@
           <span class="sidebar-label">Home</span>
         <% end %>
       </li>
-
-      <%# Browse %>
-      <li>
-        <%= link_to color_charts_path, 
-            class: sidebar_nav_classes(:browse), 
-            title: "Browse" do %>
-          <span class="sidebar-icon">
-            <%= icon(:swatch_outline, css_class: "size-6") %>
-          </span>
-          <span class="sidebar-label">Browse</span>
-        <% end %>
-      </li>
-
-      <%# Stash %>
-      <li>
-        <%= link_to stash_items_path, 
-            class: sidebar_nav_classes(:stash), 
-            title: "Stash" do %>
-          <span class="sidebar-icon">
-            <%= icon(:heart_outline, css_class: "size-6") %>
-          </span>
-          <span class="sidebar-label">Stash</span>
-        <% end %>
-      </li>
-
       <%# Create %>
       <li>
         <% if policy(Palette).create? %>
@@ -90,32 +65,30 @@
         <% end %>
       </li>
 
-      <%# More %>
+      <%# Browse %>
       <li>
-        <details class="group">
-          <summary class="flex items-center gap-3 h-10 px-3 rounded-lg cursor-pointer transition-colors text-base-content/70 hover:bg-base-content/5 hover:text-base-content list-none [&::-webkit-details-marker]:hidden">
-            <span class="sidebar-icon">
-              <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
-            </span>
-            <span class="sidebar-label">More</span>
-            <svg class="size-4 ml-auto transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </summary>
-          <ul class="flex flex-col gap-1 mt-1 ml-9">
-            <li>
-              <span class="flex items-center gap-3 h-10 px-3 rounded-lg text-sm text-base-content/40 cursor-not-allowed">
-                Settings
-              </span>
-            </li>
-            <li>
-              <span class="flex items-center gap-3 h-10 px-3 rounded-lg text-sm text-base-content/40 cursor-not-allowed">
-                Help
-              </span>
-            </li>
-          </ul>
-        </details>
+        <%= link_to color_charts_path, 
+            class: sidebar_nav_classes(:browse), 
+            title: "Browse" do %>
+          <span class="sidebar-icon">
+            <%= icon(:swatch_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Browse</span>
+        <% end %>
       </li>
+
+      <%# Stash %>
+      <li>
+        <%= link_to stash_items_path, 
+            class: sidebar_nav_classes(:stash), 
+            title: "Stash" do %>
+          <span class="sidebar-icon">
+            <%= icon(:heart_outline, css_class: "size-6") %>
+          </span>
+          <span class="sidebar-label">Stash</span>
+        <% end %>
+      </li>
+
     </ul>
 
     <%# User profile %>
