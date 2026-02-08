@@ -95,3 +95,8 @@
     width: var(--slide-panel-width-xl, 28rem);
   }
 }
+
+/* Hide new content during panel crossfade to prevent single-frame flash */
+turbo-frame[data-transitioning] > * {
+  opacity: 0 !important;
+}

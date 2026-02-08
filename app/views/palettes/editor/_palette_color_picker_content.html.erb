@@ -16,11 +16,12 @@
     <%# ================================================================== %>
     <%# Edit mode: Current color info                            %>
     <%# ================================================================== %>
-    <section class="shrink-0 hidden"
-            data-palette-editor-target="editColorInfo"
-            data-palette-header-contrast-target="editInfoBg"
-            style="background-color: var(--edit-info-bg, #ccc);">
-      <div class="px-4 py-4">
+
+    <section class="shrink-0 hidden px-4 pt-4"
+            data-palette-editor-target="editColorInfoSection">
+      <div class="px-4 py-4 rounded-md"
+           data-palette-editor-target="editColorInfo"
+           style="background-color: var(--edit-info-bg, #ccc);">
         <div class="flex items-baseline gap-1.5">
           <span class="text-xl font-semibold uppercase"
                 data-palette-editor-target="editCode"

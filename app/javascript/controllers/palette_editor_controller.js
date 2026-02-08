@@ -31,6 +31,7 @@ export default class extends Controller {
     // Save/status
     "saveButton", "unsavedIndicator",
     "editColorInfo",
+    "editColorInfoSection",
     "editHeaderTitle", 
     "panelFooter"    
   ]
@@ -765,8 +766,8 @@ export default class extends Controller {
     }
 
     // Hide color info and footer by default
-    if (this.hasEditColorInfoTarget) {
-      this.editColorInfoTarget.classList.add("hidden")
+    if (this.hasEditColorInfoSectionTarget) {
+      this.editColorInfoSectionTarget.classList.add("hidden")
     }
     if (this.hasPanelFooterTarget) {
       this.panelFooterTarget.classList.add("hidden")
@@ -783,8 +784,8 @@ export default class extends Controller {
           : "Edit color"
       }
       // Show color info card
-      if (this.hasEditColorInfoTarget) {
-        this.editColorInfoTarget.classList.remove("hidden")
+      if (this.hasEditColorInfoSectionTarget) {
+        this.editColorInfoSectionTarget.classList.remove("hidden")
       }
       // Show footer with delete button
       if (this.hasPanelFooterTarget) {
@@ -883,7 +884,7 @@ export default class extends Controller {
       }
     })
 
-    // Load content into the slide panel's turbo frame
+    // Load content into the slide panel's turbo frame with fade transition
     const frame = document.getElementById("editor_panel")
     if (frame) {
       frame.src = url.toString()

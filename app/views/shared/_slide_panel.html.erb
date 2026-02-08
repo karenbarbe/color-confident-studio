@@ -51,6 +51,8 @@
     <% end %>
 
     <%# Turbo Frame for content %>
-    <%= turbo_frame_tag frame_id, class: "flex flex-col flex-1 min-h-0 #{'pt-22' unless header_partial}" %>
+    <%= turbo_frame_tag frame_id,
+          class: "flex flex-col flex-1 min-h-0 #{'pt-22' unless header_partial}",
+          data: { controller: "panel-transition", panel_transition_duration_value: 200 } %>
   </aside>
 </div>
