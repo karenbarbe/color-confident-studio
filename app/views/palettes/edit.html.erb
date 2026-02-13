@@ -8,10 +8,14 @@
     </style>
   </div>
 
+  <% is_new_palette = @palette.color_slots.empty? %>
+
   <div class="w-full -mt-16 md:-mt-8 -mb-16 min-h-screen pt-16 md:pt-8 pb-8 transition-colors duration-300 flex flex-col"
-       data-controller="palette-editor palette-header-contrast"
+       data-controller="palette-editor palette-header-contrast onboarding-coach"
        data-palette-editor-palette-id-value="<%= @palette.id %>"
-       data-palette-editor-is-new-palette-value="<%= @palette.color_slots.empty? %>"
+       data-palette-editor-is-new-palette-value="<%= is_new_palette %>"
+       data-onboarding-coach-active-value="<%= is_new_palette %>"
+       data-onboarding-coach-has-background-value="<%= @palette.background_color.present? %>"
        data-palette-editor-target="backgroundLayer">
 
     <%# Flash messages container for Turbo Stream updates %>
@@ -32,14 +36,14 @@
             <%= render "palettes/editor/header", palette: @palette, thread_slots: @thread_slots %>
           </div>
 
-          <%# Color pills area - centered vertically %>
+          <%# Color pills area %>
           <div class="flex-1 flex items-center justify-center">
             <%= render "palettes/editor/color_pills_container",
                        palette: @palette,
                        thread_slots: @thread_slots %>
           </div>
 
-          <%# Background selector - anchored to bottom %>
+          <%# Background selector %>
           <div class="flex justify-center pb-8">
             <%= render "palettes/editor/background_selector", palette: @palette %>
           </div>

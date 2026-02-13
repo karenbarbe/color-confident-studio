@@ -1,0 +1,116 @@
+/* Wrapper that positions relative to the target's parent */
+.coach-mark-wrapper {
+  position: absolute;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Top position: above the target */
+.coach-mark-wrapper[data-position="top"] {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 0.5rem;
+}
+
+/* Bottom position: below the target */
+.coach-mark-wrapper[data-position="bottom"] {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 0.5rem;
+}
+
+.coach-mark {
+  position: relative;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.96);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+.coach-mark-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  animation: coach-bounce 0.5s ease-out 0.2s;
+}
+
+.coach-mark-hiding {
+  opacity: 0;
+  transform: translateY(-0.5rem) scale(0.96);
+  pointer-events: none;
+}
+
+.coach-mark-bubble {
+  position: relative;
+  background-color: var(--color-base-content);
+  color: var(--color-base-100);
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    0 0 0 1px var(--color-neutral-content);
+  width: 16.25rem;
+}
+
+.coach-mark-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem;
+  color: var(--color-base-100);
+  opacity: 0.5;
+  border-radius: 0.375rem;
+  transition: opacity 0.15s, background-color 0.15s;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.coach-mark-close:hover {
+  opacity: 1;
+  background-color: var(--color-neutral-content);
+}
+
+.coach-mark-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  padding-right: 1.5rem;
+}
+
+.coach-mark-message {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Arrow pointing to target - positioned relative to .coach-mark */
+.coach-mark-arrow {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--color-base-content);
+  transform: rotate(45deg);
+  left: 50%;
+  margin-left: -0.5rem;
+}
+
+/* Arrow for top position: points down, below the bubble */
+.coach-mark-wrapper[data-position="top"] .coach-mark-arrow {
+  bottom: -0.5rem;
+  box-shadow: 1px 1px 0 0 var(--color-neutral-content);
+}
+
+/* Arrow for bottom position: points up, above the bubble */
+.coach-mark-wrapper[data-position="bottom"] .coach-mark-arrow {
+  top: -0.5rem;
+  box-shadow: -1px -1px 0 0 var(--color-neutral-content);
+}
+
+/* Playful entrance bounce */
+@keyframes coach-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-6px) scale(1.02); }
+  60% { transform: translateY(2px) scale(0.99); }
+}

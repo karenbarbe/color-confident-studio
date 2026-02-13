@@ -4,6 +4,7 @@
 /* Import custom stylesheets */
 @import "../stylesheets/floating-cards.css";
 @import "../stylesheets/slide-panel.css";
+@import "../stylesheets/coach-marks.css";
 
 /* ============================================
    NAVBAR SCROLL BEHAVIOR

@@ -12,13 +12,11 @@
   <%# Existing color pills %>
   <% thread_slots.each_with_index do |slot, index| %>
 
-    <div class="flex flex-col items-center gap-2 w-16 md:w-18">
-      <%# The pill %>
+    <div class="flex flex-col items-center gap-2 w-32 md:w-36">
+      <%# Circle pill %>
       <button type="button"
-        class="w-full aspect-1/3 rounded-full transition-all hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/40 cursor-pointer"
-        style="background-color: #<%= slot.product_color.hex_color %>;"
-
-              data-action="click->palette-editor#editColor"
+        class="w-full aspect-120/124 transition-all hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/40 cursor-pointer"
+        data-action="click->palette-editor#editColor"
         data-slot-id="<%= slot.id %>"
         data-color-id="<%= slot.product_color.id %>"
         data-hex="<%= slot.product_color.hex_color %>"
@@ -29,6 +27,7 @@
         data-color-family="<%= slot.product_color.color_family %>"
         data-palette-editor-target="colorPill"
         title="<%= slot.product_color.vendor_code %> - <%= slot.product_color.name %>">
+        <%= stitched_circle_icon(hex_color: slot.product_color.hex_color) %>
       </button>
       <%# Selection indicator (shown when this pill is selected) %>
       <div class="h-2 w-3/4 rounded-full bg-base-content opacity-0 transition-all duration-300"
@@ -42,14 +41,15 @@
 
   <%# Render add button if not full %>
   <% unless is_full %>
-    <div class="flex flex-col items-center gap-2 w-16 md:w-18">
+    <div class="flex flex-col items-center gap-2 w-32 md:w-36">
       <button type="button"
-        class="w-full aspect-1/3 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/60"
+        class="w-full aspect-square border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/60 rounded-full"
         data-action="click->palette-editor#addColor"
         data-palette-editor-target="addButton"
-        data-palette-header-contrast-target="addButtonBorder">
-        <div class="size-8 md:size-10 rounded-full bg-white text-gray-900 flex items-center justify-center">
-          <%= icon(:plus_outline, css_class: "size-4 md:size-5") %>
+        data-palette-header-contrast-target="addButtonBorder"
+        data-onboarding-coach-target="addColorTrigger">
+        <div class="size-10 md:size-12 rounded-full bg-white text-gray-900 flex items-center justify-center">
+          <%= icon(:plus_outline, css_class: "size-5 md:size-6") %>
         </div>
       </button>
       <%# Empty indicator space for alignment %>
