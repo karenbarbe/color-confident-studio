@@ -5,7 +5,8 @@
         class="w-66 flex items-center gap-2 px-4 py-2 bg-base-100 text-sm text-base-content
                border border-base-content rounded-full hover:bg-base-200 transition-all duration-300 cursor-pointer"
         data-action="click->palette-editor#openBackgroundPicker"
-  data-palette-header-contrast-target="selectorButton"
+        data-palette-header-contrast-target="selectorButton"
+        data-onboarding-coach-target="backgroundTrigger"
   <% if palette.background_color %>
     data-slot-id="<%= palette.background_slots.first&.id %>"
     data-color-id="<%= palette.background_color.id %>"
