@@ -52,12 +52,6 @@ const MODE_STYLES = {
     mid: "text-white/70",
     dark: "text-white/70"
   },
-  selectorIcon: {
-    default: "text-base-content",
-    light: "text-gray-900",
-    mid: "text-white",
-    dark: "text-white"
-  },
   addButtonBorder: {
     default: "border-base-content/30 hover:border-base-content/50 hover:bg-base-content/5",
     light: "border-gray-900/30 hover:border-gray-900/50 hover:bg-gray-900/5",
@@ -77,7 +71,7 @@ const ALL_VARIANTS = Object.fromEntries(
 export default class extends Controller {
   static targets = [
     "card", "text", "textMuted", "buttonGhost", "saveButton",
-    "indicator", "selectorButton", "selectorTextMuted", "selectorIcon", "addButtonBorder"
+    "indicator", "selectorButton", "selectorTextMuted", "addButtonBorder"
   ]
 
   connect() {
@@ -143,7 +137,6 @@ export default class extends Controller {
     // Background selector
     this.selectorButtonTargets.forEach(el => this.applyStyle(el, "selectorButton", mode))
     this.selectorTextMutedTargets.forEach(el => this.applyStyle(el, "selectorTextMuted", mode))
-    this.selectorIconTargets.forEach(el => this.applyStyle(el, "selectorIcon", mode))
 
     // Add button
     this.addButtonBorderTargets.forEach(el => this.applyStyle(el, "addButtonBorder", mode))

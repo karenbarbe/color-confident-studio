@@ -526,10 +526,6 @@ export default class extends Controller {
         <span class="size-4 rounded-full ring-1 ring-inset ring-white/30"
               style="background-color: #${bg.productColor.hex};"></span>
         <span class="truncate">On ${bg.productColor.vendorCode} ${bg.productColor.name}</span>
-        <svg class="size-4 ml-auto transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-             data-palette-header-contrast-target="selectorIcon">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-        </svg>
       `
       selector.dataset.slotId = bg.id
       selector.dataset.colorId = bg.productColor.id
@@ -543,9 +539,6 @@ export default class extends Controller {
       selector.innerHTML = `
         <span class="size-4 rounded-full border-2 border-dashed border-zinc-400"></span>
         <span class="text-base-content/70">Select background fabric</span>
-        <svg class="size-4 text-base-content ml-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-        </svg>
       `
       delete selector.dataset.slotId
       delete selector.dataset.colorId

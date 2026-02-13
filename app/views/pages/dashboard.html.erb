@@ -1,14 +1,67 @@
-<div class="pt-3 md:pt-2 pb-20 space-y-4">
-<div class="bg-linear-to-br from-amber-100 via-amber-200 to-orange-200 h-60 rounded-xl p-6 flex flex-col justify-between">
-
-  <div>
-    <p class="text-sm font-medium text-amber-900/70">Hi, <%= Current.user.first_name.titleize %></p>
-    <h1 class="text-3xl font-bold text-amber-950">Create a new palette</h1>
+<div class="pt-3 md:pt-2 pb-20 space-y-30">
+  <%# Flash messages container for Turbo Stream updates %>
+  <div id="flash-messages" class="fixed top-4 right-4 z-100 space-y-2">
+    <%= render "shared/flash", notice: notice, alert: alert %>
   </div>
-  <div>
 
-    <%= button_to "Start now", palettes_path, method: :post, class: "btn btn-neutral" %>
-  </div>
-</div>
+  <%# Hero section %>
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <!-- Row 1 -->
+    <div class="h-48 bg-[#D4F72A] flex items-center p-8 order-1">
+      <h1 class="font-bold text-5xl text-balance text-gray-900">
+        Start creating
+      </h1>
+    </div>
+    <div class="h-48 bg-base-100 hidden lg:block order-2"></div>
+    <div class="h-48 bg-[#E3ADCF] flex items-center justify-center p-4 order-last md:order-3">
+      <%= button_to "Create palette", palettes_path, method: :post, class: "btn btn-neutral" %>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="h-48 bg-base-100 flex flex-col items-start justify-center p-8 order-2 md:order-4">
+      <p class="font-bold text-xl">Step 1</p>
+      <p>Choose background color</p>
+    </div>
+    <div class="h-48 bg-[#D4A89A] hidden order-3 md:block md:order-5"></div>
+    <div class="h-48 bg-base-100 flex flex-col items-start justify-center p-8 order-5 md:order-7 lg:order-6">
+      <p class="font-bold text-xl">Step 2</p>
+      <p>Choose up to 12 thread colors</p>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="h-48 bg-[#E3ADCF] order-4 md:order-6 lg:order-7"></div>
+    <div class="h-48 bg-base-100 flex flex-col items-start justify-center p-8 order-7 md:order-8">
+      <p class="font-bold text-xl">Step 3</p>
+      <p>Tweak colors and have fun</p>
+    </div>
+    <div class="h-48 bg-[#D5EDDB] order-6 md:order-9"></div>
+  </section>
+
+  <%# Recent palettes section %>
+  <section>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-base-content">Recent palettes</h2>
+      <% if @recent_palettes.any? %>
+        <%= link_to "View all", palettes_path, class: "btn btn-neutral btn-small btn-link" %>
+      <% end %>
+    </div>
+
+    <% if @recent_palettes.any? %>
+      <div class="@container">
+        <div class="grid grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 gap-4">
+          <% @recent_palettes.each do |palette| %>
+            <%= render "palettes/palette_card", palette: palette %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="border border-dashed border-base-300 rounded-xl p-8 text-center">
+        <p class="text-base-content/60">Your recent palettes will appear here</p>
+      </div>
+    <% end %>
+  </section>
+
+  <%# Stash summary %>
+  <%= render "stash_summary_card" %>
 
 </div>

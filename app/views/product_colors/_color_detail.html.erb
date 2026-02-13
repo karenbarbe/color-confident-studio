@@ -116,15 +116,15 @@
 
   </div>
 
-  <%# Stitch preview area with tabs - NOW INSIDE THE WRAPPER %>
-  <div data-controller="stitch-preview fabric-background"
+  <%# Stitch preview area with tabs %>
+  <div data-controller="stitch-preview"
        data-stitch-preview-color-value="<%= product_color.hex_color %>">
 
     <% if brand.thread? %>
-      <%# Tab buttons - only shown for thread %>
+      <%# Tab buttons - outside the colored preview area %>
       <div role="tablist" 
            aria-label="Stitch texture preview"
-           class="flex rounded-full bg-base-content/10 p-1 text-xs font-medium">
+           class="flex rounded-full bg-base-content/10 p-1 mb-3 text-xs font-medium">
         <button type="button"
                 role="tab"
                 aria-selected="true"
@@ -158,10 +158,11 @@
       </div>
     <% end %>
 
-    <%# Preview area %>
+    <%# Preview area - colored background applied here only %>
     <div id="stitch-preview-panel"
          role="tabpanel"
          class="px-8 py-16 rounded-md transition-colors duration-300"
+         data-controller="fabric-background"
          data-action="fabric-picker:styleChanged@window->fabric-background#update">
 
       <%# Solid color swatch - always present %>
