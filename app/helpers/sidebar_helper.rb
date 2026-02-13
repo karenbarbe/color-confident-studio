@@ -19,7 +19,7 @@ module SidebarHelper
       controller_name == "color_charts" ||
         (controller_name == "product_colors" && action_name == "show")
     when :create
-      controller_name == "palettes" && action_name == "studio"
+      controller_name == "palettes" && action_name == "edit"
     when :stash
       controller_name == "stash_items"
     when :palettes
