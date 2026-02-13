@@ -1,0 +1,47 @@
+<section>
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold text-base-content">Your stash</h2>
+    <% if @stash_total_count > 0 %>
+      <%= link_to "View all", stash_items_path, class: "btn btn-neutral btn-small btn-link" %>
+    <% end %>
+  </div>
+
+  <% if @stash_total_count > 0 %>
+    <div class="bg-base-100 rounded-md p-6">
+      <div class="flex flex-wrap gap-x-8 gap-y-4">
+        <%# Stats %>
+        <div class="flex gap-6">
+          <div>
+            <p class="text-2xl font-bold text-base-content"><%= @stash_total_count %></p>
+            <p class="text-sm text-base-content/60"><%= "color".pluralize(@stash_total_count) %></p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-base-content"><%= @stash_owned_count %></p>
+            <p class="text-sm text-base-content/60">owned</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-base-content"><%= @stash_wish_list_count %></p>
+            <p class="text-sm text-base-content/60">wish list</p>
+          </div>
+        </div>
+
+        <%# Top color family %>
+        <% if @top_color_family.present? %>
+          <div class="flex items-center gap-3 ml-auto">
+            <% tag_color = color_family_tags.find { |t| t[:name] == @top_color_family }&.dig(:color) || "bg-gray-400" %>
+            <div class="<%= tag_color %> size-8 rounded-full shadow-sm"></div>
+            <div>
+              <p class="text-sm font-medium text-base-content"><%= @top_color_family %></p>
+              <p class="text-xs text-base-content/60">Your top color family</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="border border-dashed border-base-300 rounded-xl p-8 text-center">
+      <p class="text-base-content/60">Track the colors you own and want</p>
+      <p class="text-sm text-base-content/40 mt-1">Add colors from the color charts to build your stash</p>
+    </div>
+  <% end %>
+</section>
