@@ -438,16 +438,18 @@ export default class extends Controller {
 
     const isFull = this.pendingState.threadSlots.length >= this.maxThreadSlotsValue
 
+    // Stitched circle SVG path (matches the helper)
+    const stitchedCirclePath = 'M49.001,122.917c-2.773,0-5.023-2.251-5.023-5.025V6.108c0-2.774,2.25-5.025,5.023-5.025s5.023,2.25,5.023,5.025v111.784c0,2.774-2.25,5.025-5.023,5.025ZM65.023,118.975V5.025c0-2.774-2.25-5.025-5.027-5.025s-5.023,2.251-5.023,5.025v113.95c0,2.774,2.25,5.025,5.023,5.025s5.027-2.251,5.027-5.025ZM43.029,114.562V9.438c0-2.774-2.25-5.025-5.023-5.025s-5.02,2.251-5.02,5.025v105.124c0,2.774,2.25,5.025,5.02,5.025s5.023-2.251,5.023-5.025ZM21.039,98.202V25.798c0-2.774-2.25-5.025-5.023-5.025s-5.023,2.251-5.023,5.025v72.403c0,2.774,2.247,5.025,5.023,5.025s5.023-2.251,5.023-5.025ZM32.038,108.392V15.608c0-2.774-2.25-5.025-5.027-5.025s-5.023,2.251-5.023,5.025v92.784c0,2.774,2.25,5.025,5.023,5.025s5.027-2.251,5.027-5.025ZM10.044,83.385v-42.771c0-2.774-2.25-5.025-5.023-5.025s-5.02,2.251-5.02,5.025v42.771c0,2.774,2.247,5.025,5.02,5.025s5.023-2.25,5.023-5.025ZM120,83.379v-42.758c0-2.774-2.247-5.025-5.023-5.025s-5.023,2.251-5.023,5.025v42.758c0,2.774,2.247,5.025,5.023,5.025s5.023-2.251,5.023-5.025ZM109.005,98.198V25.802c0-2.774-2.247-5.025-5.023-5.025s-5.023,2.25-5.023,5.025v72.396c0,2.774,2.247,5.025,5.023,5.025s5.023-2.251,5.023-5.025ZM98.006,108.392V15.608c0-2.774-2.247-5.025-5.023-5.025s-5.023,2.251-5.023,5.025v92.784c0,2.774,2.25,5.025,5.023,5.025s5.023-2.251,5.023-5.025ZM87.011,114.562V9.438c0-2.774-2.247-5.025-5.023-5.025s-5.023,2.251-5.023,5.025v105.124c0,2.774,2.25,5.025,5.023,5.025s5.023-2.251,5.023-5.025ZM76.015,117.892V6.108c0-2.774-2.247-5.025-5.023-5.025s-5.02,2.25-5.02,5.025v111.784c0,2.774,2.25,5.025,5.02,5.025s5.023-2.251,5.023-5.025Z'
+
     let html = ""
 
     // Render existing pills
     this.pendingState.threadSlots.forEach(slot => {
 
       html += `
-        <div class="flex flex-col items-center gap-2 w-16 md:w-18">
+        <div class="flex flex-col items-center gap-2 w-32 md:w-36">
           <button type="button"
-                  class="w-full aspect-1/3 rounded-full transition-all hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/40 cursor-pointer"
-                  style="background-color: #${slot.productColor.hex};"
+                  class="w-full aspect-120/124 transition-all hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/40 cursor-pointer"
                   data-action="click->palette-editor#editColor"
                   data-slot-id="${slot.id}"
                   data-color-id="${slot.productColor.id}"
@@ -459,6 +461,9 @@ export default class extends Controller {
                   data-color-family="${slot.productColor.colorFamily || ''}"
                   data-palette-editor-target="colorPill"
                   title="${slot.productColor.vendorCode} - ${slot.productColor.name}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 124" fill="#${slot.productColor.hex}" class="w-full h-full">
+              <path d="${stitchedCirclePath}"/>
+            </svg>
           </button>
           <div class="h-2 w-3/4 rounded-full bg-base-content opacity-0 transition-all duration-300"
               data-palette-editor-target="indicator"
@@ -472,9 +477,9 @@ export default class extends Controller {
     // Render add button if not full
     if (!isFull) {
       html += `
-        <div class="flex flex-col items-center gap-2 w-16 md:w-18">
+        <div class="flex flex-col items-center gap-2 w-32 md:w-36">
           <button type="button"
-                  class="w-full aspect-1/3 rounded-full border-2 border-dashed border-base-content/30 flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/60"
+                  class="w-full aspect-square border-2 border-dashed border-base-content/30 rounded-full flex items-center justify-center hover:border-base-content/50 hover:bg-base-content/5 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-base-content/60"
                   data-action="click->palette-editor#addColor"
                   data-palette-editor-target="addButton"
                   data-palette-header-contrast-target="addButtonBorder"
