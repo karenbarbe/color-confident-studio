@@ -24,7 +24,8 @@ class ColorChartsController < ApplicationController
   def show
     @category = params[:category]
     @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
-    @product_colors = @brand.product_colors.order(:id).to_a
+    @q = @brand.product_colors.ransack(params[:q])
+    @product_colors = @q.result.order(:id).to_a
 
     if Current.user.present?
       @stash_items_by_color_id = Current.user.stash_items
