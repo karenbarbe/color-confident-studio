@@ -17,12 +17,12 @@
   </div>
 
   <%# Search bar %>
-  <div class="px-3 h-16 flex flex-col justify-center overflow-hidden">
-    <div class="sidebar-label">
-      <label class="input input-bordered input-sm flex items-center gap-2 w-full">
-        <%= icon(:search_outline, css_class: "size-4 opacity-50") %>
+  <div class="px-2 py-2">
+    <div class="sidebar-label ml-0! w-full">
+      <label class="input input-bordered input-sm flex items-center gap-2 h-10 w-full">
+        <%= icon(:search_outline, css_class: "size-6 opacity-50") %>
         <input type="text" 
-               placeholder="Search colors, palettes..." 
+               placeholder="Search by code" 
                class="grow bg-transparent border-none focus:outline-none text-sm" />
       </label>
     </div>
