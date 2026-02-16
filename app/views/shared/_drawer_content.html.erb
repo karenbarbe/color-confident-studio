@@ -2,13 +2,16 @@
 
   <%# Logo %>
   <div class="h-16 px-3 flex items-center">
-    <%= link_to root_path, class: "flex items-center gap-3 h-10 rounded-lg w-full" do %>
+    <%= link_to root_path, class: "flex items-center h-10 rounded-lg w-full" do %>
       <span class="sidebar-icon sidebar-logo-icon">
         <%= render "shared/logo_isotype" %>
       </span>
-      <span class="font-semibold text-lg leading-none truncate">
-        Color Confident
-      </span>
+      <div class="sidebar-label sidebar-logo-label ">
+        <p class="font-semibold text-md truncate">
+          Color Confident
+        </p>
+        <p class="font-semibold text-xs tracking-wide uppercase opacity-70">Studio</p>
+      </div>
     <% end %>
   </div>
 
