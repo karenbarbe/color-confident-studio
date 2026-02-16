@@ -1,23 +1,20 @@
-<%= search_form_for @q, url: color_chart_path(category: @category, brand_slug: @brand.slug), method: :get, html: { class: "flex items-center", data: { controller: "expandable-search" } } do |f| %>
-  <div class="relative flex items-center gap-2">
-    <button type="button"
-            data-action="expandable-search#toggle"
-            data-expandable-search-target="button"
-            data-card-text
-            class="cursor-pointer">
+<%= search_form_for @q, url: color_chart_path(category: @category, brand_slug: @brand.slug), method: :get, html: { class: "flex items-center w-66" } do |f| %>
+  <div class="search-input-container w-full" data-card-text>
+    <span class="shrink-0">
       <%= icon(:search_outline, css_class: "size-6") %>
-    </button>
+    </span>
 
-    <%= f.search_field :vendor_code_cont,
-        placeholder: "Search code...",
-        data: { expandable_search_target: "input" },
-        class: "input input-md input-bordered w-0 opacity-0 invisible transition-all duration-200 pr-8 focus:w-44 #{params.dig(:q, :vendor_code_cont).present? ? 'w-32 opacity-100 visible' : ''}" %>
+    <div class="relative flex-1">
+      <%= f.search_field :vendor_code_cont,
+          placeholder: "Search by code...",
+          class: "search-input w-full" %>
 
-    <% if params.dig(:q, :vendor_code_cont).present? %>
-      <%= link_to color_chart_path(category: @category, brand_slug: @brand.slug),
-          class: "absolute right-2 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content" do %>
-        <%= icon(:x_mark_outline, css_class: "size-5") %>
+      <% if params.dig(:q, :vendor_code_cont).present? %>
+        <%= link_to color_chart_path(category: @category, brand_slug: @brand.slug),
+            class: "absolute right-0 top-1/2 -translate-y-1/2 text-current opacity-80 hover:opacity-100 transition-opacity" do %>
+          <%= icon(:x_mark_outline, css_class: "size-6") %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 <% end %>

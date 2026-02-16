@@ -26,6 +26,7 @@ class ColorChartsController < ApplicationController
     @brand = Brand.find_by!(slug: params[:brand_slug], category: @category)
     @q = @brand.product_colors.ransack(params[:q])
     @product_colors = @q.result.order(:id).to_a
+    @search_active = params.dig(:q, :vendor_code_cont).present?
 
     if Current.user.present?
       @stash_items_by_color_id = Current.user.stash_items
@@ -34,15 +35,16 @@ class ColorChartsController < ApplicationController
                                   .index_by(&:product_color_id)
 
       @stashed_color_ids = @stash_items_by_color_id.keys.to_set
-
       @stash_by_brand_count = @stashed_color_ids.count
     end
 
-    colors_grouped = @product_colors.group_by(&:color_family)
-
-    @colors_by_family = ProductColor::COLOR_FAMILIES.filter_map do |family|
-      colors = colors_grouped[family]
-      [ family, colors ] if colors.present?
+    # Only group when NOT searching
+    unless @search_active
+      colors_grouped = @product_colors.group_by(&:color_family)
+      @colors_by_family = ProductColor::COLOR_FAMILIES.filter_map do |family|
+        colors = colors_grouped[family]
+        [ family, colors ] if colors.present?
+      end
     end
 
     # Meta tags
