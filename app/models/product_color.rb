@@ -41,4 +41,8 @@ class ProductColor < ApplicationRecord
   scope :by_family, ->(family) { where(color_family: family) }
   scope :neutrals, -> { where(color_family: [ "Warm neutral", "Cool neutral", "Gray" ]) }
   scope :chromatic, -> { where.not(color_family: [ "Warm neutral", "Cool neutral", "Gray" ]) }
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "vendor_code" ]
+  end
 end

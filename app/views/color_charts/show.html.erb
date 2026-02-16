@@ -16,34 +16,67 @@
         <%= render "shared/color_header", brand: @brand, category: @category, color_count: @brand.product_colors_count, stash_count: @stash_by_brand_count %>
       </div>
 
-      <%# Sticky nav wrapper %>
-      <div class="sticky-nav-wrapper"
-     data-controller="sticky-nav header-card"
-     data-sticky-nav-stuck-class="is-stuck">
-
-        <%# Nav card %>
-        <div class="sticky-nav bg-base-100/90" data-sticky-nav-target="nav" data-fabric-contrast-target="card" data-card-background>
-          <%# Inner wrapper for content alignment when stuck %>
-          <div class="sticky-nav-inner">
-            <%# Mini header %>
-            <div class="sticky-nav-mini-header">
-              <span class="text-md lg:text-xl font-bold truncate" data-card-text><%= @brand.name %></span>
-            </div>
-
-            <%# Color family pills %>
-            <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
-          </div>
+      <%# Search bar %>
+      <div class="search-bar-wrapper">
+        <div class="search-bar-inner" data-fabric-contrast-target="card">
+          <%= render "color_charts/search" %>
         </div>
       </div>
 
-      <%# Color grid with container queries %>
+      <% if @colors_by_family&.any? && !@search_active %>
+        <%# Sticky nav wrapper %>
+        <div class="sticky-nav-wrapper"
+       data-controller="sticky-nav header-card"
+       data-sticky-nav-stuck-class="is-stuck">
+
+          <%# Nav card %>
+          <div class="sticky-nav bg-base-100/90" data-sticky-nav-target="nav" data-fabric-contrast-target="card" data-card-background>
+            <%# Inner wrapper for content alignment when stuck %>
+            <div class="sticky-nav-inner">
+              <%# Mini header %>
+              <div class="sticky-nav-mini-header">
+                <span class="text-md lg:text-xl font-bold truncate" data-card-text><%= @brand.name %></span>
+              </div>
+
+              <%# Color family pills %>
+              <%= render "shared/color_chart_nav", colors_by_family: @colors_by_family %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Color grid %>
       <div class="@container mx-auto px-4 md:max-w-4xl lg:max-w-5xl xl:max-w-6xl space-y-2 pt-3">
-        <% @colors_by_family.each do |family, colors| %>
-          <section id="<%= family.parameterize %>"
-                   class="scroll-mt-28 space-y-2 pt-12"
-                   data-scroll-spy-target="section">
-            <%= render "shared/color_grid", product_colors: colors %>
-          </section>
+        <% if @search_active %>
+          <%# SEARCH MODE: flat grid, no grouping by color family %>
+          <% if @product_colors.any? %>
+            <section class="pt-8 space-y-4">
+              <div class="flex items-center justify-between" data-fabric-contrast-target="emptyState">
+                <p class="opacity-90">
+                  Showing <%= pluralize(@product_colors.size, "result") %> for "<%= params[:q][:vendor_code_cont] %>"
+                </p>
+                <%= link_to "Clear", color_chart_path(category: @category, brand_slug: @brand.slug),
+          class: "btn btn-outline btn-sm" %>
+              </div>
+              <%= render "shared/color_grid", product_colors: @product_colors %>
+            </section>
+          <% else %>
+            <div class="pt-16 text-center" data-fabric-contrast-target="emptyState">
+              <p class="text-lg">No colors found for "<%= params[:q][:vendor_code_cont] %>"</p>
+              <%= link_to "Clear search", color_chart_path(category: @category, brand_slug: @brand.slug),
+        class: "btn btn-outline btn-sm mt-4" %>
+            </div>
+          <% end %>
+
+        <% elsif @colors_by_family.any? %>
+          <%# BROWSE MODE: grouped by color family %>
+          <% @colors_by_family.each do |family, colors| %>
+            <section id="<%= family.parameterize %>"
+               class="scroll-mt-28 space-y-2 pt-4"
+               data-scroll-spy-target="section">
+              <%= render "shared/color_grid", product_colors: colors %>
+            </section>
+          <% end %>
         <% end %>
       </div>
 
