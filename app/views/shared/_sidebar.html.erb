@@ -43,23 +43,6 @@
         <% end %>
       </li>
 
-      <%# Create  %>
-      <li>
-        <% if policy(Palette).create? %>
-          <%= button_to palettes_path, 
-            method: :post, 
-            class: sidebar_nav_classes(:create), 
-            title: "Create", 
-            form: { class: "w-full" }, 
-            data: { turbo: false } do %>
-            <span class="sidebar-icon">
-              <%= icon(:create_outline, css_class: "size-6") %>
-            </span>
-            <span class="sidebar-label">Create</span>
-          <% end %>
-        <% end %>
-      </li>
-
       <%# Palettes %>
       <li>
         <%= link_to palettes_path, 
@@ -76,11 +59,11 @@
       <li>
         <%= link_to color_charts_path, 
             class: sidebar_nav_classes(:browse), 
-            title: "Browse" do %>
+            title: "Color charts" do %>
           <span class="sidebar-icon">
             <%= icon(:swatch_outline, css_class: "size-6") %>
           </span>
-          <span class="sidebar-label">Browse</span>
+          <span class="sidebar-label">Color charts</span>
         <% end %>
       </li>
 

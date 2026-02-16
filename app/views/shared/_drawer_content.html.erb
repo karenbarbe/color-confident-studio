@@ -17,7 +17,7 @@
     <label class="input input-bordered input-sm flex items-center gap-2 w-full">
       <%= icon(:search_outline, css_class: "size-4 opacity-50") %>
       <input type="text" 
-             placeholder="Search colors, palettes..." 
+             placeholder="Search by code" 
              class="grow bg-transparent border-none focus:outline-none text-sm" />
     </label>
   </div>
@@ -36,22 +36,7 @@
           <span class="sidebar-label">Home</span>
         <% end %>
       </li>
-      <%# Create %>
-      <li>
-        <% if policy(Palette).create? %>
-          <%= button_to palettes_path, 
-            method: :post, 
-            class: sidebar_nav_classes(:create), 
-            title: "Create", 
-            form: { class: "w-full" }, 
-            data: { turbo: false } do %>
-            <span class="sidebar-icon">
-              <%= icon(:create_outline, css_class: "size-6") %>
-            </span>
-            <span class="sidebar-label">Create</span>
-          <% end %>
-        <% end %>
-      </li>
+
 
       <%# Palettes %>
       <li>
@@ -69,11 +54,11 @@
       <li>
         <%= link_to color_charts_path, 
             class: sidebar_nav_classes(:browse), 
-            title: "Browse" do %>
+            title: "Color charts" do %>
           <span class="sidebar-icon">
             <%= icon(:swatch_outline, css_class: "size-6") %>
           </span>
-          <span class="sidebar-label">Browse</span>
+          <span class="sidebar-label">Color charts</span>
         <% end %>
       </li>
 
