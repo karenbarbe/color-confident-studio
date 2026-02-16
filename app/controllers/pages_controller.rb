@@ -14,7 +14,7 @@ class PagesController < ApplicationController
                               .complete
                               .includes(color_slots: :product_color)
                               .order(updated_at: :desc)
-                              .limit(3)
+                              .limit(6)
 
     load_stash_summary
   end
