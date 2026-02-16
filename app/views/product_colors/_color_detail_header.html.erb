@@ -1,0 +1,11 @@
+<%# locals: (close_callback: nil) %>
+
+<div class="sticky top-0 left-0 right-0 flex items-center justify-between px-4 py-3 min-h-14 border-b border-base-300 bg-base-100 z-20">
+  <h2 class="text-lg font-semibold text-base-content">Preview color</h2>
+  <button type="button"
+          class="btn btn-circle btn-ghost btn-sm text-base-content/70 hover:text-base-content cursor-pointer"
+          data-action="click->slide-panel#close <%= close_callback %>"
+    title="Close panel">
+    <%= icon(:x_mark_outline, css_class: "size-6") %>
+  </button>
+</div>
