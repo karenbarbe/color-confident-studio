@@ -1,117 +1,119 @@
 <%# Expects: product_color, brand, stash_item (can be nil) %>
 
-<div class="px-4 pb-6" id="color-detail-content">
+<div class="px-4 py-6" id="color-detail-content">
   <%# Color card %>
 
-  <div class="flex justify-between items-start mb-6">
+  <div class="flex justify-between items-start gap-3 mb-6">
     <%# Heading %>
-    <div>
-      <h1 class="text-2xl font-semibold tracking-tight"><%= product_color.vendor_code %></h1>
+    <div class="min-w-0">
+      <h1 class="text-xl font-semibold tracking-tight"><%= product_color.vendor_code %></h1>
       <p class="text-sm text-base-content/60 truncate"><%= brand.name %></p>
       <% if product_color.name.present? %>
         <p class="text-md text-base-content/70 truncate"><%= product_color.name %></p>
       <% end %>
     </div>
 
-    <%# Dropdown menu %>
-    <div class="dropdown dropdown-end">
-      <div tabindex="0" 
-           role="button" 
-           class="btn btn-ghost btn-circle"
-           title="More options">
-        <%= icon(:ellipsis_horizontal_outline, css_class: "size-6") %>
-      </div>
+    <%# Stash actions %>
+    <div class="shrink-0">
+      <% if policy(StashItem).create? %>
+        <% if stash_item %>
+          <%# In stash: "Saved" chip with dropdown %>
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" 
+                 role="button" 
+                 class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-full transition-colors cursor-pointer"
+                 title="Stash options">
+              <%= icon(:heart_solid, css_class: "size-4") %>
+              <span>Saved</span>
+              <%= icon(:chevron_down_outline, css_class: "size-3.5") %>
+            </div>
 
-      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-lg w-52 p-2 border border-base-300 shadow-lg z-10">
-        <% if policy(StashItem).create? %>
-          <% if stash_item %>
-            <% if policy(stash_item).update? %>
-              <li class="menu-title">
-                <span class="text-xs font-medium text-base-content/50 uppercase">Stash label</span>
-              </li>
+            <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-lg w-52 p-2 border border-base-300 shadow-lg z-10">
+              <% if policy(stash_item).update? %>
+                <li class="menu-title">
+                  <span class="text-xs font-medium text-base-content/50 uppercase">Stash label</span>
+                </li>
 
-              <% is_owned = stash_item.owned? %>
-              <% is_wish_list = stash_item.wish_list? %>
+                <% is_owned = stash_item.owned? %>
+                <% is_wish_list = stash_item.wish_list? %>
 
-              <%# Owned option %>
+                <%# Owned option %>
+                <li>
+                  <%= button_to stash_item_path(stash_item),
+                                method: :patch,
+                                params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+                                form_class: "contents",
+                                data: { turbo_frame: "_top" },
+                                class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                    <% if is_owned %>
+                      <%= icon(:check_outline, css_class: "size-5") %>
+                      Owned
+                    <% else %>
+                      <div class="size-4 border-2 border-base-content/30 rounded-full"></div>
+                      Mark as owned
+                    <% end %>
+                  <% end %>
+                </li>
+
+                <%# Wish list option %>
+                <li>
+                  <%= button_to stash_item_path(stash_item),
+                                method: :patch,
+                                params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
+                                form_class: "contents",
+                                data: { turbo_frame: "_top" },
+                                class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                    <% if is_wish_list %>
+                      <%= icon(:shopping_bag_outline, css_class: "size-5") %>
+                      Wish list
+                    <% else %>
+                      <div class="size-4 border-2 border-base-content/30 rounded-full"></div>
+                      Add to wish list
+                    <% end %>
+                  <% end %>
+                </li>
+
+                <li class="h-px divider my-1"></li>
+              <% end %>
+
+              <%# Remove from stash option %>
               <li>
                 <%= button_to stash_item_path(stash_item),
-                              method: :patch,
-                              params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+                              method: :delete,
+                              params: { stash_item: { product_color_id: product_color.id } },
                               form_class: "contents",
                               data: { turbo_frame: "_top" },
                               class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
-                  <% if is_owned %>
-                    <%= icon(:check_outline, css_class: "size-5") %>
-                    Owned
-                  <% else %>
-                    <%= icon(:square_outline, css_class: "size-5 text-base-content/30") %>
-                    Mark as owned
-                  <% end %>
+                  <%= icon(:trash_outline, css_class: "size-5 text-base-content/50") %>
+                  Remove from stash
                 <% end %>
               </li>
-
-              <%# Wish list option %>
-              <li>
-                <%= button_to stash_item_path(stash_item),
-                              method: :patch,
-                              params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
-                              form_class: "contents",
-                              data: { turbo_frame: "_top" },
-                              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
-                  <% if is_wish_list %>
-                    <%= icon(:shopping_bag_outline, css_class: "size-5") %>
-                    Wish list
-                  <% else %>
-                    <%= icon(:square_outline, css_class: "size-5 text-base-content/30") %>
-                    Add to wish list
-                  <% end %>
-                <% end %>
-              </li>
-
-              <li class="h-px divider my-1"></li>
-            <% end %>
-
-            <%# Remove from stash option %>
-            <li>
-              <%= button_to stash_item_path(stash_item),
-                            method: :delete,
-                            params: { stash_item: { product_color_id: product_color.id } },
-                            form_class: "contents",
-                            data: { turbo_frame: "_top" },
-                            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
-                <%= icon(:x_mark_outline, css_class: "size-5") %>
-                Remove from stash
-              <% end %>
-            </li>
-
-          <% else %>
-            <%# Add to stash option %>
-            <li>
-              <%= button_to stash_items_path,
-                            params: { stash_item: { product_color_id: product_color.id } },
-                            form_class: "contents",
-                            data: { turbo_frame: "_top" },
-                            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
-                <%= icon(:plus_outline, css_class: "size-5") %>
-                Add to stash
-              <% end %>
-            </li>
-          <% end %>
+            </ul>
+          </div>
 
         <% else %>
-          <%# Not logged in %>
-          <li>
-            <%= link_to login_path, 
+          <%# Not in stash: "Save to stash" chip %>
+          <%= button_to stash_items_path,
+                        params: { stash_item: { product_color_id: product_color.id } },
+                        form_class: "contents",
                         data: { turbo_frame: "_top" },
-                        class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors" do %>
-              <%= icon(:log_in_outline, css_class: "size-5") %>
-              Sign in to save
-            <% end %>
-          </li>
+                        class: "flex items-center gap-2 px-3 py-2 text-sm font-medium text-base-content/70 bg-base-300 hover:text-base-content hover:bg-base-200 rounded-full transition-colors cursor-pointer",
+                        title: "Save to stash" do %>
+            <%= icon(:heart_outline, css_class: "size-4") %>
+            <span>Save to stash</span>
+          <% end %>
         <% end %>
-      </ul>
 
+      <% else %>
+        <%# Not logged in: chip that links to login %>
+        <%= link_to login_path, 
+                    data: { turbo_frame: "_top" },
+                    class: "flex items-center gap-1.5 px-2.5 py-2 text-sm font-medium text-base-content/70 bg-base-300 hover:text-base-content hover:bg-base-200 rounded-full transition-colors",
+                    title: "Sign in to save" do %>
+          <%= icon(:heart_outline, css_class: "size-4") %>
+          <span>Save to stash</span>
+        <% end %>
+      <% end %>
     </div>
 
   </div>
@@ -132,7 +134,7 @@
                 data-stitch-preview-target="tabButton"
                 data-pattern="solid"
                 data-action="click->stitch-preview#switchPattern"
-          class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
+          class="flex-1 px-2 py-1.5 rounded-full transition-all cursor-pointer">
           Solid
         </button>
         <button type="button"
@@ -142,7 +144,7 @@
                 data-stitch-preview-target="tabButton"
                 data-pattern="seed"
                 data-action="click->stitch-preview#switchPattern"
-          class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
+          class="flex-1 px-2 py-1.5 rounded-full transition-all cursor-pointer">
           Seed
         </button>
         <button type="button"
@@ -152,8 +154,8 @@
                 data-stitch-preview-target="tabButton"
                 data-pattern="longshort"
                 data-action="click->stitch-preview#switchPattern"
-          class="flex-1 px-3 py-1.5 rounded-full transition-all cursor-pointer">
-          Long and Short
+          class="flex-1 px-2 py-1.5 rounded-full transition-all cursor-pointer">
+          Long and short
         </button>
       </div>
     <% end %>
@@ -182,5 +184,4 @@
       <% end %>
     </div>
         </div>
-
       </div>
