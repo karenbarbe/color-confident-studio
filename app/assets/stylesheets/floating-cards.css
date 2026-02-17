@@ -37,7 +37,7 @@
   width: calc(100% - 1.5rem);
   max-width: calc(100% - 1.5rem);
   margin-inline: auto;
-  padding-block: 1rem 1.25rem;
+  padding-block: 1rem;
   padding-inline: 1rem;
 }
 
@@ -68,7 +68,7 @@
   align-items: center;
   gap: 0.5rem;
   padding-bottom: 0.375rem;
-  border-bottom: 1px solid currentColor;
+  /* border-bottom: 1px solid currentColor; */
   opacity: 1;
   transition: opacity 0.2s ease;
 }
