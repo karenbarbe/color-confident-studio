@@ -6,6 +6,16 @@
 @import "../stylesheets/slide-panel.css";
 @import "../stylesheets/coach-marks.css";
 
+@theme {
+  --color-yellow-lg: #e0d3b3;
+  --color-orange-bt: #fa4d0d;
+  --color-pink-lt: #F0A8E0;
+  --color-pink: #F597DC;
+  --color-red-dk: #681e0f;
+  --color-blue-md: #296b8a;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
 /* ============================================
    FOUC PREVENTION - Disable transitions on load
    ============================================ */
