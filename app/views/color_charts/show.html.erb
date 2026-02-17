@@ -50,7 +50,7 @@
         <% if @search_active %>
           <%# SEARCH MODE: flat grid, no grouping by color family %>
           <% if @product_colors.any? %>
-            <section class="pt-8 space-y-4">
+            <section class="space-y-4">
               <div class="flex items-center justify-between" data-fabric-contrast-target="emptyState">
                 <p class="opacity-90">
                   Showing <%= pluralize(@product_colors.size, "result") %> for "<%= params[:q][:vendor_code_cont] %>"
