@@ -7,6 +7,17 @@
 @import "../stylesheets/coach-marks.css";
 
 /* ============================================
+   FOUC PREVENTION - Disable transitions on load
+   ============================================ */
+
+.no-transitions,
+.no-transitions *,
+.no-transitions *::before,
+.no-transitions *::after {
+  transition: none !important;
+}
+
+/* ============================================
    NAVBAR SCROLL BEHAVIOR
    ============================================ */
 
