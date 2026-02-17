@@ -3,7 +3,7 @@
     <div class="space-y-3">
       <%# Brand %>
       <div class="h-1 flex-1 bg-base-content/20 transition-colors duration-300" data-card-line></div>
-      <h1 class="text-3xl @3xl/header:text-4xl font-bold text-base-content text-balance" data-card-text><%= brand.name %></h1>
+      <h1 class="text-3xl @3xl/header:text-4xl font-outfit font-bold text-base-content text-balance" data-card-text><%= brand.name %></h1>
       <%# Stats row %>
       <div class="flex flex-wrap items-center gap-3 @xs/header:gap-4 @xs/header:gap-y-2 text-sm text-base-content" data-card-text>
         <span class="flex items-center gap-1 @xs/header:gap-1.5">
@@ -23,9 +23,9 @@
     <div class="space-y-5 text-base-content" data-card-text>
       <div class="flex items-center gap-4">
         <%= render "shared/avatar", public_id: "avatar1_hmskyt" %>
-        <p class="text-lg font-black text-balance"><%= brand.subheading %></p>
+        <p class="text-lg font-outfit font-bold text-balance leading-tight"><%= brand.subheading %></p>
       </div>
-      <p><%= brand.description %></p>
+      <p class="text-md"><%= brand.description %></p>
     </div>
 
     <%# Fabric picker %>
