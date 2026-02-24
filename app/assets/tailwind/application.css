@@ -9,10 +9,14 @@
 @theme {
   --color-yellow-lg: #e0d3b3;
   --color-orange-bt: #fa4d0d;
+  --color-peach: #FFC9C1;
   --color-pink-lt: #F0A8E0;
   --color-pink: #F597DC;
   --color-red-dk: #681e0f;
   --color-blue-md: #296b8a;
+  --color-purple: #7F0163;
+  --color-purple-dk: #681452;
+  --color-sunflower: #FFC800;
   --font-outfit: 'Outfit', sans-serif;
 }
 

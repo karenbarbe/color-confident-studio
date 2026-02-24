@@ -1,154 +1,131 @@
 <% content_for :full_width_before do %>
+  <div class="flex flex-col min-h-[calc(100vh-4rem)]">
 
-  <%# Hero %>
-  <div class="hero bg-base-200 min-h-[80vh] -mt-8">
-    <div class="hero-content text-center">
-      <div class="max-w-2xl">
-        <h1 class="text-4xl md:text-5xl font-bold leading-tight">Fall in love with your palette before you stitch</h1>
-        <p class="py-6 text-lg text-base-content/80">Choosing colors doesn't have to be the hard part. Browse real threads, experiment with combinations, and see how they work together before you start.</p>
-        <%= link_to "Create your first palette", signup_path, class: "btn btn-primary btn-lg" %>
+    <%# Hero %>
+    <div class="min-h-[80vh] flex flex-col md:flex-row bg-peach overflow-hidden">
+      <%# Hero copy %>
+      <div class="md:w-2/5 flex items-center px-8 py-16 md:py-0 md:pl-12 lg:pl-20">
+        <div class="max-w-md text-left text-white">
+          <p class="text-[#e30a48] text-xl font-outfit font-bold">Color Confident Studio</p>
+          <h2 class="font-outfit text-5xl md:text-6xl text-purple font-bold mb-4">color<br>
+            confidence<br>
+            starts here</h2>
+
+          <%= link_to "Create your first palette", signup_path, class: "btn bg-purple text-white hover:bg-purple-dk btn-lg border-0 mt-8" %>
+        </div>
+      </div>
+
+      <%# Image %>
+      <div class="md:w-3/5 min-h-[50vh] md:min-h-0 bg-no-repeat bg-left-top md:bg-left bg-cover md:bg-size-[auto_calc(100%-3rem)]"
+          style="background-image: url('<%= cl_image_path("hero_grfgsb", quality: "auto", fetch_format: "auto") %>');">
       </div>
     </div>
-  </div>
 
-  <%# How it works %>
-  <div class="bg-base-100 py-16 md:py-24">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">From inspiration to a palette you'll love</h2>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <%# Step 1 %>
-        <div class="text-center">
-          <div class="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-          <h3 class="font-bold text-lg mb-2">Browse colors</h3>
-          <p class="text-base-content/70">Explore thread color charts from the brands you use - DMC, Aurifil, and more.</p>
+    <%# Supporting section %>
+    <div class="bg-purple py-16 md:py-24">
+      <div class="max-w-5xl mx-auto px-4 text-white">
+        <div class="flex items-center gap-4">
+          <%= render "shared/avatar", public_id: "avatar1_hmskyt" %>
+          <p class="font-outfit font-bold text-lg">Choosing colors shouldn't be the hard part.</p>
         </div>
-
-        <%# Step 2 %>
-        <div class="text-center">
-          <div class="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-          <h3 class="font-bold text-lg mb-2">Build your stash</h3>
-          <p class="text-base-content/70">Save your favorites and track what you own. One place for your whole thread collection.</p>
-        </div>
-
-        <%# Step 3 %>
-        <div class="text-center">
-          <div class="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-          <h3 class="font-bold text-lg mb-2">Create palettes</h3>
-          <p class="text-base-content/70">Combine colors into palettes and preview how they'll look together.</p>
-        </div>
-
-        <%# Step 4 %>
-        <div class="text-center">
-          <div class="w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold mx-auto mb-4">4</div>
-          <h3 class="font-bold text-lg mb-2">Start stitching</h3>
-          <p class="text-base-content/70">Begin your project knowing your colors will work.</p>
-        </div>
+        <p class="font-outfit font-semibold text-3xl max-w-[40ch] text-balance mt-6">Color Confident Studio is a free tool to help you create palettes you'll love. Browse real threads, experiment with combinations, and see how they work together before you start.</p>
       </div>
     </div>
-  </div>
 
-  <%# Demo video %>
-  <div class="bg-base-200 py-16 md:py-24">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Made for the way you craft</h2>
-        <p class="text-lg text-base-content/80">Color Confident Studio is there when you need it. Browse colors at home. Pull up your palette at the craft store. Share your stash with friends at a stitching meetup.</p>
-      </div>
-      <div class="rounded-xl overflow-hidden shadow-xl">
-        <%= cl_video_tag("hero_desktop_cr1olo",
-          class: "hidden md:block w-full",
-          controls: true, quality: :auto, 
-          fetch_format: :auto,
-          poster: { public_id: "hero_desktop_poster_oclnhe" }) %>
+    <div>
+      <%# Features %>
+      <div class="bg-base-100 py-16 md:py-24">
+        <div class="max-w-5xl mx-auto px-4">
 
-        <%= cl_video_tag("hero_mobile_enpknt",
-          class: "block md:hidden w-full",
-          controls: true, quality: :auto, 
-          fetch_format: :auto,
-          poster: { public_id: "hero_mobile_poster_xm9yqx" }) %>
-      </div>
-    </div>
-  </div>
+          <%# Feature 1: Color charts %>
+          <div class="flex flex-col md:flex-row items-center gap-8 mb-16 md:mb-24">
+            <div class="md:w-1/2">
+              <h3 class="text-2xl md:text-3xl font-outfit font-bold mb-4">Browse real thread colors, not shop listings</h3>
+              <p class="text-base-content/80 mb-4">
+                Explore full color charts from DMC, Aurifil, Kona Cotton, and more. Organized by color family. Simple to search. Free from the clutter of online stores.
+              </p>
+              <%= link_to "Explore color charts", color_charts_path, class: "btn btn-outline font-medium text-base-content" %>
+            </div>
+            <div class="w-full md:w-1/2 bg-base-300 rounded-xl aspect-square overflow-hidden flex items-center justify-center">
+              <%= cl_image_tag("charts_pqwljs") %>
+            </div>
+          </div>
 
-  <%# Features %>
-  <div class="bg-base-200 py-16 md:py-24">
-    <div class="max-w-5xl mx-auto px-4">
+          <%# Feature 2: Stash management %>
+          <div class="flex flex-col md:flex-row-reverse items-center gap-8 mb-16 md:mb-24">
+            <div class="md:w-1/2">
+              <h3 class="text-2xl md:text-3xl font-outfit font-bold mb-4">Know what's in your stash</h3>
+              <p class="text-base-content/80 mb-4">
+                No more guessing what you own. Keep track of your thread collection in one place and see what's possible with the colors you already have.</p>
+            </div>
+            <div class="w-full md:w-1/2 bg-base-300 rounded-xl aspect-square overflow-hidden flex items-center justify-center">
+              <%= cl_image_tag("stash_uu5gok") %>
+            </div>
+          </div>
 
-      <%# Feature 1: Color charts %>
-      <div class="flex flex-col md:flex-row items-center gap-8 mb-16 md:mb-24">
-        <div class="md:w-1/2">
-          <h3 class="text-2xl md:text-3xl font-bold mb-4">Browse real thread colors, not shop listings</h3>
-          <p class="text-base-content/80 mb-4">
-            Explore full color charts from DMC, Aurifil, Kona Cotton, and more. Organized by color family. Simple to search. Free from the clutter of online stores.
-          </p>
-          <%= link_to "Explore color charts", color_charts_path, class: "link link-neutral font-medium text-base-content" %>
-        </div>
-        <div class="w-full md:w-1/2 bg-base-300 rounded-xl aspect-video flex items-center justify-center">
-          <span class="text-base-content/40">Color charts preview</span>
-        </div>
-      </div>
-
-      <%# Feature 2: Stash management %>
-      <div class="flex flex-col md:flex-row-reverse items-center gap-8 mb-16 md:mb-24">
-        <div class="md:w-1/2">
-          <h3 class="text-2xl md:text-3xl font-bold mb-4">Know what's in your stash</h3>
-          <p class="text-base-content/80 mb-4">
-            No more guessing what you own. Keep track of your thread collection in one place and see what's possible with the colors you already have.</p>
-        </div>
-        <div class="w-full md:w-1/2 bg-base-300 rounded-xl aspect-video flex items-center justify-center">
-          <span class="text-base-content/40">Stash preview</span>
-        </div>
-      </div>
-
-      <%# Feature 3: Palette studio %>
-      <div class="flex flex-col md:flex-row items-center gap-8">
-        <div class="md:w-1/2">
-          <h3 class="text-2xl md:text-3xl font-bold mb-4">See your palette come to life</h3>
-          <p class="text-base-content/80 mb-4">
-            Combine colors into palettes and preview how they'll look on embroidery samples. 
-            Experiment until you find the combination that feels just right.
-          </p>
-        </div>
-        <div class="w-full md:w-1/2 bg-base-300 rounded-xl aspect-video flex items-center justify-center">
-          <span class="text-base-content/40">Palette studio preview</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <%# Authority / Book %>
-  <div class="bg-base-100 py-16 md:py-24">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-        <div class="w-full md:w-2/5">
-          <div class="bg-base-300 rounded-xl aspect-3/4 flex items-center justify-center">
-            <span class="text-base-content/40">Book cover</span>
+          <%# Feature 3: Palette studio %>
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2">
+              <h3 class="text-2xl md:text-3xl font-outfit font-bold mb-4">See your palette come to life</h3>
+              <p class="text-base-content/80 mb-4">
+                Combine colors into palettes and preview how they'll look on embroidery samples. 
+                Experiment until you find the combination that feels just right.
+              </p>
+            </div>
+            <div class="w-full md:w-1/2 bg-base-300 rounded-xl aspect-square overflow-hidden flex items-center justify-center">
+              <%= cl_image_tag("palette_pink_znxgz4") %>
+            </div>
           </div>
         </div>
-        <div class="md:w-3/5">
-          <p class="text-sm font-medium text-primary">From the maker of</p>
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">Colour Confident Stitching</h2>
-          <p class="text-base-content/80 mb-4">
-            Creating beautiful color palettes is a skill that can be learned. In Colour Confident Stitching, Karen Barb&eacute; guides you through color theory and color sensitivity as two paths to finding palettes that feel right.
-          </p>
-          <p class="text-base-content/80 mb-6">
-            Color Confident Studio puts those ideas into practice. Browse real thread colors, experiment with combinations, and train your eye one palette at a time.
-          </p>
-          <%= link_to "Explore the book", root_path, class: "link link-neutral font-medium text-base-content" %>
+      </div>
+
+      <%# Authority / Book %>
+      <div class="bg-yellow-lg py-16 md:py-24">
+        <div class="max-w-5xl mx-auto px-4">
+          <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="w-full md:w-2/5">
+              <div class="bg-base-300 rounded-xl aspect-4/5 overflow-hidden flex items-center justify-center">
+                <%= cl_image_tag("book_cover_edpjew") %>
+              </div>
+            </div>
+            <div class="md:w-3/5">
+              <p class="text-sm font-medium uppercase">From the maker of</p>
+              <h2 class="text-3xl md:text-4xl font-outfit font-bold mb-4">Colour Confident Stitching</h2>
+              <p class="text-base-content/80 mb-4">
+                Creating beautiful color palettes is a skill that can be learned. In <span class="font-bold">Colour Confident Stitching</span>, Karen Barb&eacute; guides you through color theory and color sensitivity as two paths to finding palettes that feel right.
+              </p>
+              <p class="text-base-content/80 mb-6">
+                <span class="font-bold">Color Confident Studio</span> puts those ideas into practice. Browse real thread colors, experiment with combinations, and train your eye one palette at a time.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <%# Secondary CTA %>
-  <div class="bg-primary text-primary-content py-16 md:py-24">
-    <div class="max-w-3xl mx-auto px-4 text-center">
-      <h2 class="text-2xl md:text-3xl font-bold text-balance mb-4">Create palettes you'll love from the first stitch</h2>
-      <%= link_to "Start now", signup_path, class: "btn btn-lg bg-base-100 text-base-content hover:bg-base-200 border-0" %>
-    </div>
-  </div>
+      <%# Secondary CTA %>
+      <div class="bg-peach text-base-content pt-20 md:pt-32 pb-8 mt-auto">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+          <h2 class="text-2xl md:text-3xl font-outfit font-bold text-balance mb-8">Create palettes you'll love from the first stitch</h2>
+          <%= link_to "Start now", signup_path, class: "btn btn-lg bg-base-100 text-base-content hover:bg-base-200 border-0" %>
+        </div>
+        <div class="max-w-5xl mx-auto px-4 mt-20 md:mt-32">
+          <div class="flex justify-between items-center border-t border-t-base-content pt-8">
+            <p class="text-sm text-balance">&copy; Color Confident Studio by Karen Barb&eacute;</p>
+            <div class="flex gap-4">
+              <%= link_to "https://www.linkedin.com/in/karenbarbe/", target: "_blank", rel: "noopener noreferrer", aria: { label: "LinkedIn" }, class: "cursor-pointer" do %>
+                <%= social_icon(:linkedin) %>
+              <% end %>
+              <%= link_to "https://www.github.com/karenbarbe/", target: "_blank", rel: "noopener noreferrer", aria: { label: "GitHub" }, class: "cursor-pointer" do %>
+                <%= social_icon(:github) %>
+              <% end %>
+              <%= link_to "https://www.instagram.com/karenbarbe/", target: "_blank", rel: "noopener noreferrer", aria: { label: "Instagram" }, class: "cursor-pointer" do %>
+                <%= social_icon(:instagram) %>
+              <% end %>
 
-<% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
