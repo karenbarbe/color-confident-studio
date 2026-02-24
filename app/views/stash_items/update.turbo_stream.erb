@@ -1,8 +1,10 @@
 <%= turbo_stream.replace "color-detail-content" do %>
-  <%= render "product_colors/color_detail",
-      product_color: @product_color,
-      brand: @brand,
-      stash_item: @stash_item %>
+  <div class="px-4 py-6" id="color-detail-content">
+    <%= render "product_colors/color_detail_content",
+        product_color: @product_color,
+        brand: @brand,
+        stash_item: @stash_item %>
+  </div>
 <% end %>
 
 <%= turbo_stream.replace dom_id(@product_color, :ownership_indicator) do %>

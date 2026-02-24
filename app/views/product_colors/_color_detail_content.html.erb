@@ -1,0 +1,180 @@
+<%# Expects: product_color, brand, stash_item (can be nil) %>
+
+<%# Color card %>
+
+<div class="flex justify-between items-start gap-3 mb-6">
+  <%# Heading %>
+  <div class="min-w-0">
+    <h1 class="text-xl font-semibold tracking-tight"><%= product_color.vendor_code %></h1>
+    <p class="text-sm text-base-content/60 truncate"><%= brand.name %></p>
+    <% if product_color.name.present? %>
+      <p class="text-md text-base-content/70 truncate"><%= product_color.name %></p>
+    <% end %>
+  </div>
+
+  <%# Stash actions %>
+  <div class="shrink-0">
+    <% if policy(StashItem).create? %>
+      <% if stash_item %>
+        <%# In stash: "Saved" chip with dropdown %>
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" 
+               role="button" 
+               class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-full transition-colors cursor-pointer"
+               title="Stash options">
+            <%= icon(:heart_solid, css_class: "size-4") %>
+            <span>Saved</span>
+            <%= icon(:chevron_down_outline, css_class: "size-3.5") %>
+          </div>
+
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-lg w-52 p-2 border border-base-300 shadow-lg z-10">
+            <% if policy(stash_item).update? %>
+              <li class="menu-title">
+                <span class="text-xs font-medium text-base-content/50 uppercase">Stash label</span>
+              </li>
+
+              <% is_owned = stash_item.owned? %>
+              <% is_wish_list = stash_item.wish_list? %>
+
+              <%# Owned option %>
+              <li>
+                <%= button_to stash_item_path(stash_item),
+                              method: :patch,
+                              params: { stash_item: { ownership_status: is_owned ? nil : :owned } },
+                              form_class: "contents",
+                              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                  <% if is_owned %>
+                    <%= icon(:check_outline, css_class: "size-5") %>
+                    Owned
+                  <% else %>
+                    <div class="size-4 border-2 border-base-content/30 rounded-full"></div>
+                    Mark as owned
+                  <% end %>
+                <% end %>
+              </li>
+
+              <%# Wish list option %>
+              <li>
+                <%= button_to stash_item_path(stash_item),
+                              method: :patch,
+                              params: { stash_item: { ownership_status: is_wish_list ? nil : :wish_list } },
+                              form_class: "contents",
+                              class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                  <% if is_wish_list %>
+                    <%= icon(:shopping_bag_outline, css_class: "size-5") %>
+                    Wish list
+                  <% else %>
+                    <div class="size-4 border-2 border-base-content/30 rounded-full"></div>
+                    Add to wish list
+                  <% end %>
+                <% end %>
+              </li>
+
+              <li class="h-px divider my-1"></li>
+            <% end %>
+
+            <%# Remove from stash option %>
+            <li>
+              <%= button_to stash_item_path(stash_item),
+                            method: :delete,
+                            params: { stash_item: { product_color_id: product_color.id } },
+                            form_class: "contents",
+                            class: "flex items-center gap-2 px-3 py-2 rounded-md text-sm text-base-content/80 hover:bg-base-content/5 hover:text-base-content transition-colors cursor-pointer" do %>
+                <%= icon(:trash_outline, css_class: "size-5 text-base-content/50") %>
+                Remove from stash
+              <% end %>
+            </li>
+          </ul>
+        </div>
+
+      <% else %>
+        <%# Not in stash: "Save to stash" chip %>
+        <%= button_to stash_items_path,
+                      params: { stash_item: { product_color_id: product_color.id } },
+                      form_class: "contents",
+                      class: "flex items-center gap-2 px-3 py-2 text-sm font-medium text-base-content/70 bg-base-300 hover:text-base-content hover:bg-base-200 rounded-full transition-colors cursor-pointer",
+                      title: "Save to stash" do %>
+          <%= icon(:heart_outline, css_class: "size-4") %>
+          <span>Save to stash</span>
+        <% end %>
+      <% end %>
+
+    <% else %>
+      <%# Not logged in: chip that links to login %>
+      <%= link_to login_path, 
+                  class: "flex items-center gap-1.5 px-2.5 py-2 text-sm font-medium text-base-content/70 bg-base-300 hover:text-base-content hover:bg-base-200 rounded-full transition-colors",
+                  title: "Sign in to save" do %>
+        <%= icon(:heart_outline, css_class: "size-4") %>
+        <span>Save to stash</span>
+      <% end %>
+    <% end %>
+  </div>
+
+</div>
+
+<%# Stitch preview area with tabs %>
+<div data-controller="stitch-preview"
+     data-stitch-preview-color-value="<%= product_color.hex_color %>">
+
+  <% if brand.thread? %>
+    <%# Tab buttons %>
+    <div role="tablist" 
+         aria-label="Stitch texture preview"
+         class="flex rounded-full bg-base-content/10 p-1 mb-3 text-xs font-medium">
+      <button type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="stitch-preview-panel"
+              data-stitch-preview-target="tabButton"
+              data-pattern="solid"
+              data-action="click->stitch-preview#switchPattern"
+        class="flex-1 px-2 py-1.5 rounded-full transition-all cursor-pointer">
+        Solid
+      </button>
+      <button type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="stitch-preview-panel"
+              data-stitch-preview-target="tabButton"
+              data-pattern="seed"
+              data-action="click->stitch-preview#switchPattern"
+        class="flex-1 px-2 py-1.5 rounded-full transition-all cursor-pointer">
+        Seed
+      </button>
+      <button type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="stitch-preview-panel"
+              data-stitch-preview-target="tabButton"
+              data-pattern="longshort"
+              data-action="click->stitch-preview#switchPattern"
+        class="flex-1 px-2 py-1.5 rounded-full transition-all cursor-pointer">
+        Long and short
+      </button>
+    </div>
+  <% end %>
+
+  <%# Preview area %>
+  <div id="stitch-preview-panel"
+       role="tabpanel"
+       class="px-8 py-16 rounded-md transition-colors duration-300"
+       data-controller="fabric-background"
+       data-action="fabric-picker:styleChanged@window->fabric-background#update">
+
+    <%# Solid color swatch  %>
+    <svg class="aspect-1 w-full rounded-md" 
+         data-stitch-preview-target="solidSwatch"
+         viewBox="0 0 240 240" 
+         preserveAspectRatio="xMidYMid slice"
+         aria-hidden="true">
+      <rect x="0" y="0" width="100%" height="100%" 
+            rx="16"
+            fill="#<%= product_color.hex_color %>"/>
+    </svg>
+
+    <% if brand.thread? %>
+      <%= render "product_colors/stitch_patterns/seed_stitch", hex_color: product_color.hex_color %>
+      <%= render "product_colors/stitch_patterns/longshort_stitch", hex_color: product_color.hex_color %>
+    <% end %>
+  </div>
+      </div>
