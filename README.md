@@ -21,7 +21,6 @@
 - **Frontend:** Hotwire (Turbo + Stimulus)
 - **Styling:** Tailwind CSS with daisyUI
 - **Authentication:** Rails built-in authentication
-- **Admin panel**: Avo
 
 ## Installation
 
