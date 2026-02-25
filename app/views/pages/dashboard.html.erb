@@ -4,55 +4,67 @@
     <%= render "shared/flash", notice: notice, alert: alert %>
   </div>
 
-  <%# Hero section %>
-  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-
-    <!-- Row 1 -->
-    <div class="h-48 bg-[#D4F72A] flex flex-col items-start justify-center p-8 order-1">
-      <p class="font-outfit text-sm font-semibold tracking-widest uppercase text-gray-700 mb-1">
-        Hi <%= Current.user.first_name.capitalize %> 👋
-      </p>
-      <h1 class="font-outfit font-bold text-5xl leading-none text-gray-900">
-        Start<br>creating.
-      </h1>
-    </div>
-
-    <div class="h-48 bg-base-100 hidden lg:block order-2"></div>
-
-    <div class="h-48 bg-[#E3ADCF] flex flex-col items-center justify-center gap-2 p-6 order-last md:order-3">
-      <p class="font-outfit font-semibold text-xl text-center text-gray-800">Ready?</p>
-      <%= button_to "Create palette", palettes_path, method: :post,
-            class: "btn btn-neutral" %>
-    </div>
-
-
-    <!-- Row 2 -->
+  <%# Hero %>
+  <section class="max-w-6xl mx-auto">
+    <%# Grid %>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       
-    <div class="h-48 bg-base-100 border-t border-base-200 flex flex-col justify-center p-8 order-2 md:order-4">
-      <span class="font-outfit text-sm font-bold tracking-widest uppercase text-base-content/50 mb-2">Step 1</span>
-      <p class="font-outfit font-semibold text-xl text-base-content">Pick a background color</p>
-      <p class="text-md text-base-content/70 mt-1">Your fabric. Everything else reacts to it.</p>
+      <%# Row 1 %>
+      <div class="bg-purple rounded-3xl md:col-span-3 p-8 md:p-10 flex justify-between items-center min-h-60 md:min-h-80">
+        <div>
+          <p class="text-white text-xl font-outfit font-medium mb-2">Hi <%= Current.user.first_name.capitalize %> <span class="text-3xl">👋</span></p>
+          <h1 class="font-outfit text-4xl md:text-5xl lg:text-6xl text-white font-bold leading-none">
+            Start<br>creating.
+          </h1>
+        </div>
+       
+        <div class="rounded-3xl flex items-center justify-center">
+          <%= link_to new_palette_path, class: "group flex flex-col items-center justify-center" do %>
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white group-hover:bg-purple-dk transition-colors flex items-center justify-center">
+              <span class="text-purple hover:text-white font-outfit font-bold text-lg md:text-2xl text-center px-4">Create palette</span>
+            </div>
+          <% end %>
+        </div>
+
+      </div>
+
+      <%# Row 2 - Steps %>
+      <%# Step 1 %>
+      <div class="bg-yellow-lg rounded-3xl p-6 md:p-8 md:min-h-60">
+        <div class="flex flex-row md:flex-col lg:flex-row items-start gap-3 mb-3">
+          <div class="size-12 rounded-full bg-purple text-white flex items-center justify-center font-outfit font-bold text-xl shrink-0">1</div>
+          <div class="space-y-2 md:space-y-4">
+            <h3 class="font-outfit font-bold text-xl md:text-2xl text-purple">Select a background color</h3>
+            <p class="text-purple text-md font-semibold">Your fabric. Everything else reacts to it.</p>
+          </div>
+        </div>
+      </div>
+
+      <%# Step 2 %>
+      <div class="bg-peach rounded-3xl p-6 md:p-8 md:min-h-60">
+        <div class="flex flex-row md:flex-col lg:flex-row items-start gap-3 mb-3">
+          <div class="size-12 rounded-full bg-purple text-white flex items-center justify-center font-outfit font-bold text-xl shrink-0">2</div>
+          <div class="space-y-2 md:space-y-4">
+            <h3 class="font-outfit font-bold text-xl md:text-2xl text-purple">Add up to 12 thread colors</h3>
+            <p class="text-purple text-md font-semibold">Choose from any color chart. Mix brands just as you would in real life.</p>
+          </div>
+        </div>
+      </div>
+
+      <%# Step 3 %>
+      <div class="bg-[#E0F4FC] rounded-3xl p-6 md:p-8 md:min-h-60">
+        <div class="flex flex-row md:flex-col lg:flex-row items-start gap-3 mb-3">
+          <div class="size-12 rounded-full bg-purple text-white flex items-center justify-center font-outfit font-bold text-xl shrink-0">3</div>
+          <div class="space-y-2 md:space-y-4">
+            <h3 class="font-outfit font-bold text-xl md:text-2xl text-purple">Tweak colors and have fun</h3>
+            <p class="text-purple text-md font-semibold">Adjust, preview, and save when it feels right.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-    <div class="h-48 bg-[#D4A89A] hidden order-3 md:block md:order-5"></div>
-
-    <div class="h-48 bg-base-100 border-t border-base-200 flex flex-col justify-center p-8 order-5 md:order-7 lg:order-6">
-      <span class="font-outfit text-sm font-bold tracking-widest uppercase text-base-content/50 mb-2">Step 2</span>
-      <p class="font-outfit font-semibold text-xl text-base-content">Add up to 12 thread colors</p>
-      <p class="text-md text-base-content/70 mt-1">Choose from any color chart. Mix brands just as you would in real life.</p>
-    </div>
-
-    <!-- Row 3 -->
-    <div class="h-48 bg-[#E3ADCF] order-4 md:order-6 lg:order-7"></div>
-
-    <div class="h-48 bg-base-100 border-t border-base-200 flex flex-col justify-center p-8 order-7 md:order-8">
-      <span class="font-outfit text-sm font-bold tracking-widest uppercase text-base-content/50 mb-2">Step 3</span>
-      <p class="font-outfit font-semibold text-xl text-base-content">Tweak and have fun</p>
-      <p class="text-md text-base-content/70 mt-1">Adjust, preview, and save when it feels right.</p>
-    </div>
-
-    <div class="h-48 bg-[#D5EDDB] order-6 md:order-9"></div>
   </section>
+
 
   <%# Recent palettes section %>
   <section>

@@ -80,7 +80,7 @@
       </div>
 
       <%# Authority / Book %>
-      <div class="bg-yellow-lg py-16 md:py-24">
+      <div class="bg-yellow-lg py-16 md:py-24 text-purple">
         <div class="max-w-5xl mx-auto px-4">
           <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="w-full md:w-2/5">
@@ -91,10 +91,10 @@
             <div class="md:w-3/5">
               <p class="text-sm font-medium uppercase">From the maker of</p>
               <h2 class="text-3xl md:text-4xl font-outfit font-bold mb-4">Colour Confident Stitching</h2>
-              <p class="text-base-content/80 mb-4">
+              <p class="mb-4">
                 Creating beautiful color palettes is a skill that can be learned. In <span class="font-bold">Colour Confident Stitching</span>, Karen Barb&eacute; guides you through color theory and color sensitivity as two paths to finding palettes that feel right.
               </p>
-              <p class="text-base-content/80 mb-6">
+              <p class="mb-6">
                 <span class="font-bold">Color Confident Studio</span> puts those ideas into practice. Browse real thread colors, experiment with combinations, and train your eye one palette at a time.
               </p>
             </div>
@@ -103,13 +103,13 @@
       </div>
 
       <%# Secondary CTA %>
-      <div class="bg-peach text-base-content pt-20 md:pt-32 pb-8 mt-auto">
+      <div class="bg-peach text-purple pt-20 md:pt-32 pb-8 mt-auto">
         <div class="max-w-3xl mx-auto px-4 text-center">
           <h2 class="text-2xl md:text-3xl font-outfit font-bold text-balance mb-8">Create palettes you'll love from the first stitch</h2>
-          <%= link_to "Start now", signup_path, class: "btn btn-lg bg-base-100 text-base-content hover:bg-base-200 border-0" %>
+          <%= link_to "Start now", signup_path, class: "btn btn-lg btn-outline text-purple hover:bg-purple hover:text-peach hover:border-0" %>
         </div>
         <div class="max-w-5xl mx-auto px-4 mt-20 md:mt-32">
-          <div class="flex justify-between items-center border-t border-t-base-content pt-8">
+          <div class="flex justify-between items-center border-t border-t-purple pt-8">
             <p class="text-sm text-balance">&copy; Color Confident Studio by Karen Barb&eacute;</p>
             <div class="flex gap-4">
               <%= link_to "https://www.linkedin.com/in/karenbarbe/", target: "_blank", rel: "noopener noreferrer", aria: { label: "LinkedIn" }, class: "cursor-pointer" do %>
