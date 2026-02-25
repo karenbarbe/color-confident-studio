@@ -19,9 +19,9 @@
         </div>
        
         <div class="rounded-3xl flex items-center justify-center">
-          <%= link_to new_palette_path, class: "group flex flex-col items-center justify-center" do %>
-            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white group-hover:bg-purple-dk transition-colors flex items-center justify-center">
-              <span class="text-purple hover:text-white font-outfit font-bold text-lg md:text-2xl text-center px-4">Create palette</span>
+          <%= button_to palettes_path, method: :post, class: "group flex flex-col items-center justify-center" do %>
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full text-purple bg-white group-hover:bg-purple-dk group-hover:text-white transition-colors flex items-center justify-center cursor-pointer">
+              <span class="font-outfit font-bold text-lg md:text-2xl text-center px-4">Create palette</span>
             </div>
           <% end %>
         </div>
