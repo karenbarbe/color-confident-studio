@@ -5,7 +5,7 @@
 - Project Name: Color Confident Studio
 - Reviewer Name: Claude Code, Ian Heraty, Adolfo Nava
 - Repository URL: https://github.com/karenbarbe/color-confident-studio
-- Feedback Pull Request URL: `TODO`
+- Feedback Pull Request URL: https://github.com/karenbarbe/color-confident-studio/pull/59
 
 ---
 
