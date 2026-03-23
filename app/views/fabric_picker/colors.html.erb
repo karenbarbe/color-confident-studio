@@ -6,9 +6,7 @@
         No colors in this family
       </div>
     <% else %>
-      <% @colors.each do |color| %>
-        <%= render "fabric_picker/color_button", color: color %>
-      <% end %>
+      <%= render partial: "fabric_picker/color_button", collection: @colors, as: :color %>
     <% end %>
 
   </div>

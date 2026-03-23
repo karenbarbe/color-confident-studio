@@ -6,9 +6,7 @@
       <div class="px-4 py-1.5">
         <span class="text-xs font-medium text-base-content/50 uppercase tracking-wider">Recently used</span>
       </div>
-      <% @recent_colors.each do |color| %>
-        <%= render "fabric_picker/color_button", color: color %>
-      <% end %>
+      <%= render partial: "fabric_picker/color_button", collection: @recent_colors, as: :color %>
       <div class="h-px bg-base-content/10 my-2"></div>
     <% end %>
 

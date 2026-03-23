@@ -78,9 +78,7 @@
     <% if @recent_palettes.any? %>
       <div class="@container">
         <div class="grid grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 gap-4">
-          <% @recent_palettes.each do |palette| %>
-            <%= render "palettes/palette_card", palette: palette %>
-          <% end %>
+          <%= render partial: "palettes/palette_card", collection: @recent_palettes, as: :palette %>
         </div>
       </div>
     <% else %>
