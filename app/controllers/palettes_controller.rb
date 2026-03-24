@@ -116,11 +116,7 @@ class PalettesController < ApplicationController
     @pending_background_hex = params[:pending_background_hex].presence
     @pending_background_oklch_l = params[:pending_background_oklch_l].presence
 
-    if @type == "fabric"
-      load_fabric_picker_data
-    else
-      load_thread_picker_data
-    end
+    load_picker_data(category: @type)
 
     render partial: "palettes/editor/palette_color_picker_content", locals: {
       palette: @palette,
@@ -282,37 +278,11 @@ class PalettesController < ApplicationController
   # Picker data loaders (for color_picker_content)
   # ============================================================================
 
-  def load_thread_picker_data
+  def load_picker_data(category:)
     @filter_params = extract_filter_params
-    @brands = Brand.where(category: "thread").order(:name)
+    @brands = Brand.where(category: category).order(:name)
 
-    set_thread_edit_mode_slot
-
-    @selected_brand = find_selected_brand(@brands)
-
-
-    if @mode == "add" && @filter_params[:color_family].blank?
-      @filter_params[:color_family] = "Red"
-    end
-
-    if @mode == "edit" && @current_color && @filter_params[:color_family].blank?
-      @filter_params[:color_family] = @current_color.color_family
-    end
-
-    matcher = ColorMatcher.new(
-      brand: @selected_brand,
-      **@filter_params
-    )
-
-    @colors = matcher.matching_colors.limit(120)
-    @total_count = matcher.count
-  end
-
-  def load_fabric_picker_data
-    @filter_params = extract_filter_params
-    @brands = Brand.where(category: "fabric").order(:name)
-
-    set_fabric_edit_mode_slot
+    set_edit_mode_slot(category: category)
 
     @selected_brand = find_selected_brand(@brands)
 
@@ -343,24 +313,19 @@ class PalettesController < ApplicationController
     end
   end
 
-  def set_thread_edit_mode_slot
+  def set_edit_mode_slot(category:)
     @current_slot = nil
     @current_color = nil
 
-    if @mode == "edit" && params[:slot_id].present?
-      @current_slot = @palette.color_slots.find_by(id: params[:slot_id])
-      @current_color = @current_slot&.product_color
-    end
-  end
+    return unless @mode == "edit"
 
-  def set_fabric_edit_mode_slot
-    @current_slot = nil
-    @current_color = nil
-
-    if @mode == "edit"
-      @current_slot = @palette.color_slots.includes(:product_color).find_by(slot_type: "background")
-      @current_color = @current_slot&.product_color
+    @current_slot = if category == "fabric"
+      @palette.color_slots.includes(:product_color).find_by(slot_type: "background")
+    elsif params[:slot_id].present?
+      @palette.color_slots.find_by(id: params[:slot_id])
     end
+
+    @current_color = @current_slot&.product_color
   end
 
   # ============================================================================
